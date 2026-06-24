@@ -115,7 +115,153 @@ The ADR provides detailed analysis across 8 dimensions:
 
 ---
 
-## 💻 Working Examples
+## � Work Product 1.3: The `Runnable` Protocol - Deep Dive into the Engine
+
+**Status**: Complete  
+**Work Product**: 1.3 - Deep Dive: Understanding the Foundation  
+
+While ADR-1.2 teaches you how to USE chains, WP-1.3 teaches you how chains WORK.
+
+### The Core Insight
+
+```
+A chain is not a special object—it's a directed acyclic graph (DAG) 
+of Runnables connected via the pipe operator.
+
+[Input] → [Runnable A] → [Runnable B] → [Runnable C] → [Output]
+
+Every Runnable supports FOUR execution modes:
+  • invoke()  - Single, synchronous
+  • batch()   - Multiple inputs, parallel
+  • stream()  - Single, streaming chunks  
+  • ainvoke() - Single, asynchronous
+
+This unified interface means ANY Runnable composes with ANY other.
+```
+
+### What You'll Learn
+
+1. **The Runnable Protocol** - The interface beneath LCEL
+   - All four methods and their semantics
+   - Why they exist and when to use each
+   - How they compose together
+
+2. **Execution Modes Deep Dive**
+   - `invoke()` - Blocking, simple, synchronous
+   - `batch()` - Parallel execution, rate-aware, efficient
+   - `stream()` - Real-time output, token-by-token
+   - `ainvoke()` - Non-blocking, async/await, high concurrency
+
+3. **Composition as a Graph**
+   - How pipes create DAGs
+   - Parallel processing with RunnableParallel
+   - Conditional routing with RunnableBranch
+   - Composition semantics and how they work
+
+4. **Architecture Diagrams**
+   - Simple sequential chains
+   - Parallel processing patterns
+   - Conditional routing patterns
+   - Complete execution models
+
+5. **Implementation Patterns**
+   - Building custom Runnables
+   - Understanding the contract
+   - Performance optimization
+   - Error handling and retries
+
+6. **Production Patterns**
+   - Caching and memoization
+   - Fallbacks and resilience
+   - Full execution tracing
+   - LangSmith integration
+
+### Key Differences: ADR-1.2 vs WP-1.3
+
+| Aspect | ADR-1.2 | WP-1.3 |
+|--------|---------|--------|
+| **Focus** | Which pattern to use | How the engine works |
+| **Audience** | Practitioners | Architects & Advanced Users |
+| **Goal** | Make good design decisions | Understand the architecture |
+| **Content** | Comparison, scenarios, examples | Deep dive, diagrams, implementation |
+| **Outcomes** | Know when to use RunnableSequence | Know why RunnableSequence works |
+
+### Practical Applications
+
+**Use WP-1.3 to:**
+- ✅ Build custom Runnables for your domain
+- ✅ Optimize performance with batch() and stream()
+- ✅ Debug execution flow through complex DAGs
+- ✅ Design systems that scale from prototypes to production
+- ✅ Understand why certain patterns work
+- ✅ Train your team on LangChain architecture
+
+### Example: Understanding the Difference
+
+**ADR-1.2 tells you:**
+> "Use RunnableSequence + LCEL for production systems."
+
+**WP-1.3 shows you:**
+> Here's what happens when you call `invoke()`:
+> 1. Input passed to Runnable A
+> 2. A.invoke() returns intermediate value
+> 3. Intermediate passed to Runnable B
+> 4. B.invoke() returns output
+> 5. LangSmith callback logs the entire path
+>
+> Here's what happens with `batch([inputs])`:
+> 1. Inputs split into chunks
+> 2. All chunks sent to A (parallel)
+> 3. Results passed to B (parallel)
+> 4. Final outputs collected in order
+> 5. Full DAG is traced in LangSmith
+>
+> And here's how to build your own Runnable...
+
+### Document Contents
+
+**WP-1.3-The-Runnable-Protocol.md** (12 KB, comprehensive)
+
+1. Executive Summary
+2. What is a Runnable? (the protocol)
+3. The Four Execution Modes (detailed)
+4. Composition as a Graph
+5. Architecture Diagrams (ASCII and conceptual)
+6. Implementation Deep Dive
+7. Execution Traces and Observability
+8. Performance Characteristics
+9. Design Patterns (branching, fallbacks, retries, caching)
+10. Production Patterns (real-world chatbot example)
+11. Key Takeaways
+12. Quick Reference
+
+**examples_1_3.py** (6 practical demonstrations)
+
+1. The Four Execution Modes
+2. Building Custom Runnables
+3. Composition as a DAG
+4. Execution Tracing
+5. Conditional Routing
+6. Batch Performance Comparison
+
+### Quick Start with WP-1.3
+
+```bash
+# Read the protocol explanation
+cat WP-1.3-The-Runnable-Protocol.md
+
+# Run practical examples
+python examples_1_3.py
+
+# Try building your own Runnable
+# (See examples_1_3.py for template)
+```
+
+**Full Documentation**: See [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md)
+
+---
+
+## �💻 Working Examples
 
 ### examples_1_2.py
 
@@ -211,6 +357,8 @@ add_routes(app, my_chain, path="/my-chain")
 |------|---------|------|
 | [ADR-1.2-Hello-World-Three-Ways.md](ADR-1.2-Hello-World-Three-Ways.md) | Complete chain type analysis with examples, scenarios, decision flow | 17 KB, 495 lines |
 | [examples_1_2.py](examples_1_2.py) | Working implementations of all 3 approaches with advanced patterns | 16.5 KB, 441 lines |
+| [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | Deep dive into Runnable interface, execution modes, composition, architecture | 12 KB, comprehensive |
+| [examples_1_3.py](examples_1_3.py) | Practical demonstrations of Runnable protocol with custom implementations | 6 KB, 6 examples |
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | Complete LangChain stack documentation and integration patterns | - |
 | [README.md](README.md) | This file - project overview and guide | - |
 
