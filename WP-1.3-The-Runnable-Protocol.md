@@ -7,6 +7,43 @@
 
 ---
 
+## 📋 Document Navigation
+
+This document is organized into 12 comprehensive parts:
+
+| Part | Topic | Duration | Level |
+|------|-------|----------|-------|
+| 1 | What is a Runnable? | 5 min | Beginner |
+| 2 | The Four Execution Modes | 10 min | Beginner |
+| 3 | Composition as a Graph | 10 min | Intermediate |
+| 4 | Architecture Diagrams | 5 min | All Levels |
+| 5 | Implementation Deep Dive | 15 min | Advanced |
+| 6 | Execution Traces & Observability | 10 min | Intermediate |
+| 7 | Performance Characteristics | 10 min | Advanced |
+| 8 | Design Patterns | 15 min | Advanced |
+| 9 | Production Patterns | 20 min | Advanced |
+| 10 | Comparison with Other Frameworks | 10 min | All Levels |
+| 11 | Key Takeaways | 5 min | All Levels |
+| 12 | Next Steps & References | 5 min | All Levels |
+
+**Estimated Total Reading Time**: ~2 hours  
+**Hands-on Practice Time**: See examples_1_3.py (~1 hour)  
+
+---
+
+## 📌 Key Notation Used in This Document
+
+Throughout this guide, you'll see these markers:
+
+- **💡 KEY INSIGHT**: The core idea you should remember
+- **⚠️ COMMON MISTAKE**: Pitfall to avoid
+- **✅ BEST PRACTICE**: Recommended approach
+- **🔬 TECHNICAL DETAIL**: Deep implementation info
+- **📖 REFERENCE**: Links to more resources
+- **💻 CODE EXAMPLE**: Practical example you can run
+
+---
+
 ## Executive Summary
 
 The **`Runnable` protocol** is the engine of LangChain. Everything—prompts, language models, chains, tools—is a `Runnable`. Understanding this abstraction is the difference between using a framework and building with it.
@@ -18,7 +55,7 @@ This document dissects:
 - **When** to compose vs. extend vs. customize
 - **Architecture patterns** that scale from prototypes to production
 
-**Key Insight**: A chain is not a special object. A chain is simply a graph of Runnables connected via the pipe operator. Understanding this changes how you architect AI systems.
+**💡 KEY INSIGHT**: A chain is not a special object. A chain is simply a graph of Runnables connected via the pipe operator. Understanding this changes how you architect AI systems.
 
 ---
 
