@@ -255,13 +255,17 @@ jobs:
       
       - name: Generate static site
         run: |
-          # Create mkdocs.yml if it doesn't exist
+          # Create docs directory and copy markdown files
+          mkdir -p docs
+          cp *.md docs/
+          cp examples_*.py docs/ || true
+          
+          # Create mkdocs.yml
           cat > mkdocs.yml << 'MKDOCS_EOF'
           site_name: AI Architecture Blueprints
           site_description: Production-Ready Design Patterns for LLM Systems
           site_author: Architecture Team
           repo_url: https://github.com/${{ github.repository }}
-          docs_dir: .
           
           theme:
             name: material
