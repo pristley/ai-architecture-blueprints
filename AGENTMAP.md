@@ -77,6 +77,7 @@ graph TB
 | [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
 | [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
 | [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
+| [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
 
 ### Code Examples
 
@@ -85,6 +86,7 @@ graph TB
 | [examples_1_2.py](examples_1_2.py) | 💻 Code | 3 chain approaches with advanced patterns | ~900 | ✅ |
 | [examples_1_3.py](examples_1_3.py) | 💻 Code | 6 Runnable protocol examples with deep comments | ~1500 | ✅ |
 | [examples_1_4.py](examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
+| [examples_1_7.py](examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
 
 ### Meta Documents
 
@@ -200,34 +202,34 @@ WP-1.5: Output Parsing for System Integration
 
    ### WP-1.7 Relationships
 
-   ```
-   WP-1.7: Introduction to Tracing with LangSmith
-   │
-   ├─→ Depends on
-   │   ├─ WP-1.3 (understanding Runnable chain structure)
-   │   ├─ WP-1.4 (traces show prompt optimization impact)
-   │   ├─ WP-1.5 (traces show parser performance and failures)
-   │   └─ WP-1.6 (traces compare model performance)
-   │
-   ├─→ Enables optimization of
-   │   ├─ WP-1.4 (see prompt token impact on cost/latency)
-   │   ├─ WP-1.5 (debug parsing failures, measure overhead)
-   │   └─ WP-1.6 (measure real-world model performance)
-   │
-   ├─→ References
-   │   ├─ README.md (overview)
-   │   ├─ LangSmith (https://smith.langchain.com)
-   │   └─ LangChain Tracing Docs
-   │
-   └─→ Introduces patterns for
-      ├─ Automatic chain instrumentation
-      ├─ Token-level observability
-      ├─ Latency breakdown analysis
-      ├─ Cost tracking per request
-      ├─ A/B testing with trace comparison
-      ├─ Adaptive production sampling (10% random + 100% errors)
-      └─ ADR for tracing strategy
-   ```
+```
+WP-1.7: Introduction to Tracing with LangSmith
+│
+├─→ Depends on
+│   ├─ WP-1.3 (understanding Runnable chain structure)
+│   ├─ WP-1.4 (traces show prompt optimization impact)
+│   ├─ WP-1.5 (traces show parser performance and failures)
+│   └─ WP-1.6 (traces compare model performance)
+│
+├─→ Enables optimization of
+│   ├─ WP-1.4 (see prompt token impact on cost/latency)
+│   ├─ WP-1.5 (debug parsing failures, measure overhead)
+│   └─ WP-1.6 (measure real-world model performance)
+│
+├─→ References
+│   ├─ README.md (overview)
+│   ├─ LangSmith (https://smith.langchain.com)
+│   └─ LangChain Tracing Docs
+│
+└─→ Introduces patterns for
+   ├─ Automatic chain instrumentation
+   ├─ Token-level observability
+   ├─ Latency breakdown analysis
+   ├─ Cost tracking per request
+   ├─ A/B testing with trace comparison
+   ├─ Adaptive production sampling (10% random + 100% errors)
+   └─ ADR for tracing strategy
+```
 
 ### Examples Relationships
 
@@ -258,6 +260,39 @@ examples_1_3.py: Runnable Protocol Deep Dive
 │
 └─→ Complements
     └─ WP-1.3-The-Runnable-Protocol.md (theory + practice)
+```
+
+examples_1_4.py: PromptRegistry Demonstrations
+├─→ Demonstrates
+│   ├─ PromptRegistry (named, versioned prompts)
+│   ├─ Prompt composition (base + specialist)
+│   ├─ Multi-turn conversations
+│   ├─ Prompt unit testing
+│   ├─ Chat history management
+│   └─ Dynamic routing by prompt version
+│
+└─→ Shows patterns like
+    ├─ Versioning
+    ├─ Composition
+    ├─ Testing
+    └─ Observability
+```
+
+examples_1_7.py: LangSmith Tracing Demonstrations
+├─→ Demonstrates
+│   ├─ Enabling tracing with environment variables
+│   ├─ Understanding trace structure and components
+│   ├─ Comparing chains using trace metrics
+│   ├─ Debugging failures through trace analysis
+│   ├─ Token counting and cost calculation
+│   └─ Latency breakdown (TTFT, generation time)
+│
+└─→ Shows patterns like
+    ├─ Automatic instrumentation
+    ├─ Metric extraction
+    ├─ A/B testing with traces
+    ├─ Production sampling strategy
+    └─ Error debugging
 ```
 
 ---
@@ -329,6 +364,22 @@ examples_1_3.py: Runnable Protocol Deep Dive
 ```
 
 **Outcome**: Make informed model selection decisions with architectural trade-offs and sensitivity analysis
+
+---
+
+### Path 7: "Debug and Optimize with Observability" (2 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. WP-1.7-Introduction-to-Tracing-with-LangSmith.md (45 min)
+   ↓
+3. examples_1_7.py (all 4 examples - 45 min)
+   ↓
+4. Set up LangSmith API key and trace your own chain (15 min)
+```
+
+**Outcome**: Use observability to debug failures and optimize cost/latency with real data
 
 ---
 
@@ -655,20 +706,22 @@ LANGCHAIN_ECOSYSTEM_MAP.md (reference)
 
 | Document | Type | Lines | Sections | Status |
 |----------|------|-------|----------|--------|
-| README.md | Guide | ~800 | 10 | ✅ Complete |
+| README.md | Guide | ~900 | 11 | ✅ Complete |
 | LANGCHAIN_ECOSYSTEM_MAP.md | Reference | ~1200 | 15 | ✅ Complete |
 | ADR-1.2 | Decision | ~500 | 12 | ✅ Complete |
 | WP-1.3 | Deep Dive | ~1100 | 12 | ✅ Complete |
 | WP-1.4 | Design Pattern | ~900 | 10 | ✅ Complete |
 | WP-1.5 | Design Pattern | ~200 | 8 | ✅ Complete |
+| WP-1.6 | Design Pattern | ~220 | 8 | ✅ Complete |
+| WP-1.7 | Design Pattern | ~740 | 11 | ✅ Complete |
 | examples_1_2.py | Code | ~900 | 7 | ✅ Complete |
 | examples_1_3.py | Code | ~1500 | 7 | ✅ Complete |
 | examples_1_4.py | Code | ~600 | 6 | ✅ Complete |
-| WP-1.6 | Design Pattern | ~220 | 8 | ✅ Complete |
-| AGENTMAP.md | Map | ~650 | 17 | ✅ This file |
-| **TOTAL** | | **~9300+** | | ✅ |
+| examples_1_7.py | Code | ~603 | 6 | ✅ Complete |
+| AGENTMAP.md | Map | ~750 | 18 | ✅ This file |
+| **TOTAL** | | **~11,800+** | | ✅ |
 
-**Estimated Learning Time**: 15-20 hours for complete understanding + hands-on practice
+**Estimated Learning Time**: 18-24 hours for complete understanding + hands-on practice
 
 ---
 

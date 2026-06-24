@@ -38,10 +38,11 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 - 🎯 **Production Patterns** - Real-world strategies for reliability, observability, and scaling
 - 📚 **Complete Documentation** - From fundamentals to advanced patterns with 15+ examples
 - ⚡ **Fast Iteration** - Automated CI/CD pipeline with instant GitHub Pages deployment
-- 🧪 **Tested & Proven** - All examples validated with 6+ unit tests and 100% syntax pass rate
+- 🧪 **Tested & Proven** - All examples validated with 8+ unit tests and 100% syntax pass rate
 - 🔗 **Full Ecosystem** - Reference guide for entire LangChain stack (core, community, services)
 - 🤖 **Modern DevOps** - GitHub Actions automation with auto-documentation updates
 - 📖 **Visual Navigation** - Knowledge graph with Mermaid diagrams for quick orientation
+- 🔍 **Production Observability** - Complete tracing guide with LangSmith for debugging and optimization
 
 ---
 
@@ -80,6 +81,7 @@ We provide:
 | **Manage prompts in production** | [WP-1.4](#wp-14-prompt-engineering-as-code) | 90 min |
 | **Parse structured output safely** | [WP-1.5](#wp-15-output-parsing-for-system-integration) | 45 min |
 | **Choose a production model** | [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) | 45 min |
+| **Debug with observability** | [WP-1.7](#wp-17-tracing-with-langsmith) | 60 min |
 | **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
 | **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
 
@@ -128,9 +130,11 @@ We provide:
 **Lost? Start here:**
 - 🗺️ **Full map** → [AGENTMAP.md](AGENTMAP.md) - Visual graph of all documents
 - 🚀 **Fast track (30 min)** → [ADR-1.2](#adr-12-chain-abstractions) - Which pattern to use
-- 📚 **Deep dive (2 hours)** → [WP-1.3](#wp-13-runnable-protocol) - How it works
+- � **Deep dive** → [WP-1.3](#wp-13-runnable-protocol) - How it works
 - 📈 **Typed extraction (45 min)** → [WP-1.5](#wp-15-output-parsing-for-system-integration) - Parse and recover structured output
+- 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) - Pick the best model with a weighted matrix
+- 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 🏭 **Production (1 hour)** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -394,6 +398,72 @@ Includes ADR with production guardrails, monitoring strategy, and sensitivity an
 
 ---
 
+### WP-1.7: Tracing with LangSmith
+
+**[WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md)** answers: *"How do I debug and optimize my LLM chains?"*
+
+#### The Problem
+
+LLM systems are opaque. When a chain is slow or expensive, you don't know if the problem is:
+- Network latency to the LLM provider?
+- LLM inference time?
+- Token overhead in prompts?
+- Parsing overhead in output processing?
+- A custom Runnable doing expensive computation?
+
+#### The Pattern
+
+```python
+import os
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGSMITH_API_KEY"] = "your-key"
+
+# Every invoke() automatically creates a trace
+result = chain.invoke({"input": "..."})
+# → View in LangSmith dashboard with full execution breakdown
+```
+
+Traces capture:
+- **Input/Output** at each step
+- **Token counts** (prompt and completion tokens)
+- **Timing** (TTFT, generation time, total latency)
+- **Cost** calculated from tokens and model
+- **Metadata** for production context
+- **Errors** with full context for debugging
+
+#### Repository Use Case
+
+This work product provides:
+- Observability-first debugging strategy
+- Step-by-step LangSmith trace interpretation
+- Token usage and cost analysis patterns
+- Real-world debugging scenarios:
+  * High latency identification and fix
+  * Cost reduction through trace analysis
+  * Parsing failure debugging
+- Production tracing best practices:
+  * 100% tracing in development
+  * 10% sampling + 100% errors in production
+  * Custom metadata for production context
+- ADR: Adaptive tracing strategy for production
+- Integration with WP-1.4 (prompt optimization) and WP-1.5 (output parsing)
+
+#### Practice Examples
+
+**[examples_1_7.py](examples_1_7.py)** provides 4 practical demonstrations:
+1. **Basic Tracing Setup** - Enable LangSmith with one environment variable
+2. **Understanding Trace Structure** - What information is captured and how to interpret it
+3. **Comparing Chains with Traces** - A/B testing using real trace data
+4. **Debugging with Traces** - Finding and fixing failures using trace analysis
+
+Each example includes:
+- How to enable tracing
+- How to read trace output
+- How to extract metrics (tokens, latency, cost)
+- How to use traces for optimization decisions
+
+---
+
 **[LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)** maps the entire LangChain ecosystem:
 
 **Core Layers:**
@@ -576,17 +646,29 @@ result = chain.invoke({"input": "..."})
 
 **Outcome:** Versioned, composable, testable prompts for any agent
 
-### Level 4: Full Production (4 hours)
+### Level 4: Production Observability (2 hours)
+
+**Goal:** Debug and optimize with complete visibility
+
+1. Read [WP-1.7](#wp-17-tracing-with-langsmith)
+2. Run `python examples_1_7.py` - All 4 examples
+3. Set up LangSmith API key and connect your chains
+4. Capture traces and analyze token usage/latency
+5. Use traces to compare and optimize components
+
+**Outcome:** Data-driven optimization and confident debugging
+
+### Level 5: Full Production (4 hours)
 
 **Goal:** Build complete production AI systems
 
 1. Finish [WP-1.3](#wp-13-runnable-protocol) - Parts 6-12
 2. Build custom Runnable for your domain
 3. Compose with other components
-4. Set up observability with LangSmith
-5. Deploy with LangServe
+4. Set up adaptive sampling strategy (10% random + 100% errors)
+5. Deploy with LangServe and production observability
 
-**Outcome:** Ready to build enterprise AI systems
+**Outcome:** Ready to build enterprise AI systems with production monitoring
 
 ---
 
@@ -650,6 +732,9 @@ add_routes(app, my_chain, path="/chain")
 | [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | Design Pattern | PromptRegistry: versioning, composition, multi-turn | For production prompt management |
 | [examples_1_4.py](examples_1_4.py) | Code | 6 PromptRegistry demos with unit tests | After reading WP-1.4 |
 | [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | Design Pattern | Structured output, parser repair, retry strategy | For typed downstream integrations |
+| [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | Design Pattern | Model decision matrix, 2026 landscape, routing strategy | For production model selection |
+| [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | Design Pattern | Observability, tracing, debugging, optimization | For production monitoring and debugging |
+| [examples_1_7.py](examples_1_7.py) | Code | 4 LangSmith tracing demonstrations | After reading WP-1.7 |
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | Reference | Complete LangChain stack | For component decisions |
 | [README.md](README.md) | Overview | This file | Starting point |
 
