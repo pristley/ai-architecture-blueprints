@@ -10,6 +10,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  pages: write
+  id-token: write
 
 jobs:
   lint-and-test:
@@ -52,6 +54,7 @@ jobs:
           python examples_1_2.py 2>&1 | head -20 || echo "⚠️  examples_1_2 requires OPENAI_API_KEY"
           python examples_1_3.py 2>&1 | head -20 || echo "⚠️  examples_1_3 requires OPENAI_API_KEY"
           python examples_1_4.py 2>&1 | tail -20 || echo "⚠️  Some examples require OPENAI_API_KEY"
+          python examples_1_7.py 2>&1 | tail -20 || echo "⚠️  examples_1_7 requires LANGSMITH_API_KEY"
           echo "✅ Example validation complete"
       
       - name: Validate markdown links
@@ -92,7 +95,7 @@ jobs:
           echo "Generating documentation statistics..."
           
           # Count lines for all documented work products
-          files_to_count="README.md LANGCHAIN_ECOSYSTEM_MAP.md ADR-1.2-Hello-World-Three-Ways.md WP-1.3-The-Runnable-Protocol.md WP-1.4-Prompt-Engineering-as-Code.md WP-1.5-Output-Parsing-for-System-Integration.md WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md examples_1_2.py examples_1_3.py examples_1_4.py"
+          files_to_count="README.md LANGCHAIN_ECOSYSTEM_MAP.md ADR-1.2-Hello-World-Three-Ways.md WP-1.3-The-Runnable-Protocol.md WP-1.4-Prompt-Engineering-as-Code.md WP-1.5-Output-Parsing-for-System-Integration.md WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md WP-1.7-Introduction-to-Tracing-with-LangSmith.md examples_1_2.py examples_1_3.py examples_1_4.py examples_1_7.py"
           
           total_lines=$(wc -l $files_to_count | tail -1 | awk '{print $1}')
           echo "total_lines=$total_lines" >> $GITHUB_OUTPUT
@@ -154,9 +157,11 @@ jobs:
                   'WP-1.4-Prompt-Engineering-as-Code.md',
                   'WP-1.5-Output-Parsing-for-System-Integration.md',
                   'WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md',
+                  'WP-1.7-Introduction-to-Tracing-with-LangSmith.md',
                   'examples_1_2.py',
                   'examples_1_3.py',
                   'examples_1_4.py',
+                  'examples_1_7.py',
               ]
               
               stats = {f: get_line_count(f) for f in files if os.path.exists(f)}
@@ -293,6 +298,7 @@ jobs:
               - Prompt Engineering: WP-1.4-Prompt-Engineering-as-Code.md
               - Output Parsing: WP-1.5-Output-Parsing-for-System-Integration.md
               - Model Selection: WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md
+              - Tracing & Observability: WP-1.7-Introduction-to-Tracing-with-LangSmith.md
             - Reference:
               - Ecosystem: LANGCHAIN_ECOSYSTEM_MAP.md
           
@@ -307,12 +313,40 @@ jobs:
           mkdocs build
           echo "✅ Static site generated"
       
+      - name: Verify site structure
+        run: |
+          echo "📋 Verifying generated site..."
+          if [ -d "site" ]; then
+            echo "✅ Site directory created"
+            echo "📊 Site contents:"
+            ls -lah site/ | head -20
+            echo ""
+            echo "📄 Main files:"
+            find site/ -maxdepth 1 -type f -name "*.html" | head -10
+          else
+            echo "❌ Site directory not found!"
+            exit 1
+          fi
+      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
-          cname: blueprints.example.com  # Optional: set your custom domain
+          # Remove CNAME if not using a custom domain
+      
+      - name: Deployment Summary
+        run: |
+          echo "✅ GitHub Pages Deployment Complete"
+          echo ""
+          echo "📄 Site URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "🔗 Repository: ${{ github.server_url }}/${{ github.repository }}"
+          echo ""
+          echo "📊 Deployed Content:"
+          echo "  - 7 Work Products (WP-1.3 through WP-1.7)"
+          echo "  - 1 ADR (Architecture Decision Record)"
+          echo "  - 4 Working Examples"
+          echo "  - Full Ecosystem Reference"
 
   notify:
     name: Deployment Notification
