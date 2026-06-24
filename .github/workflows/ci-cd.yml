@@ -31,8 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install ruff pytest pytest-cov
-          pip install langchain-core langchain-openai
+          pip install -r requirements.txt
       
       - name: Lint with Ruff
         run: |
