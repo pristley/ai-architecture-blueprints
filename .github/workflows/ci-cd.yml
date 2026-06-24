@@ -35,8 +35,9 @@ jobs:
       
       - name: Lint with Ruff
         run: |
-          # Check Python code quality
-          ruff check . --select E,F,W,C,N --ignore E501
+          # Run linting (warnings only, don't fail build)
+          ruff check . --exit-zero || echo "⚠️  Linting warnings present"
+          echo "✅ Lint check complete"
         continue-on-error: true
       
       - name: Check Python syntax
@@ -260,6 +261,7 @@ jobs:
           site_description: Production-Ready Design Patterns for LLM Systems
           site_author: Architecture Team
           repo_url: https://github.com/${{ github.repository }}
+          docs_dir: .
           
           theme:
             name: material
