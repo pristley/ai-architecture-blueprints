@@ -592,3 +592,12 @@ Back to Read (deeper understanding)
 **Status**: ✅ Complete and production-ready  
 
 Happy learning! 🎓
+
+---
+
+**Repository Statistics** (auto-generated)
+
+- 📄 Documentation: 4,448 lines across 5 files
+- 💻 Examples: 3,777 lines across 3 files
+- 📊 Total: 8,225 lines
+- 🕒 Last updated: 2026-06-24 04:48 UTC

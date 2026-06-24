@@ -1,5 +1,7 @@
 # AI Architecture Blueprints
 
+![CI/CD Status](https://github.com/pristley/ai-architecture-blueprints/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg)
+
 **Production-Ready Design Patterns for LLM Systems**
 
 A comprehensive guide to building scalable, observable, and maintainable AI systems using LangChain. This repository contains architecture decision records, design patterns, and proven implementations for enterprise-grade AI applications.
