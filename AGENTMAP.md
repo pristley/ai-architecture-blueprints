@@ -16,6 +16,8 @@ graph TB
     EX12["💻 examples_1_2.py<br/>Working Implementations"]
     WP13["🔬 WP-1.3<br/>Runnable Protocol"]
     EX13["💻 examples_1_3.py<br/>Practical Demonstrations"]
+    WP14["📋 WP-1.4<br/>Prompt Engineering as Code"]
+    EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -24,9 +26,13 @@ graph TB
     START -->|Deep dive| WP13
     WP13 -->|Practice| EX13
     WP13 -->|Builds on| ADR12
+    WP13 -->|Enables| WP14
+    WP14 -->|Practice| EX14
+    WP14 -->|Builds on| ADR12
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| WP13
+    AGENTMAP -->|Shows relationships| WP14
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -34,6 +40,8 @@ graph TB
     style EX12 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP13 fill:#FF9800,stroke:#E65100,color:#fff
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style WP14 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX14 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -49,6 +57,7 @@ graph TB
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | 📚 Reference | Complete LangChain stack documentation | ~1200 | ✅ |
 | [ADR-1.2-Hello-World-Three-Ways.md](ADR-1.2-Hello-World-Three-Ways.md) | 🏗️ Architecture Decision | Chain abstraction comparison and decision flow | ~500 | ✅ |
 | [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | 🔬 Deep Dive | Runnable protocol explained in 12 parts | ~1100 | ✅ |
+| [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
 
 ### Code Examples
 
@@ -56,6 +65,7 @@ graph TB
 |----------|------|---------|-------|--------|
 | [examples_1_2.py](examples_1_2.py) | 💻 Code | 3 chain approaches with advanced patterns | ~900 | ✅ |
 | [examples_1_3.py](examples_1_3.py) | 💻 Code | 6 Runnable protocol examples with deep comments | ~1500 | ✅ |
+| [examples_1_4.py](examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
 
 ### Meta Documents
 
@@ -102,6 +112,28 @@ WP-1.3: The Runnable Protocol
 │
 └─→ Explains
     └─ How RunnableSequence (from ADR-1.2) actually works
+```
+
+### WP-1.4 Relationships
+
+```
+WP-1.4: Prompt Engineering as Code
+│
+├─→ Depends on
+│   ├─ WP-1.3 (ChatPromptTemplate IS a Runnable - composition via pipe operator)
+│   └─ ADR-1.2 (Prompts plug into LCEL chains - the chosen chain abstraction)
+│
+├─→ References
+│   └─ README.md (overview)
+│
+├─→ Provides code examples to
+│   └─ examples_1_4.py
+│
+└─→ Introduces patterns for
+    ├─ PromptRegistry (versioned prompt management)
+    ├─ MessagesPlaceholder (multi-turn conversation)
+    ├─ Prompt composition (base + specialist)
+    └─ Prompt unit testing (structure validation without LLM)
 ```
 
 ### Examples Relationships
@@ -152,6 +184,24 @@ examples_1_3.py: Runnable Protocol Deep Dive
 ```
 
 **Outcome**: Know which chain abstraction to use in production
+
+---
+
+### Path 4: "Prompt Engineering for Production" (3 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. ADR-1.2 (know the chosen chain abstraction - 20 min)
+   ↓
+3. WP-1.4-Prompt-Engineering-as-Code.md (60 min)
+   ↓
+4. examples_1_4.py (all 6 examples - 45 min)
+   ↓
+5. Build PromptRegistry for your own project (30 min)
+```
+
+**Outcome**: Manage prompts as versioned, composable, testable code artifacts
 
 ---
 

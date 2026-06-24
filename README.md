@@ -38,6 +38,7 @@ We provide:
 | **Understand which pattern to use** | [ADR-1.2](#adr-12-chain-abstractions) | 30 min |
 | **See working implementations** | [examples_1_2.py](#examples) | 30 min |
 | **Master the architecture** | [WP-1.3](#wp-13-runnable-protocol) | 2 hours |
+| **Manage prompts in production** | [WP-1.4](#wp-14-prompt-engineering-as-code) | 90 min |
 | **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
 | **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
 
@@ -233,7 +234,66 @@ Each example includes detailed comments explaining WHY, not just WHAT.
 
 ---
 
-### LANGCHAIN_ECOSYSTEM_MAP: Complete Stack
+### WP-1.4: Prompt Engineering as Code
+
+**[WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md)** answers: *"How do I manage prompts at scale?"*
+
+#### The Problem
+
+Prompts are not strings. They are executable configuration that encodes business logic. When prompts live as hard-coded strings:
+- No versioning (can't A/B test or roll back)
+- No reuse (copy-paste drift across 12 files)
+- No composition (each specialist re-declares base rules)
+- No testability (only way to test is to call the LLM)
+- Multi-turn chaos (conversation history appended ad hoc)
+
+#### The Pattern
+
+```python
+# Treat prompts like code: named, versioned, composable
+registry = PromptRegistry()
+registry.register(
+    name="customer_support",
+    template=ChatPromptTemplate.from_messages([
+        ("system", "You are a {role} at {company}..."),
+        MessagesPlaceholder("history"),  # multi-turn slot
+        ("human", "{input}"),
+    ]),
+    version="v1.1",
+    description="Added escalation protocol",
+    author="cx-team",
+)
+
+# Get any version by name
+prompt = registry.get("customer_support")           # latest
+prompt = registry.get("customer_support", "v1.0")  # specific
+
+# Compose: base rules + domain specialist
+combined = registry.compose("base_assistant", "customer_support")
+```
+
+#### Contains
+
+- The PromptRegistry implementation (complete, production-ready)
+- Semantic versioning strategy for prompts (MAJOR/MINOR/PATCH)
+- Composition patterns (base + specialist layers)
+- ConversationAgent with history windowing
+- History management strategies (fixed window, token budget, summarize)
+- Unit testing prompts without calling an LLM
+- A/B testing and hot-reload for production
+
+#### Practice Examples
+
+**[examples_1_4.py](examples_1_4.py)** provides 6 working demonstrations:
+
+1. **ChatPromptTemplate vs f-strings** - Why the abstraction matters
+2. **PromptRegistry** - Build, register, get, inspect
+3. **Versioning and deprecation** - Full lifecycle in practice
+4. **Composition** - Two-layer and three-layer prompt composition
+5. **ConversationAgent** - Multi-turn with MessagesPlaceholder and history windowing
+6. **Prompt unit testing** - Structural tests that run without any API call
+
+---
 
 **[LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)** maps the entire LangChain ecosystem:
 
@@ -406,9 +466,20 @@ result = chain.invoke({"input": "..."})
 
 **Outcome:** Can build custom Runnables, optimize for performance
 
-### Level 3: Mastery (4 hours)
+### Level 3: Prompt Mastery (2 hours)
 
-**Goal:** Build production systems
+**Goal:** Manage prompts as production engineering artifacts
+
+1. Read [WP-1.4](#wp-14-prompt-engineering-as-code)
+2. Run `python examples_1_4.py` - All 6 examples
+3. Build a PromptRegistry for your project
+4. Write structural unit tests for your prompts
+
+**Outcome:** Versioned, composable, testable prompts for any agent
+
+### Level 4: Full Production (4 hours)
+
+**Goal:** Build complete production AI systems
 
 1. Finish [WP-1.3](#wp-13-runnable-protocol) - Parts 6-12
 2. Build custom Runnable for your domain
@@ -477,6 +548,8 @@ add_routes(app, my_chain, path="/chain")
 | [examples_1_2.py](examples_1_2.py) | Code | Working implementations of 3 approaches | After reading ADR-1.2 |
 | [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | Deep Dive | How Runnables work, patterns, optimization | To understand architecture |
 | [examples_1_3.py](examples_1_3.py) | Code | 6 Runnable protocol demonstrations | After reading WP-1.3 |
+| [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | Design Pattern | PromptRegistry: versioning, composition, multi-turn | For production prompt management |
+| [examples_1_4.py](examples_1_4.py) | Code | 6 PromptRegistry demos with unit tests | After reading WP-1.4 |
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | Reference | Complete LangChain stack | For component decisions |
 | [README.md](README.md) | Overview | This file | Starting point |
 
@@ -507,6 +580,8 @@ add_routes(app, my_chain, path="/chain")
 3. **Use batch() for N items** - Never loop with invoke()
 4. **Stream for interactive UX** - Lower perceived latency
 5. **Error handling at boundaries** - Don't silently fail
+6. **Version every prompt** - Register with name, version, and description
+7. **Test prompt structure** - Unit test templates before integration testing behavior
 
 ---
 
@@ -525,6 +600,12 @@ add_routes(app, my_chain, path="/chain")
 
 **How do I deploy to production?**
 → See [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) LangServe section
+
+**How do I manage prompts across a team?**
+→ See [WP-1.4](#wp-14-prompt-engineering-as-code) PromptRegistry pattern
+
+**How do I build a multi-turn conversational agent?**
+→ See [WP-1.4](#wp-14-prompt-engineering-as-code) Part 6 + examples_1_4.py Example 5
 
 **I'm lost, where do I start?**
 → See [AGENTMAP.md](AGENTMAP.md)
