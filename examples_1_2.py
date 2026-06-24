@@ -41,12 +41,10 @@ for educational purposes. In production, always use Approach 3
 (RunnableSequence + LCEL).
 """
 
-import os
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableSequence, RunnableLambda
+from langchain_core.runnables import RunnableLambda
 from langchain_core.callbacks import StdOutCallbackHandler
-from langchain.chains import LLMChain
 
 
 # ============================================================================
@@ -181,6 +179,26 @@ def approach_2_simple_sequential_chain():
     WARNING: SimpleSequentialChain and LLMChain are deprecated in favor of
     RunnableSequence with LCEL. This example shows the pattern for reference
     and for maintaining existing codebases.
+    
+    NOTE: LLMChain import moved here to avoid import errors in modern LangChain.
+    This is for demonstration only—use Approach 3 in production.
+    """
+    # Lazy import of deprecated LLMChain to avoid module errors when not used
+    try:
+        from langchain.chains import LLMChain
+    except ImportError:
+        # Fallback for newer LangChain versions that removed this module
+        print("\n⚠️  NOTE: LLMChain is not available in this LangChain version.")
+        print("    This approach is deprecated. Use Approach 3 (LCEL) instead.")
+        return {
+            "poem": "(Skipped - LLMChain not available)",
+            "summary": "(Skipped - LLMChain not available)",
+            "traceability": "N/A - deprecated module",
+            "method": "SimpleSequentialChain (LLMChain) - DEPRECATED",
+            "observability_effort": "N/A"
+        }
+    
+    """
     
     CHARACTERISTICS:
     ────────────────

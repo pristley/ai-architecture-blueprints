@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.1] - 2026-06-24
+
+### Added
+- **WP-1.6: Choosing an LLM - A Decision Matrix**
+  - Architect-focused comparison of GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, and Mixtral via Groq
+  - Evaluation axes: cost per 1M tokens, TTFT, TPS, context window, tool-calling reliability, multimodal capability
+  - Weighted scoring for a high-volume customer support chatbot
+  - Short ADR with primary model decision, routing strategy, trade-offs, and mitigations
+
+- **Unit tests for WP-1.6**
+  - Existence and required matrix dimensions validated in CI
+
+### Changed
+- Updated README navigation and documentation sections to include WP-1.6
+- Updated AGENTMAP hierarchy and document overview to include WP-1.6
+- Updated CI/CD auto-documentation workflow to include WP-1.6 in line-count statistics
+
 ## [1.0.0] - 2026-06-24
 
 ### Added

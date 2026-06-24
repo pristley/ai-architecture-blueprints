@@ -79,6 +79,7 @@ We provide:
 | **Master the architecture** | [WP-1.3](#wp-13-runnable-protocol) | 2 hours |
 | **Manage prompts in production** | [WP-1.4](#wp-14-prompt-engineering-as-code) | 90 min |
 | **Parse structured output safely** | [WP-1.5](#wp-15-output-parsing-for-system-integration) | 45 min |
+| **Choose a production model** | [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) | 45 min |
 | **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
 | **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
 
@@ -129,6 +130,7 @@ We provide:
 - 🚀 **Fast track (30 min)** → [ADR-1.2](#adr-12-chain-abstractions) - Which pattern to use
 - 📚 **Deep dive (2 hours)** → [WP-1.3](#wp-13-runnable-protocol) - How it works
 - 📈 **Typed extraction (45 min)** → [WP-1.5](#wp-15-output-parsing-for-system-integration) - Parse and recover structured output
+- 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) - Pick the best model with a weighted matrix
 - 🏭 **Production (1 hour)** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -362,6 +364,27 @@ Production systems need typed outputs, not loosely formatted text. If the model 
 #### Repository Use Case
 
 This pattern is designed for invoice extraction, document ingestion, and any system integration that depends on reliable structured output.
+
+---
+
+### WP-1.6: Choosing an LLM - A Decision Matrix
+
+**[WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md)** answers: *"How do I choose the right model for a production architecture?"*
+
+#### The Problem
+
+Model selection is a systems decision, not just a benchmark result. Architects must balance token economics, latency, context needs, tool-calling reliability, and multimodal support.
+
+#### The Pattern
+
+- Compare candidate models on shared operational axes.
+- Use explicit weighting aligned to workload priorities.
+- Run sensitivity analysis to see when the recommendation changes.
+- Record the outcome as a short ADR with risks and mitigations.
+
+#### Repository Use Case
+
+This work product provides a practical decision matrix and ADR for a hypothetical high-volume customer support chatbot, including a routed multi-model production strategy.
 
 ---
 

@@ -19,6 +19,7 @@ graph TB
     WP14["📋 WP-1.4<br/>Prompt Engineering as Code"]
       EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
       WP15["📈 WP-1.5<br/>Output Parsing for System Integration"]
+         WP16["🤖 WP-1.6<br/>Choosing an LLM"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -29,6 +30,7 @@ graph TB
     WP13 -->|Builds on| ADR12
     WP13 -->|Enables| WP14
       WP14 -->|Enables| WP15
+         WP15 -->|Informs| WP16
     WP14 -->|Practice| EX14
     WP14 -->|Builds on| ADR12
     AGENTMAP -->|Shows relationships| START
@@ -36,6 +38,7 @@ graph TB
     AGENTMAP -->|Shows relationships| WP13
     AGENTMAP -->|Shows relationships| WP14
       AGENTMAP -->|Shows relationships| WP15
+      AGENTMAP -->|Shows relationships| WP16
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -46,6 +49,7 @@ graph TB
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
     style EX14 fill:#9C27B0,stroke:#6A1B9A,color:#fff
       style WP15 fill:#FF9800,stroke:#E65100,color:#fff
+         style WP16 fill:#FF9800,stroke:#E65100,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -63,6 +67,7 @@ graph TB
 | [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | 🔬 Deep Dive | Runnable protocol explained in 12 parts | ~1100 | ✅ |
 | [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
 | [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
+| [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
 
 ### Code Examples
 
@@ -164,6 +169,26 @@ WP-1.5: Output Parsing for System Integration
       └─ RetryWithErrorOutputParser retries
 ```
 
+   ### WP-1.6 Relationships
+
+   ```
+   WP-1.6: Choosing an LLM - A Decision Matrix
+   │
+   ├─→ Depends on
+   │   ├─ WP-1.5 (structured outputs and tool reliability are model-selection constraints)
+   │   ├─ WP-1.4 (prompt strategy influences model cost and latency)
+   │   └─ ADR-1.2 (orchestration architecture changes model requirements)
+   │
+   ├─→ References
+   │   └─ README.md (overview)
+   │
+   └─→ Introduces patterns for
+      ├─ Weighted model decision matrices
+      ├─ Sensitivity analysis by workload priority
+      ├─ ADR capture for model selection
+      └─ Routed multi-model deployment strategy
+   ```
+
 ### Examples Relationships
 
 ```
@@ -251,6 +276,22 @@ examples_1_3.py: Runnable Protocol Deep Dive
 
 ---
 
+### Path 6: "Model Selection for Production" (2.5 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md (60 min)
+   ↓
+3. Review weighted scoring and sensitivity analysis (30 min)
+   ↓
+4. Apply decision matrix to your use case (45 min)
+```
+
+**Outcome**: Make informed model selection decisions with architectural trade-offs and sensitivity analysis
+
+---
+
 ### Path 2: "I Want to Understand" (6 hours)
 
 ```
@@ -273,7 +314,7 @@ examples_1_3.py: Runnable Protocol Deep Dive
 
 ---
 
-### Path 3: "Production Systems" (4 hours)
+### Path 3: "Production Systems" (5 hours)
 
 ```
 1. README.md (15 min)
@@ -288,10 +329,12 @@ examples_1_3.py: Runnable Protocol Deep Dive
    ↓
 6. examples_1_3.py (Focus on Example 6: batch performance - 30 min)
    ↓
-7. Design and build production system
+7. WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md (Model selection - 45 min)
+   ↓
+8. Design and build production system
 ```
 
-**Outcome**: Ready to build production-grade LLM systems
+**Outcome**: Ready to build production-grade LLM systems with informed model selection
 
 ---
 
@@ -314,6 +357,11 @@ Layer 3: Understanding (How does it work?)
 
 Layer 4: Navigation (How is it all connected?)
 └─ AGENTMAP.md (you are here)
+
+Layer 5: Model Selection (Which model to use?)
+├─ WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md
+├─ Weighted scoring framework
+└─ Production ADR template
 ```
 
 ---
@@ -363,6 +411,10 @@ Layer 4: Navigation (How is it all connected?)
 | How to route conditionally? | examples_1_3.py | Example 5 |
 | Why is batch() important? | examples_1_3.py | Example 6 |
 | How do I parse structured output safely? | WP-1.5 | Schema + recovery strategy |
+| How to choose a production model? | WP-1.6 | Decision matrix & scoring |
+| How do I compare model trade-offs? | WP-1.6 | Architect axes comparison |
+| What is tool-calling reliability? | WP-1.6 | Model evaluation criteria |
+| How to do sensitivity analysis? | WP-1.6 | Impact analysis section |
 | How to deploy? | LANGCHAIN_ECOSYSTEM_MAP.md | LangServe section |
 
 ---
@@ -443,6 +495,12 @@ Week 3: Mastery
 ├─ Day 2: Design composition architecture
 ├─ Day 3: Optimize performance (batch, streaming)
 └─ Day 4: Production deployment
+
+Week 4: Architecture
+├─ Day 1: WP-1.6 decision matrix (model selection)
+├─ Day 2: Output parsing and validation (WP-1.5)
+├─ Day 3: Prompt management strategies (WP-1.4)
+└─ Day 4: Full system design with all patterns
 ```
 
 ---
@@ -472,6 +530,13 @@ Week 3: Mastery
 - 📖 [README.md](README.md) - Overview
 - 🏗️ [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Context for examples_1_2.py
 - 🔬 [WP-1.3](WP-1.3-The-Runnable-Protocol.md) - Theory for examples_1_3.py
+- 📋 [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md) - Theory for examples_1_4.py
+
+### From WP-1.6, you can reach:
+- 📖 [README.md](README.md) - Back to overview
+- 📈 [WP-1.5](WP-1.5-Output-Parsing-for-System-Integration.md) - Output reliability constraints
+- 📋 [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md) - Prompt strategy impact on costs
+- 🏗️ [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Orchestration architecture effects
 
 ---
 
@@ -503,7 +568,21 @@ AGENTMAP.md (shows)
     │               └─ demonstrates: ADR-1.2 approaches
     │
     └─────────→ examples_1_3.py (code)
-                    └─ demonstrates: WP-1.3 concepts
+    │               └─ demonstrates: WP-1.3 concepts
+    │
+    ├─────────→ WP-1.4 (prompts)
+    │               ├─ depends on: ADR-1.2
+    │               ├─ references: WP-1.3
+    │               └─ provides examples to: examples_1_4.py
+    │
+    ├─────────→ WP-1.5 (parsing)
+    │               ├─ depends on: WP-1.3, WP-1.4
+    │               └─ referenced by: WP-1.6
+    │
+    └─────────→ WP-1.6 (model selection)
+                ├─ depends on: WP-1.5, WP-1.4, ADR-1.2
+                ├─ provides: Decision framework
+                └─ ADR template
 
 LANGCHAIN_ECOSYSTEM_MAP.md (reference)
     ↑
@@ -544,8 +623,10 @@ LANGCHAIN_ECOSYSTEM_MAP.md (reference)
 | WP-1.5 | Design Pattern | ~200 | 8 | ✅ Complete |
 | examples_1_2.py | Code | ~900 | 7 | ✅ Complete |
 | examples_1_3.py | Code | ~1500 | 7 | ✅ Complete |
-| AGENTMAP.md | Map | ~600 | 15 | ✅ This file |
-| **TOTAL** | | **~8500** | | ✅ |
+| examples_1_4.py | Code | ~600 | 6 | ✅ Complete |
+| WP-1.6 | Design Pattern | ~220 | 8 | ✅ Complete |
+| AGENTMAP.md | Map | ~650 | 17 | ✅ This file |
+| **TOTAL** | | **~9300+** | | ✅ |
 
 **Estimated Learning Time**: 15-20 hours for complete understanding + hands-on practice
 
@@ -603,10 +684,12 @@ Back to Read (deeper understanding)
 - Use Runnables? → [WP-1.3 Part 1](WP-1.3-The-Runnable-Protocol.md)
 - Choose chain pattern? → [ADR-1.2 Decision Flow](ADR-1.2-Hello-World-Three-Ways.md)
 - Build custom component? → [examples_1_3.py Example 2](examples_1_3.py)
-- Stream output? → [WP-1.3 Part 2 (stream)](WP-1.3-The-Runnable-Protocol.md) + [examples_1_3.py Example 1](examples_1_3.py)
+- Stream output? → [WP-1.3 Part 2 - stream](WP-1.3-The-Runnable-Protocol.md) + [examples_1_3.py Example 1](examples_1_3.py)
 - Batch process? → [examples_1_3.py Example 6](examples_1_3.py)
 - Debug execution? → [examples_1_3.py Example 4](examples_1_3.py)
 - Route conditionally? → [examples_1_3.py Example 5](examples_1_3.py)
+- Manage prompts at scale? → [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md)
+- Choose a model? → [WP-1.6](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md)
 - Deploy to production? → [LANGCHAIN_ECOSYSTEM_MAP.md LangServe](LANGCHAIN_ECOSYSTEM_MAP.md)
 
 ---

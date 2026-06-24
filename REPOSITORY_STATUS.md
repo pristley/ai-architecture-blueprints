@@ -59,7 +59,8 @@ Added comprehensive metrics table to README:
 | Status | ✅ Production-Ready |
 | Python | 3.9+ |
 | License | MIT |
-| Documentation | 8,400+ lines |
+| Documentation | 9,300+ lines (11 documents) |
+| Work Products | 5 (ADR-1.2, WP-1.3, WP-1.4, WP-1.5, WP-1.6) |
 | CI/CD | 4-job pipeline, 52s deployment |
 | Examples | 15+ working demonstrations |
 | Unit Tests | 6/6 passing |
@@ -82,10 +83,10 @@ Added 8-point highlights showcasing key features:
 ## 📈 Repository Quality Metrics
 
 ### Documentation
-- **Total Lines**: 8,400+
-- **Files**: 9 markdown documents
+- **Total Lines**: 9,300+
+- **Files**: 11 markdown documents (including WP-1.5, WP-1.6)
 - **Examples**: 15+ working demonstrations
-- **Comments**: 800+ lines of detailed explanations
+- **Comments**: 1,000+ lines of detailed explanations
 
 ### Code Quality
 - **Python Files**: 3 example files
@@ -155,29 +156,32 @@ When someone visits your repository on GitHub, they now see:
 
 ```
 ai-architecture-blueprints/
-├── VERSION                                # 1.0.0
-├── LICENSE                                # MIT License
-├── CHANGELOG.md                           # Release history
-├── README.md                              # Updated with badges & metrics
-├── ADR-1.2-Hello-World-Three-Ways.md     # Chain decision record
-├── WP-1.3-The-Runnable-Protocol.md       # Protocol deep dive
-├── WP-1.4-Prompt-Engineering-as-Code.md  # Prompt patterns
-├── AGENTMAP.md                            # Visual knowledge graph
-├── LANGCHAIN_ECOSYSTEM_MAP.md             # Full stack reference
-├── DEPLOYMENT_SUMMARY.md                  # Deployment guide
-├── PIPELINE_STATUS.md                     # CI/CD status
-├── examples_1_2.py                        # Three chain patterns
-├── examples_1_3.py                        # Runnable protocol
-├── examples_1_4.py                        # Prompt engineering
-├── requirements.txt                       # Python dependencies
-├── .gitignore                             # Exclude artifacts
+├── VERSION                                  # 1.0.0
+├── LICENSE                                  # MIT License
+├── CHANGELOG.md                             # Release history
+├── README.md                                # Updated with badges & metrics
+├── ADR-1.2-Hello-World-Three-Ways.md       # Chain decision record
+├── WP-1.3-The-Runnable-Protocol.md         # Protocol deep dive
+├── WP-1.4-Prompt-Engineering-as-Code.md    # Prompt patterns
+├── WP-1.5-Output-Parsing-for-System-Integration.md # Output validation
+├── WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md    # Model selection
+├── AGENTMAP.md                              # Visual knowledge graph
+├── LANGCHAIN_ECOSYSTEM_MAP.md               # Full stack reference
+├── REPOSITORY_STATUS.md                     # This file
+├── DEPLOYMENT_SUMMARY.md                    # Deployment guide
+├── PIPELINE_STATUS.md                       # CI/CD status
+├── examples_1_2.py                          # Three chain patterns
+├── examples_1_3.py                          # Runnable protocol
+├── examples_1_4.py                          # Prompt engineering
+├── requirements.txt                         # Python dependencies
+├── .gitignore                               # Exclude artifacts
 └── .github/
     ├── workflows/
-    │   └── ci-cd.yml                     # GitHub Actions pipeline
+    │   └── ci-cd.yml                       # GitHub Actions pipeline
     ├── scripts/
-    │   └── update_docs.py                # Auto-doc updates
-    ├── PIPELINE.md                        # Pipeline documentation
-    └── QUICKSTART.md                      # Quick reference
+    │   └── update_docs.py                  # Auto-doc updates
+    ├── PIPELINE.md                          # Pipeline documentation
+    └── QUICKSTART.md                        # Quick reference
 ```
 
 ---

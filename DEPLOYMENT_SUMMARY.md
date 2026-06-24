@@ -46,8 +46,9 @@ graph TB
 - ✅ Markdown link validation
 
 #### Job 2: Update Documentation (~1 min)
-- 📊 Calculate repository statistics
+- 📊 Calculate repository statistics (including WP-1.5, WP-1.6)
 - 📝 Update [AGENTMAP.md](AGENTMAP.md) with file counts and timestamps
+- 📄 Process all work products: ADR-1.2, WP-1.3, WP-1.4, WP-1.5, WP-1.6
 - 🔖 Add CI/CD badge to [README.md](README.md)
 - 💾 Auto-commit with `[skip ci]` to prevent loops
 
