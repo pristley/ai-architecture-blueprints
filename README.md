@@ -373,18 +373,24 @@ This pattern is designed for invoice extraction, document ingestion, and any sys
 
 #### The Problem
 
-Model selection is a systems decision, not just a benchmark result. Architects must balance token economics, latency, context needs, tool-calling reliability, and multimodal support.
+Model selection is a systems decision, not just a benchmark result. Architects must balance token economics, latency, context needs, tool-calling reliability, and multimodal support. The 2026 LLM landscape includes diverse options with different trade-offs.
 
 #### The Pattern
 
-- Compare candidate models on shared operational axes.
+- Compare 7+ candidate models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Mixtral, Gemini 3.5, ChatGPT 5.5, Claude OS 4.8) on shared operational axes.
 - Use explicit weighting aligned to workload priorities.
 - Run sensitivity analysis to see when the recommendation changes.
-- Record the outcome as a short ADR with risks and mitigations.
+- Record the outcome as a short ADR with tiered routing strategy and production guardrails.
 
 #### Repository Use Case
 
-This work product provides a practical decision matrix and ADR for a hypothetical high-volume customer support chatbot, including a routed multi-model production strategy.
+This work product provides a comprehensive decision matrix comparing 7 models across architect-critical dimensions (cost, latency, context, tool-calling reliability, multimodal capability). The 2026 update identifies **Claude OS 4.8 as the primary recommendation** for high-volume support, delivering:
+- 50%+ cost savings vs GPT-4o (2.5x cheaper input tokens)
+- Industry-leading context window (300k) for complex case reasoning
+- Strong tool-calling reliability (4.6/5.0)
+- Tiered multi-model routing for latency-sensitive and budget-optimized paths
+
+Includes ADR with production guardrails, monitoring strategy, and sensitivity analysis showing when competing models become optimal.
 
 ---
 

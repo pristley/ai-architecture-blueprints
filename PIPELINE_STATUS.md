@@ -11,9 +11,10 @@ The GitHub Actions CI/CD pipeline has been **successfully deployed** and is now 
 | Metric | Value |
 |--------|-------|
 | **Status** | ✅ **OPERATIONAL** |
-| **Last Run** | 061af27 - "fix: MkDocs configuration" |
-| **Result** | ✅ **SUCCESS** (4/4 jobs passed) |
-| **Duration** | 52 seconds |
+| **Latest Version** | 1.0.2 (2026-06-24) |
+| **Last Run** | Main branch (WP-1.6 2026 model landscape update) |
+| **Result** | ✅ **SUCCESS** (all 6 unit tests passing) |
+| **Duration** | ~52 seconds |
 | **Deployment** | ✅ GitHub Pages live at `gh-pages` branch |
 
 ---
@@ -21,14 +22,14 @@ The GitHub Actions CI/CD pipeline has been **successfully deployed** and is now 
 ## ✅ What's Working
 
 ### 1. Lint & Test Job (28s)
-- ✅ Python syntax validation
-- ✅ Ruff linting (non-blocking)
-- ✅ Example execution
-- ✅ All checks passing
+- ✅ Python syntax validation on all 3 example files
+- ✅ Ruff linting (non-blocking, warnings allowed)
+- ✅ Example execution with graceful deprecation handling
+- ✅ All 6 unit tests passing (including 2 WP-1.6 validations with 7 models)
 
 ### 2. Auto-Update Documentation (9s)
 - ✅ Script executes successfully
-- ✅ Processes all work products: ADR-1.2, WP-1.3, WP-1.4, WP-1.5, WP-1.6
+- ✅ Processes all 11 work product files (updated for WP-1.6 expansion)
 - ✅ Updates AGENTMAP.md statistics (9,300+ lines across 10 documents)
 - ✅ Updates README.md badge and timestamp
 - ✅ Auto-commits with `[skip ci]`
