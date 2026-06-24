@@ -17,9 +17,11 @@ graph TB
     WP13["🔬 WP-1.3<br/>Runnable Protocol"]
     EX13["💻 examples_1_3.py<br/>Practical Demonstrations"]
     WP14["📋 WP-1.4<br/>Prompt Engineering as Code"]
-      EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
-      WP15["📈 WP-1.5<br/>Output Parsing for System Integration"]
-         WP16["🤖 WP-1.6<br/>Choosing an LLM"]
+    EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
+    WP15["📈 WP-1.5<br/>Output Parsing for System Integration"]
+    WP16["🤖 WP-1.6<br/>Choosing an LLM"]
+    WP17["🔍 WP-1.7<br/>Tracing with LangSmith"]
+    EX17["💻 examples_1_7.py<br/>Tracing Examples"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -29,16 +31,21 @@ graph TB
     WP13 -->|Practice| EX13
     WP13 -->|Builds on| ADR12
     WP13 -->|Enables| WP14
-      WP14 -->|Enables| WP15
-         WP15 -->|Informs| WP16
+    WP14 -->|Enables| WP15
+    WP15 -->|Informs| WP16
     WP14 -->|Practice| EX14
     WP14 -->|Builds on| ADR12
+    WP16 -->|Optimizes with| WP17
+    WP14 -->|Debugs with| WP17
+    WP15 -->|Debugs with| WP17
+    WP17 -->|See code| EX17
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| WP13
     AGENTMAP -->|Shows relationships| WP14
-      AGENTMAP -->|Shows relationships| WP15
-      AGENTMAP -->|Shows relationships| WP16
+    AGENTMAP -->|Shows relationships| WP15
+    AGENTMAP -->|Shows relationships| WP16
+    AGENTMAP -->|Shows relationships| WP17
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -48,8 +55,10 @@ graph TB
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
     style EX14 fill:#9C27B0,stroke:#6A1B9A,color:#fff
-      style WP15 fill:#FF9800,stroke:#E65100,color:#fff
-         style WP16 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP15 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP16 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP17 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX17 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -187,6 +196,37 @@ WP-1.5: Output Parsing for System Integration
       ├─ Sensitivity analysis by workload priority
       ├─ ADR capture for model selection
       └─ Routed multi-model deployment strategy
+   ```
+
+   ### WP-1.7 Relationships
+
+   ```
+   WP-1.7: Introduction to Tracing with LangSmith
+   │
+   ├─→ Depends on
+   │   ├─ WP-1.3 (understanding Runnable chain structure)
+   │   ├─ WP-1.4 (traces show prompt optimization impact)
+   │   ├─ WP-1.5 (traces show parser performance and failures)
+   │   └─ WP-1.6 (traces compare model performance)
+   │
+   ├─→ Enables optimization of
+   │   ├─ WP-1.4 (see prompt token impact on cost/latency)
+   │   ├─ WP-1.5 (debug parsing failures, measure overhead)
+   │   └─ WP-1.6 (measure real-world model performance)
+   │
+   ├─→ References
+   │   ├─ README.md (overview)
+   │   ├─ LangSmith (https://smith.langchain.com)
+   │   └─ LangChain Tracing Docs
+   │
+   └─→ Introduces patterns for
+      ├─ Automatic chain instrumentation
+      ├─ Token-level observability
+      ├─ Latency breakdown analysis
+      ├─ Cost tracking per request
+      ├─ A/B testing with trace comparison
+      ├─ Adaptive production sampling (10% random + 100% errors)
+      └─ ADR for tracing strategy
    ```
 
 ### Examples Relationships

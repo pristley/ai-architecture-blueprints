@@ -1,7 +1,7 @@
 # AI Architecture Blueprints
 
 [![CI/CD Pipeline](https://github.com/pristley/ai-architecture-blueprints/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg?branch=main)](https://github.com/pristley/ai-architecture-blueprints/actions)
-[![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](VERSION)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-latest-orange.svg)](https://github.com/langchain-ai/langchain)

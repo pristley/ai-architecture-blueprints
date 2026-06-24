@@ -11,9 +11,9 @@ The GitHub Actions CI/CD pipeline has been **successfully deployed** and is now 
 | Metric | Value |
 |--------|-------|
 | **Status** | ✅ **OPERATIONAL** |
-| **Latest Version** | 1.0.2 (2026-06-24) |
+| **Latest Version** | 1.0.3 (2026-06-24) |
 | **Last Run** | Main branch (WP-1.6 2026 model landscape update) |
-| **Result** | ✅ **SUCCESS** (all 6 unit tests passing) |
+| **Result** | ✅ **SUCCESS** (all 8 unit tests passing - added WP-1.7 tests) |
 | **Duration** | ~52 seconds |
 | **Deployment** | ✅ GitHub Pages live at `gh-pages` branch |
 

@@ -21,7 +21,8 @@
   - Linked from badges
   
 - **[CHANGELOG.md](CHANGELOG.md)** - Release history
-  - v1.0.2: WP-1.6 expanded to 7 models, new primary recommendation (Claude Opus 4.8)
+  - v1.0.3: Added WP-1.7 (Introduction to Tracing with LangSmith)
+- v1.0.2: WP-1.6 expanded to 7 models, new primary recommendation (Claude Opus 4.8)
   - v1.0.1: Initial WP-1.6 with 4-model comparison
   - v1.0.0: Core architecture work products
   - Quality metrics and cost analysis

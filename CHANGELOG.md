@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.0.3] - 2026-06-24
+
+### Added
+- **WP-1.7: Introduction to Tracing with LangSmith**
+  - Complete observability-first guide to LLM debugging
+  - Detailed walkthrough of LangSmith trace structure with annotations
+  - Step-by-step analysis of token usage, latency (TTFT), and costs
+  - Real-world debugging examples:
+    * High latency identification and optimization
+    * Cost reduction through trace analysis
+    * Parsing failure debugging
+  - Best practices for production tracing:
+    * 100% tracing in development
+    * 10% sampling + 100% errors in production
+    * Custom metadata for production debugging
+  - ADR: Adaptive tracing strategy for production
+  - Integration with WP-1.4 (prompt optimization) and WP-1.5 (output parsing)
+  - 4 practical examples demonstrating:
+    * Basic tracing setup with automatic instrumentation
+    * Understanding trace structure (input/output/tokens/timing)
+    * Comparing chains with traces (A/B testing)
+    * Custom metadata for production systems
+  - examples_1_7.py: Working examples of all tracing scenarios
+
+- **Test Coverage**
+  - Added test_wp_1_7.py with 8 comprehensive tests
+  - Validates WP-1.7 content, examples, and ADR section
+  - Verifies observability-first mindset emphasis
+
+### Changed
+- Version: 1.0.2 → 1.0.3
+- Updated all documentation to reference WP-1.7 and observability
+- Enhanced AGENTMAP.md with WP-1.7 relationships
+- Updated REPOSITORY_STATUS.md metrics for v1.0.3
+- Updated PIPELINE_STATUS.md for new test count
+
+### Key Metrics
+- Work Products: 6 (WP-1.3 through WP-1.7, plus ADR-1.2)
+- Total Documentation: 9,800+ lines
+- Test Coverage: 8 tests (added 2 for WP-1.7 validation)
+- Observability: Complete with LangSmith tracing guide
+
+---
+
 ## [1.0.2] - 2026-06-24
 
 ### Changed
