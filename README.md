@@ -22,7 +22,7 @@ A comprehensive guide to building scalable, observable, and maintainable AI syst
 | **Status** | ✅ Production-Ready |
 | **Python** | 3.9+ |
 | **License** | [MIT](LICENSE) |
-| **Documentation** | [8,400+ lines](AGENTMAP.md#document-statistics) |
+| **Documentation** | [8,500+ lines](AGENTMAP.md#document-statistics) |
 | **CI/CD** | 4-job pipeline, 52s deployment |
 | **Examples** | 15+ working demonstrations |
 | **Unit Tests** | 6/6 passing |
@@ -78,6 +78,7 @@ We provide:
 | **See working implementations** | [examples_1_2.py](#examples) | 30 min |
 | **Master the architecture** | [WP-1.3](#wp-13-runnable-protocol) | 2 hours |
 | **Manage prompts in production** | [WP-1.4](#wp-14-prompt-engineering-as-code) | 90 min |
+| **Parse structured output safely** | [WP-1.5](#wp-15-output-parsing-for-system-integration) | 45 min |
 | **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
 | **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
 
@@ -127,6 +128,7 @@ We provide:
 - 🗺️ **Full map** → [AGENTMAP.md](AGENTMAP.md) - Visual graph of all documents
 - 🚀 **Fast track (30 min)** → [ADR-1.2](#adr-12-chain-abstractions) - Which pattern to use
 - 📚 **Deep dive (2 hours)** → [WP-1.3](#wp-13-runnable-protocol) - How it works
+- 📈 **Typed extraction (45 min)** → [WP-1.5](#wp-15-output-parsing-for-system-integration) - Parse and recover structured output
 - 🏭 **Production (1 hour)** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -331,6 +333,35 @@ combined = registry.compose("base_assistant", "customer_support")
 4. **Composition** - Two-layer and three-layer prompt composition
 5. **ConversationAgent** - Multi-turn with MessagesPlaceholder and history windowing
 6. **Prompt unit testing** - Structural tests that run without any API call
+
+---
+
+### WP-1.5: Output Parsing for System Integration
+
+**[WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md)** answers: *"How do I turn model text into reliable typed data?"*
+
+#### The Problem
+
+Production systems need typed outputs, not loosely formatted text. If the model returns malformed JSON, missing fields, or inconsistent totals, the integration boundary breaks.
+
+#### The Pattern
+
+- Define a strict Pydantic schema as the contract.
+- Prefer native structured output from the model when available.
+- Repair close-but-invalid output with `OutputFixingParser`.
+- Retry with the validation error using `RetryWithErrorOutputParser`.
+- Escalate the remaining failures to human review.
+
+#### Why It Matters
+
+- The downstream system receives a typed object instead of a string blob.
+- Validation happens at the boundary instead of inside business logic.
+- Recovery is explicit and bounded.
+- Schema drift becomes visible instead of silently corrupting data.
+
+#### Repository Use Case
+
+This pattern is designed for invoice extraction, document ingestion, and any system integration that depends on reliable structured output.
 
 ---
 
@@ -589,6 +620,7 @@ add_routes(app, my_chain, path="/chain")
 | [examples_1_3.py](examples_1_3.py) | Code | 6 Runnable protocol demonstrations | After reading WP-1.3 |
 | [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | Design Pattern | PromptRegistry: versioning, composition, multi-turn | For production prompt management |
 | [examples_1_4.py](examples_1_4.py) | Code | 6 PromptRegistry demos with unit tests | After reading WP-1.4 |
+| [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | Design Pattern | Structured output, parser repair, retry strategy | For typed downstream integrations |
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | Reference | Complete LangChain stack | For component decisions |
 | [README.md](README.md) | Overview | This file | Starting point |
 
@@ -645,6 +677,9 @@ add_routes(app, my_chain, path="/chain")
 
 **How do I build a multi-turn conversational agent?**
 → See [WP-1.4](#wp-14-prompt-engineering-as-code) Part 6 + examples_1_4.py Example 5
+
+**How do I parse model output safely?**
+→ See [WP-1.5](#wp-15-output-parsing-for-system-integration) parser recovery strategy
 
 **I'm lost, where do I start?**
 → See [AGENTMAP.md](AGENTMAP.md)

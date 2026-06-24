@@ -150,6 +150,7 @@ jobs:
                   'ADR-1.2-Hello-World-Three-Ways.md',
                   'WP-1.3-The-Runnable-Protocol.md',
                   'WP-1.4-Prompt-Engineering-as-Code.md',
+                  'WP-1.5-Output-Parsing-for-System-Integration.md',
                   'examples_1_2.py',
                   'examples_1_3.py',
                   'examples_1_4.py',

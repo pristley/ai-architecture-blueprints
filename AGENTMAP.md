@@ -17,7 +17,8 @@ graph TB
     WP13["🔬 WP-1.3<br/>Runnable Protocol"]
     EX13["💻 examples_1_3.py<br/>Practical Demonstrations"]
     WP14["📋 WP-1.4<br/>Prompt Engineering as Code"]
-    EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
+      EX14["💻 examples_1_4.py<br/>PromptRegistry Demos"]
+      WP15["📈 WP-1.5<br/>Output Parsing for System Integration"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -27,12 +28,14 @@ graph TB
     WP13 -->|Practice| EX13
     WP13 -->|Builds on| ADR12
     WP13 -->|Enables| WP14
+      WP14 -->|Enables| WP15
     WP14 -->|Practice| EX14
     WP14 -->|Builds on| ADR12
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| WP13
     AGENTMAP -->|Shows relationships| WP14
+      AGENTMAP -->|Shows relationships| WP15
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -42,6 +45,7 @@ graph TB
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
     style EX14 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+      style WP15 fill:#FF9800,stroke:#E65100,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -58,6 +62,7 @@ graph TB
 | [ADR-1.2-Hello-World-Three-Ways.md](ADR-1.2-Hello-World-Three-Ways.md) | 🏗️ Architecture Decision | Chain abstraction comparison and decision flow | ~500 | ✅ |
 | [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | 🔬 Deep Dive | Runnable protocol explained in 12 parts | ~1100 | ✅ |
 | [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
+| [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
 
 ### Code Examples
 
@@ -136,6 +141,29 @@ WP-1.4: Prompt Engineering as Code
     └─ Prompt unit testing (structure validation without LLM)
 ```
 
+### WP-1.5 Relationships
+
+```
+WP-1.5: Output Parsing for System Integration
+│
+├─→ Depends on
+│   ├─ WP-1.3 (structured parsing fits naturally into Runnable pipelines)
+│   ├─ WP-1.4 (prompt outputs should be explicit contracts)
+│   └─ ADR-1.2 (choose the right chain abstraction before adding parsing)
+│
+├─→ References
+│   └─ README.md (overview)
+│
+├─→ Provides code examples to
+│   └─ downstream invoice extraction and integration pipelines
+│
+└─→ Introduces patterns for
+      ├─ Pydantic schema contracts
+      ├─ Native structured model output
+      ├─ OutputFixingParser repair
+      └─ RetryWithErrorOutputParser retries
+```
+
 ### Examples Relationships
 
 ```
@@ -202,6 +230,24 @@ examples_1_3.py: Runnable Protocol Deep Dive
 ```
 
 **Outcome**: Manage prompts as versioned, composable, testable code artifacts
+
+---
+
+### Path 5: "Typed Output for Production" (3 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. WP-1.5-Output-Parsing-for-System-Integration.md (45 min)
+   ↓
+3. Review the Pydantic schema and recovery flow (30 min)
+   ↓
+4. Apply the pattern to your own extraction task (60 min)
+   ↓
+5. Add validation metrics and a dead-letter path (30 min)
+```
+
+**Outcome**: Turn LLM text into reliable typed data for downstream systems
 
 ---
 
@@ -316,6 +362,7 @@ Layer 4: Navigation (How is it all connected?)
 | How to trace execution? | examples_1_3.py | Example 4 |
 | How to route conditionally? | examples_1_3.py | Example 5 |
 | Why is batch() important? | examples_1_3.py | Example 6 |
+| How do I parse structured output safely? | WP-1.5 | Schema + recovery strategy |
 | How to deploy? | LANGCHAIN_ECOSYSTEM_MAP.md | LangServe section |
 
 ---
@@ -493,10 +540,12 @@ LANGCHAIN_ECOSYSTEM_MAP.md (reference)
 | LANGCHAIN_ECOSYSTEM_MAP.md | Reference | ~1200 | 15 | ✅ Complete |
 | ADR-1.2 | Decision | ~500 | 12 | ✅ Complete |
 | WP-1.3 | Deep Dive | ~1100 | 12 | ✅ Complete |
+| WP-1.4 | Design Pattern | ~900 | 10 | ✅ Complete |
+| WP-1.5 | Design Pattern | ~200 | 8 | ✅ Complete |
 | examples_1_2.py | Code | ~900 | 7 | ✅ Complete |
 | examples_1_3.py | Code | ~1500 | 7 | ✅ Complete |
 | AGENTMAP.md | Map | ~600 | 15 | ✅ This file |
-| **TOTAL** | | **~6500** | | ✅ |
+| **TOTAL** | | **~8500** | | ✅ |
 
 **Estimated Learning Time**: 15-20 hours for complete understanding + hands-on practice
 
@@ -597,7 +646,7 @@ Happy learning! 🎓
 
 **Repository Statistics** (auto-generated)
 
-- 📄 Documentation: 4,448 lines across 5 files
+- 📄 Documentation: 4,725 lines across 6 files
 - 💻 Examples: 3,777 lines across 3 files
-- 📊 Total: 8,225 lines
+- 📊 Total: 8,502 lines
 - 🕒 Last updated: 2026-06-24 04:48 UTC
