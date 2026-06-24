@@ -377,14 +377,14 @@ Model selection is a systems decision, not just a benchmark result. Architects m
 
 #### The Pattern
 
-- Compare 7+ candidate models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Mixtral, Gemini 3.5, ChatGPT 5.5, Claude OS 4.8) on shared operational axes.
+- Compare 7+ candidate models (GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Mixtral, Gemini 3.5, ChatGPT 5.5, Claude Opus 4.8) on shared operational axes.
 - Use explicit weighting aligned to workload priorities.
 - Run sensitivity analysis to see when the recommendation changes.
 - Record the outcome as a short ADR with tiered routing strategy and production guardrails.
 
 #### Repository Use Case
 
-This work product provides a comprehensive decision matrix comparing 7 models across architect-critical dimensions (cost, latency, context, tool-calling reliability, multimodal capability). The 2026 update identifies **Claude OS 4.8 as the primary recommendation** for high-volume support, delivering:
+This work product provides a comprehensive decision matrix comparing 7 models across architect-critical dimensions (cost, latency, context, tool-calling reliability, multimodal capability). The 2026 update identifies **Claude Opus 4.8 as the primary recommendation** for high-volume support, delivering:
 - 50%+ cost savings vs GPT-4o (2.5x cheaper input tokens)
 - Industry-leading context window (300k) for complex case reasoning
 - Strong tool-calling reliability (4.6/5.0)

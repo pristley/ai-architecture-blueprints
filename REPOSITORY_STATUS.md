@@ -21,7 +21,7 @@
   - Linked from badges
   
 - **[CHANGELOG.md](CHANGELOG.md)** - Release history
-  - v1.0.2: WP-1.6 expanded to 7 models, new primary recommendation (Claude OS 4.8)
+  - v1.0.2: WP-1.6 expanded to 7 models, new primary recommendation (Claude Opus 4.8)
   - v1.0.1: Initial WP-1.6 with 4-model comparison
   - v1.0.0: Core architecture work products
   - Quality metrics and cost analysis
@@ -51,8 +51,8 @@ Updated comprehensive metrics table:
 | **License** | MIT |
 | **Documentation** | 9,500+ lines (11 documents) |
 | **Work Products** | 5 (ADR-1.2, WP-1.3, WP-1.4, WP-1.5, WP-1.6) |
-| **Models Compared** | 7 (GPT-4o, Claude 3.5, Gemini 1.5, Mixtral, Gemini 3.5, ChatGPT 5.5, Claude OS 4.8) |
-| **Primary Recommendation** | **Claude OS 4.8** (score 4.41, 50%+ cost savings) |
+| **Models Compared** | 7 (GPT-4o, Claude 3.5, Gemini 1.5, Mixtral, Gemini 3.5, ChatGPT 5.5, Claude Opus 4.8) |
+| **Primary Recommendation** | **Claude Opus 4.8** (score 4.41, 50%+ cost savings) |
 | **CI/CD** | 4-job pipeline, 52s deployment |
 | **Unit Tests** | 6/6 passing |
 | **Last Updated** | 2026-06-24 |

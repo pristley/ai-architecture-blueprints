@@ -19,7 +19,7 @@ def test_wp_1_6_contains_required_decision_axes_and_models():
     # New models (2026 updates)
     assert "Gemini 3.5" in text, "WP-1.6 must include Gemini 3.5"
     assert "ChatGPT 5.5" in text or "GPT-5.5" in text, "WP-1.6 must include OpenAI ChatGPT 5.5"
-    assert "Claude OS 4.8" in text, "WP-1.6 must include Claude OS 4.8"
+    assert "Claude Opus 4.8" in text, "WP-1.6 must include Claude Opus 4.8"
     
     # Required decision axes
     assert "cost" in text.lower(), "WP-1.6 must discuss cost"
@@ -31,4 +31,4 @@ def test_wp_1_6_contains_required_decision_axes_and_models():
     assert "ADR" in text, "WP-1.6 must include an ADR section"
     
     # Decision outcome
-    assert "Claude OS 4.8" in text, "WP-1.6 ADR must recommend a model choice"
+    assert "Claude Opus 4.8" in text, "WP-1.6 ADR must recommend a model choice"

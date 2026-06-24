@@ -5,12 +5,12 @@
 ### Changed
 - **WP-1.6: Expanded Model Landscape (2026 Update)**
   - Expanded from 4 to 7 candidate models
-  - Added Gemini 3.5, OpenAI ChatGPT 5.5, Claude OS 4.8
+  - Added Gemini 3.5, OpenAI ChatGPT 5.5, Claude Opus 4.8
   - Updated weighted scoring and rankings
-  - **New Primary Recommendation**: Claude OS 4.8 (score 4.41) replaces GPT-4o
-  - Key insight: Claude OS 4.8 provides 50%+ cost savings vs GPT-4o for high-volume support
+  - **New Primary Recommendation**: Claude Opus 4.8 (score 4.41) replaces GPT-4o
+  - Key insight: Claude Opus 4.8 provides 50%+ cost savings vs GPT-4o for high-volume support
   - Enhanced ADR with tiered multi-model routing strategy:
-    * Primary: Claude OS 4.8 (standard requests, cost-optimized)
+    * Primary: Claude Opus 4.8 (standard requests, cost-optimized)
     * Speed-critical: ChatGPT 5.5 (SLA <500ms TTFT)
     * Budget: Mixtral via Groq (FAQ/retrieval, stateless)
     * Long-context: Gemini 3.5 (2M+ context edge cases)
@@ -20,7 +20,7 @@
 
 - **Test Coverage**
   - Updated test_wp_1_6.py to validate all 7 models
-  - Added assertion for Claude OS 4.8 decision outcome
+  - Added assertion for Claude Opus 4.8 decision outcome
 
 ## [1.0.1] - 2026-06-24
 

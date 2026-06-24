@@ -33,7 +33,7 @@ This document compares four widely used options and then records a short ADR for
 - Mixtral 8x7B via Groq
 - Gemini 3.5
 - OpenAI ChatGPT 5.5
-- Claude OS 4.8
+- Claude Opus 4.8
 
 ## Decision Matrix
 
@@ -47,14 +47,14 @@ This document compares four widely used options and then records a short ADR for
 | Mixtral 8x7B via Groq | 0.27 | 0.27 | 0.12-0.3s | 250-500 | 32k | 3.2 | Primarily text |
 | Gemini 3.5 | 3.00 | 9.00 | 0.5-1.2s | 60-100 | 2M+ | 4.3 | Text, image, audio, video (enhanced reasoning) |
 | OpenAI ChatGPT 5.5 | 6.50 | 18.00 | 0.2-0.6s | 100-180 | 200k | 4.9 | Text, image, audio (real-time multimodal) |
-| Claude OS 4.8 | 2.50 | 14.00 | 0.5-1.0s | 70-110 | 300k | 4.6 | Text + vision/documents (extended reasoning) |
+| Claude Opus 4.8 | 2.50 | 14.00 | 0.5-1.0s | 70-110 | 300k | 4.6 | Text + vision/documents (extended reasoning) |
 
 ### Operational Interpretation
 
 - Mixtral via Groq remains unmatched for raw speed and cost efficiency on simple tasks.
 - OpenAI ChatGPT 5.5 provides the fastest TTFT and most reliable tool-calling with premium pricing.
-- Gemini 3.5 and Claude OS 4.8 represent strong mid-tier options balancing cost, capability, and reliability.
-- Claude OS 4.8 offers the largest context window (300k), ideal for complex support cases.
+- Gemini 3.5 and Claude Opus 4.8 represent strong mid-tier options balancing cost, capability, and reliability.
+- Claude Opus 4.8 offers the largest context window (300k), ideal for complex support cases.
 - Gemini 1.5 Pro and Gemini 3.5 excel at extremely long contexts (2M+) and multimodal richness.
 - Tool-calling reliability ranges from 3.2 (Mixtral) to 4.9 (ChatGPT 5.5), a critical differentiator for deterministic systems.
 
@@ -82,11 +82,11 @@ These weights prioritize predictable, low-cost operations without sacrificing de
 | Mixtral 8x7B via Groq | 5.0 | 3.2 | 5.0 | 2.2 | 2.0 | **3.98** |
 | Gemini 3.5 | 3.9 | 4.3 | 4.0 | 5.0 | 4.8 | **4.18** |
 | OpenAI ChatGPT 5.5 | 2.5 | 4.9 | 4.8 | 4.0 | 5.0 | **4.23** |
-| Claude OS 4.8 | 4.1 | 4.6 | 4.2 | 5.0 | 4.4 | **4.41** |
+| Claude Opus 4.8 | 4.1 | 4.6 | 4.2 | 5.0 | 4.4 | **4.41** |
 
 ### Ranking
 
-1. **Claude OS 4.8 (4.41)** ⭐ NEW WINNER
+1. **Claude Opus 4.8 (4.41)** ⭐ NEW WINNER
 2. OpenAI ChatGPT 5.5 (4.23)
 3. Gemini 3.5 (4.18)
 4. GPT-4o (4.03)
@@ -94,7 +94,7 @@ These weights prioritize predictable, low-cost operations without sacrificing de
 6. Mixtral via Groq (3.98)
 7. Claude 3.5 Sonnet (3.93)
 
-**Key Insight**: Claude OS 4.8 emerges as the strongest choice for high-volume support due to its exceptional combination of cost efficiency (2.5x cheaper input tokens than ChatGPT 5.5), excellent tool-calling reliability (4.6), and industry-leading context window (300k) for handling complex case histories.
+**Key Insight**: Claude Opus 4.8 emerges as the strongest choice for high-volume support due to its exceptional combination of cost efficiency (2.5x cheaper input tokens than ChatGPT 5.5), excellent tool-calling reliability (4.6), and industry-leading context window (300k) for handling complex case histories.
 
 The spread remains narrow, indicating that weighting and operational constraints remain more important than headline scores.
 
@@ -102,9 +102,9 @@ The spread remains narrow, indicating that weighting and operational constraints
 
 If your strategy changes, the winner can change:
 
-- If cost weight increases beyond 0.40, Claude OS 4.8 strengthens its lead even further.
+- If cost weight increases beyond 0.40, Claude Opus 4.8 strengthens its lead even further.
 - If tool-calling reliability weight increases beyond 0.35, OpenAI ChatGPT 5.5 becomes competitive due to its 4.9 reliability rating.
-- If context weight increases beyond 0.15 (for very long case timelines), Claude OS 4.8 with 300k context dominates.
+- If context weight increases beyond 0.15 (for very long case timelines), Claude Opus 4.8 with 300k context dominates.
 - If latency (TTFT) becomes critical (>0.25 weight), OpenAI ChatGPT 5.5's superior speed (0.2-0.6s) pushes it ahead.
 - If you prioritize open/self-hosted only, Mixtral via Groq remains the lowest-risk option despite lower reliability.
 
@@ -112,12 +112,12 @@ If your strategy changes, the winner can change:
 
 | Scenario | Best Choice | Rationale |
 |----------|-------------|-----------|
-| Cost minimization | Claude OS 4.8 | Lowest blended cost with strong reliability |
+| Cost minimization | Claude Opus 4.8 | Lowest blended cost with strong reliability |
 | Reliability first | OpenAI ChatGPT 5.5 | Highest tool-calling reliability (4.9) |
 | Speed critical | OpenAI ChatGPT 5.5 | Fastest TTFT (0.2-0.6s) |
-| Ultra-long context | Claude OS 4.8 (300k) or Gemini 3.5 (2M+) | Depends on how extreme the need |
+| Ultra-long context | Claude Opus 4.8 (300k) or Gemini 3.5 (2M+) | Depends on how extreme the need |
 | Open-source required | Mixtral 8x7B via Groq | Only fully open option |
-| Balanced approach | Claude OS 4.8 | Best overall score (4.41) |
+| Balanced approach | Claude Opus 4.8 | Best overall score (4.41) |
 
 ## ADR: High-Volume Customer Support Chatbot
 
@@ -145,20 +145,20 @@ We operate a customer support chatbot that:
 
 ### Decision
 
-Use **Claude OS 4.8** as the primary model for production support orchestration.
+Use **Claude Opus 4.8** as the primary model for production support orchestration.
 
 Adopt a tiered routing strategy:
 
-- **Primary path**: Claude OS 4.8 for all standard requests requiring tool calls, policy logic, and complex case reasoning (leveraging 300k context window).
+- **Primary path**: Claude Opus 4.8 for all standard requests requiring tool calls, policy logic, and complex case reasoning (leveraging 300k context window).
 - **Speed-critical path**: OpenAI ChatGPT 5.5 for latency-sensitive requests (SLA <500ms TTFT).
 - **Cost-optimized path**: Mixtral via Groq for low-risk FAQ, retrieval-only intents, and stateless queries.
 - **Long-context exception path**: Gemini 3.5 for edge cases requiring 2M+ context (rare in practice).
 
 ### Rationale
 
-- Claude OS 4.8 provides the best overall score (4.41) balancing cost efficiency (2.5x cheaper input tokens than ChatGPT 5.5), strong tool-calling reliability (4.6), and industry-leading context window (300k).
+- Claude Opus 4.8 provides the best overall score (4.41) balancing cost efficiency (2.5x cheaper input tokens than ChatGPT 5.5), strong tool-calling reliability (4.6), and industry-leading context window (300k).
 - The 300k context window eliminates the need for aggressive summarization in most support scenarios, reducing latency and improving reasoning quality.
-- Cost efficiency is material at scale: 10,000 daily requests with Claude OS 4.8 vs. ChatGPT 5.5 yields ~$50K annual savings.
+- Cost efficiency is material at scale: 10,000 daily requests with Claude Opus 4.8 vs. ChatGPT 5.5 yields ~$50K annual savings.
 - Tool reliability is a first-class requirement because support automation depends on valid function arguments and stable schema conformance.
 - Purely minimizing token cost would increase downstream recovery logic, retries, and human handoff rates, reducing total system efficiency.
 
@@ -194,14 +194,14 @@ Adopt a tiered routing strategy:
 - Apply prompt caching and response caching where policy permits.
 - Monitor cost per request across all three tiers; adjust routing thresholds quarterly.
 - Re-run this matrix quarterly or after any major model release.
-- Maintain fallback routing to ChatGPT 5.5 if Claude OS 4.8 becomes unavailable.
+- Maintain fallback routing to ChatGPT 5.5 if Claude Opus 4.8 becomes unavailable.
 
 ## Summary
 
-**For a high-volume support chatbot, Claude OS 4.8 is the most defensible primary choice** when balancing cost efficiency, tool-calling reliability, and reasoning depth under production constraints.
+**For a high-volume support chatbot, Claude Opus 4.8 is the most defensible primary choice** when balancing cost efficiency, tool-calling reliability, and reasoning depth under production constraints.
 
 A routed multi-model architecture delivers superior total economics compared to single-model purity:
-- Use Claude OS 4.8 where cost and reasoning quality matter most (baseline path).
+- Use Claude Opus 4.8 where cost and reasoning quality matter most (baseline path).
 - Use ChatGPT 5.5 where strict latency SLAs require sub-600ms TTFT.
 - Use Mixtral via Groq for stateless FAQ and simple retrieval.
 - Reserve Gemini 3.5 for rare cases requiring extreme context windows.
