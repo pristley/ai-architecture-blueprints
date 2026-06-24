@@ -12,8 +12,8 @@ The GitHub Actions CI/CD pipeline has been **successfully deployed** and is now 
 |--------|-------|
 | **Status** | ✅ **OPERATIONAL** |
 | **Latest Version** | 1.0.3 (2026-06-24) |
-| **Last Run** | Main branch (WP-1.6 2026 model landscape update) |
-| **Result** | ✅ **SUCCESS** (all 8 unit tests passing - added WP-1.7 tests) |
+| **Last Run** | Main branch (WP-1.7 Introduction to Tracing with LangSmith) |
+| **Result** | ✅ **SUCCESS** (all 8 unit tests passing) |
 | **Duration** | ~52 seconds |
 | **Deployment** | ✅ GitHub Pages live at `gh-pages` branch |
 

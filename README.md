@@ -18,14 +18,14 @@ A comprehensive guide to building scalable, observable, and maintainable AI syst
 
 | Metric | Value |
 |--------|-------|
-| **Version** | [1.0.0](VERSION) |
+| **Version** | [1.0.3](VERSION) |
 | **Status** | ✅ Production-Ready |
 | **Python** | 3.9+ |
 | **License** | [MIT](LICENSE) |
-| **Documentation** | [8,500+ lines](AGENTMAP.md#document-statistics) |
+| **Documentation** | [9,300+ lines](AGENTMAP.md#document-statistics) |
 | **CI/CD** | 4-job pipeline, 52s deployment |
 | **Examples** | 15+ working demonstrations |
-| **Unit Tests** | 6/6 passing |
+| **Unit Tests** | 8/8 passing |
 | **Last Updated** | 2026-06-24 |
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
