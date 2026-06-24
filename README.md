@@ -6,6 +6,17 @@ A repository of Architecture Decision Records (ADRs), design patterns, and evalu
 
 ---
 
+## 🗺️ Quick Navigation
+
+**Lost? Start here!** → **[AGENTMAP.md](AGENTMAP.md)** - Visual guide showing how all documents relate
+
+**Choose your path:**
+- 🚀 **Just show me what to do** → [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) (30 min)
+- 📖 **I want to understand** → [WP-1.3](WP-1.3-The-Runnable-Protocol.md) (2 hours)
+- 🏭 **Building production systems** → [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) then [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md)
+
+---
+
 ## 🎯 Core Principles
 
 - **Observability**: Measurable systems with full tracing and monitoring (LangSmith integration)
@@ -355,6 +366,7 @@ add_routes(app, my_chain, path="/my-chain")
 
 | File | Purpose | Size |
 |------|---------|------|
+| [AGENTMAP.md](AGENTMAP.md) | Visual knowledge graph showing relationships between all documents and learning paths | 12 KB, 600 lines |
 | [ADR-1.2-Hello-World-Three-Ways.md](ADR-1.2-Hello-World-Three-Ways.md) | Complete chain type analysis with examples, scenarios, decision flow | 17 KB, 495 lines |
 | [examples_1_2.py](examples_1_2.py) | Working implementations of all 3 approaches with advanced patterns | 16.5 KB, 441 lines |
 | [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | Deep dive into Runnable interface, execution modes, composition, architecture | 12 KB, comprehensive |
