@@ -22,11 +22,11 @@ A comprehensive guide to building scalable, observable, and maintainable AI syst
 | **Status** | ✅ Production-Ready |
 | **Python** | 3.9+ |
 | **License** | [MIT](LICENSE) |
-| **Documentation** | [9,300+ lines](AGENTMAP.md#document-statistics) |
+| **Documentation** | [11,500+ lines](AGENTMAP.md#document-statistics) |
 | **CI/CD** | 4-job pipeline, 52s deployment |
-| **Examples** | 15+ working demonstrations |
-| **Unit Tests** | 8/8 passing |
-| **Last Updated** | 2026-06-24 |
+| **Examples** | 20+ working demonstrations |
+| **Unit Tests** | 30/30 passing |
+| **Last Updated** | 2026-06-25 |
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
 
@@ -82,6 +82,7 @@ We provide:
 | **Parse structured output safely** | [WP-1.5](#wp-15-output-parsing-for-system-integration) | 45 min |
 | **Choose a production model** | [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) | 45 min |
 | **Debug with observability** | [WP-1.7](#wp-17-tracing-with-langsmith) | 60 min |
+| **Build stateful memory systems** | [WP-2.1](#wp-21-short-term-vs-long-term-memory) | 90 min |
 | **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
 | **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
 
@@ -132,9 +133,9 @@ We provide:
 - 🚀 **Fast track (30 min)** → [ADR-1.2](#adr-12-chain-abstractions) - Which pattern to use
 - � **Deep dive** → [WP-1.3](#wp-13-runnable-protocol) - How it works
 - 📈 **Typed extraction (45 min)** → [WP-1.5](#wp-15-output-parsing-for-system-integration) - Parse and recover structured output
-- 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) - Pick the best model with a weighted matrix
 - 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
+- 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
 - 🏭 **Production (1 hour)** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -461,6 +462,66 @@ Each example includes:
 - How to read trace output
 - How to extract metrics (tokens, latency, cost)
 - How to use traces for optimization decisions
+
+---
+
+### WP-2.1: Short-Term vs. Long-Term Memory
+
+**[WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md)** answers: *"How do I build conversational AI systems that scale?"*
+
+#### The Problem
+
+Conversational systems face a fundamental tension:
+- Keep all messages → token count grows unbounded → exceeds context window and costs explode
+- Discard history → bot forgets preferences, context, and reasoning
+- Store everything in summaries → lose granularity and recent context
+
+#### The Solution: Dual-Memory Architecture
+
+**Separate memory into two complementary streams:**
+
+| Memory Type | Strategy | Characteristics |
+|------------|----------|-----------------|
+| **Short-Term** | Last N messages in buffer | Bounded tokens, immediate context, per-session |
+| **Long-Term** | Extracted facts in vector store | Semantic meaning, unbounded but compressed, persistent |
+
+```python
+from examples_2_1 import DualMemoryChatbot
+
+# Initialize with both memory systems
+bot = DualMemoryChatbot(model="gpt-4o", buffer_k=10)
+
+# Chat updates both memories automatically
+response = bot.chat("I'm an engineer from Toronto who loves hiking")
+
+# Short-term: remembers this message
+# Long-term: extracts and stores: [Toronto, engineer, hiking]
+```
+
+#### Repository Use Case
+
+This work product provides:
+- Complete dual-memory pattern architecture
+- Short-term memory: ConversationBufferWindowMemory (bounded sliding window)
+- Long-term memory: ConversationSummaryMemory + vector store integration
+- Separation of concerns for observability
+- Implementation checklist (5 phases: planning, implementation, integration, observability, optimization)
+- Troubleshooting FAQ for common issues
+- Production patterns: monitoring memory health, resetting sessions, exporting state
+- Integration with WP-1.5 (structured fact extraction) and WP-1.7 (observability)
+
+#### Practice Examples
+
+**[examples_2_1.py](examples_2_1.py)** provides 3 complete demonstrations:
+1. **Dual-Memory Chatbot Architecture** - Full conversation with both memory systems in action
+2. **Memory Separation & Token Bounding** - Side-by-side comparison showing predictable cost
+3. **Observability and Debugging** - Inspect memory state, collect statistics, monitor health
+
+Each example includes:
+- Memory initialization and configuration
+- Conversation simulation with fact extraction
+- Memory inspection and statistics
+- Production monitoring patterns
 
 ---
 

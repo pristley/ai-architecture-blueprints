@@ -22,6 +22,8 @@ graph TB
     WP16["🤖 WP-1.6<br/>Choosing an LLM"]
     WP17["🔍 WP-1.7<br/>Tracing with LangSmith"]
     EX17["💻 examples_1_7.py<br/>Tracing Examples"]
+    WP21["💾 WP-2.1<br/>Short-Term vs Long-Term Memory"]
+    EX21["💻 examples_2_1.py<br/>Dual-Memory Chatbot Examples"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -39,6 +41,10 @@ graph TB
     WP14 -->|Debugs with| WP17
     WP15 -->|Debugs with| WP17
     WP17 -->|See code| EX17
+    WP16 -->|Enables| WP21
+    WP15 -->|Extracts facts for| WP21
+    WP21 -->|See code| EX21
+    WP21 -->|Observes with| WP17
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| WP13
@@ -46,6 +52,7 @@ graph TB
     AGENTMAP -->|Shows relationships| WP15
     AGENTMAP -->|Shows relationships| WP16
     AGENTMAP -->|Shows relationships| WP17
+    AGENTMAP -->|Shows relationships| WP21
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -59,6 +66,8 @@ graph TB
     style WP16 fill:#FF9800,stroke:#E65100,color:#fff
     style WP17 fill:#FF9800,stroke:#E65100,color:#fff
     style EX17 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style WP21 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX21 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -78,6 +87,7 @@ graph TB
 | [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
 | [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
 | [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
+| [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
 
 ### Code Examples
 
@@ -87,6 +97,7 @@ graph TB
 | [examples_1_3.py](examples_1_3.py) | 💻 Code | 6 Runnable protocol examples with deep comments | ~1500 | ✅ |
 | [examples_1_4.py](examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
 | [examples_1_7.py](examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
+| [examples_2_1.py](examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
 
 ### Meta Documents
 
@@ -231,6 +242,38 @@ WP-1.7: Introduction to Tracing with LangSmith
    └─ ADR for tracing strategy
 ```
 
+### WP-2.1 Relationships
+
+```
+WP-2.1: Short-Term vs. Long-Term Memory
+│
+├─→ Depends on
+│   ├─ WP-1.3 (understanding Runnable composability for memory pipelines)
+│   ├─ WP-1.5 (structured fact extraction for long-term storage)
+│   ├─ WP-1.6 (choosing models that support streaming for memory operations)
+│   └─ WP-1.7 (observing memory health, token usage, and performance)
+│
+├─→ Enables patterns for
+│   ├─ Bounded token usage in multi-turn conversations
+│   ├─ Persistent context across sessions
+│   ├─ Semantic search over conversation history
+│   └─ Production memory scaling
+│
+├─→ References
+│   ├─ README.md (overview)
+│   ├─ LANGCHAIN_ECOSYSTEM_MAP.md (vector store options)
+│   └─ Production deployment patterns
+│
+└─→ Introduces patterns for
+   ├─ Separation of concerns (short vs. long-term)
+   ├─ Token bounding with sliding windows
+   ├─ Semantic summarization and extraction
+   ├─ Memory health monitoring
+   ├─ Session lifecycle management
+   ├─ Production vector store integration
+   └─ Cost optimization through predictable token usage
+```
+
 ### Examples Relationships
 
 ```
@@ -293,6 +336,24 @@ examples_1_7.py: LangSmith Tracing Demonstrations
     ├─ A/B testing with traces
     ├─ Production sampling strategy
     └─ Error debugging
+```
+
+examples_2_1.py: Dual-Memory Chatbot Demonstrations
+├─→ Demonstrates
+│   ├─ Short-term memory with bounded buffer (deque)
+│   ├─ Long-term memory with semantic extraction
+│   ├─ Dual-memory orchestration (DualMemoryChatbot)
+│   ├─ Token usage patterns and cost bounding
+│   ├─ Memory health monitoring and statistics
+│   └─ Multi-turn conversations with fact extraction
+│
+└─→ Shows patterns like
+    ├─ Separation of concerns
+    ├─ Token awareness
+    ├─ Semantic understanding
+    ├─ Production monitoring
+    ├─ Session management
+    └─ Cost optimization
 ```
 
 ---
