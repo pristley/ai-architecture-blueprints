@@ -525,6 +525,59 @@ Each example includes:
 
 ---
 
+### WP-2.2: State Management in Single-Agent Loop
+
+**[WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md)** answers: *"How do I build agents that don't infinite loop?"*
+
+#### The Problem
+
+Agent loops are powerful but chaotic:
+- You don't know what state the agent is in
+- Self-loops happen without visibility (planning → planning → planning...)
+- Same tool gets called repeatedly (search same query 6x)
+- You hit rate limits and burn tokens before catching it
+
+#### The Solution: Explicit State Machine
+
+```python
+state = ResearchState(query="...", state="IDLE")
+state.state_history = ["IDLE", "PLANNING", "SEARCHING", ...]
+state.record_action("SYNTHESIZING", "action_taken")  # Validates + transitions
+```
+
+**With a state machine you get:**
+- Clear transitions (IDLE → PLANNING → SEARCHING → SYNTHESIZING → CITING)
+- Loop detection (step count, state repeats, alternating patterns)
+- State inspection for debugging
+- Predictable execution flow
+
+#### Repository Use Case
+
+This work product provides:
+- State machine architecture with 5 phases
+- State transition diagram showing all valid paths
+- Pydantic state model with validation
+- Loop guard with 4 detection mechanisms
+- ResearchAssistant class showing state-aware tool calls
+- Integration patterns with LangGraph
+- Production observability (checkpointing, metrics, tracing)
+
+#### Practice Examples
+
+**[examples_2_2.py](examples_2_2.py)** provides 3 complete demonstrations:
+1. **Happy Path** - Successful research workflow with state transitions
+2. **Loop Detection** - Four different infinite loop scenarios and how guard catches them
+3. **State Inspection** - Debugging with state snapshots at each step
+
+Each example includes:
+- State object creation and manipulation
+- Tool calls with state transitions
+- Loop guard evaluation
+- State history tracking
+- Observability patterns
+
+---
+
 **[LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)** maps the entire LangChain ecosystem:
 
 **Core Layers:**

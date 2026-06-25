@@ -24,6 +24,8 @@ graph TB
     EX17["💻 examples_1_7.py<br/>Tracing Examples"]
     WP21["💾 WP-2.1<br/>Short-Term vs Long-Term Memory"]
     EX21["💻 examples_2_1.py<br/>Dual-Memory Chatbot Examples"]
+    WP22["🤖 WP-2.2<br/>State Management in Agent Loop"]
+    EX22["💻 examples_2_2.py<br/>State Machine Agent Examples"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -45,6 +47,9 @@ graph TB
     WP15 -->|Extracts facts for| WP21
     WP21 -->|See code| EX21
     WP21 -->|Observes with| WP17
+    WP22 -->|See code| EX22
+    WP22 -->|Prevents loops in| WP17
+    WP22 -->|Coordinates multiple| WP15
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| WP13
@@ -53,6 +58,7 @@ graph TB
     AGENTMAP -->|Shows relationships| WP16
     AGENTMAP -->|Shows relationships| WP17
     AGENTMAP -->|Shows relationships| WP21
+    AGENTMAP -->|Shows relationships| WP22
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -68,6 +74,8 @@ graph TB
     style EX17 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP21 fill:#FF9800,stroke:#E65100,color:#fff
     style EX21 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style WP22 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX22 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -88,6 +96,7 @@ graph TB
 | [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
 | [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
 | [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
+| [WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
 
 ### Code Examples
 
@@ -98,6 +107,7 @@ graph TB
 | [examples_1_4.py](examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
 | [examples_1_7.py](examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
 | [examples_2_1.py](examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
+| [examples_2_2.py](examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
 
 ### Meta Documents
 
@@ -354,6 +364,64 @@ examples_2_1.py: Dual-Memory Chatbot Demonstrations
     ├─ Production monitoring
     ├─ Session management
     └─ Cost optimization
+```
+
+### WP-2.2 Relationships
+
+```
+WP-2.2: State Management in Single-Agent Loop
+│
+├─→ Depends on
+│   ├─ WP-1.3 (understanding Runnable DAG composition for agent tools)
+│   ├─ WP-1.5 (validating structured state transitions)
+│   ├─ WP-1.6 (choosing models for agent decision-making)
+│   └─ WP-1.7 (observing agent execution and debugging loops)
+│
+├─→ Prevents infinite loops in
+│   ├─ Research agents (planning → searching → synthesis → citations)
+│   ├─ Routing agents (condition → routing → action → loop back?)
+│   ├─ Hierarchical agents (parent → delegated tasks → parent)
+│   └─ Multi-step workflows
+│
+├─→ Coordinates patterns for
+│   ├─ Tool calls with state validation
+│   ├─ Transition guards (can_transition checks)
+│   ├─ Loop detection (multiple mechanisms)
+│   └─ State checkpointing (recovery)
+│
+├─→ References
+│   ├─ README.md (overview)
+│   ├─ LangGraph (graph-based agent execution)
+│   └─ LangSmith (tracing agent execution)
+│
+└─→ Introduces patterns for
+   ├─ Explicit state machines (5+ states)
+   ├─ Typed transitions (valid paths only)
+   ├─ Multi-mechanism loop detection (step count, repeats, alternating)
+   ├─ State history tracking for debugging
+   ├─ Tool call orchestration
+   ├─ Session lifecycle management
+   └─ Production agent observability
+```
+
+examples_2_2.py: State Machine Agent Demonstrations
+├─→ Demonstrates
+│   ├─ ResearchState Pydantic model with validation
+│   ├─ State transition validation (can_transition)
+│   ├─ Infinite loop detection (4 mechanisms)
+│   ├─ LoopGuard class for comprehensive checking
+│   ├─ ResearchAssistant with state-aware tools
+│   ├─ Main agent loop with state management
+│   └─ Happy path workflow (IDLE → PLANNING → SEARCHING → SYNTHESIZING → CITING)
+│
+└─→ Shows patterns like
+    ├─ Pydantic models for state
+    ├─ Explicit transitions
+    ├─ Step budgets
+    ├─ Tool-level state validation
+    ├─ Loop detection
+    ├─ State inspection for debugging
+    └─ Production monitoring
 ```
 
 ---
