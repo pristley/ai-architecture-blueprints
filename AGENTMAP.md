@@ -119,12 +119,14 @@ graph TB
 | [examples_2_1.py](examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
 | [examples_2_2.py](examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
 | [choreography_hive_mind.py](choreography_hive_mind.py) | 💻 Code | Event-driven choreography pattern: EventBus, agents, feedback loops | ~1200 | ✅ |
+| [research_assistant_state_machine.py](research_assistant_state_machine.py) | 💻 Code | Production state machine for agent loops with comprehensive loop detection | ~600 | ✅ |
 
 ### Test Examples
 
 | Document | Type | Purpose | Lines | Status |
 |----------|------|---------|-------|--------|
 | [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py) | 🧪 Tests | Comprehensive choreography pattern tests: events, bus, agents, workflows | ~800 | ✅ |
+| [tests/test_research_assistant_state_machine.py](tests/test_research_assistant_state_machine.py) | 🧪 Tests | 43 tests for state machine: transitions, loop detection, tools, workflows | ~600 | ✅ |
 
 ### Meta Documents
 
@@ -559,6 +561,124 @@ tests/test_choreography_hive_mind.py: Comprehensive Choreography Pattern Tests
     ├─ Feedback loops (Critic signals drive Drafter re-work)
     ├─ Decoupling benefits (agents don't know each other)
     └─ System resilience (failures remain isolated)
+```
+
+### research_assistant_state_machine.py: Production State Machine Implementation
+
+```
+research_assistant_state_machine.py: Complete Research Agent with State Management
+│
+├─→ Demonstrates
+│   ├─ AgentState enum (IDLE, PLANNING, SEARCHING, SYNTHESIZING, CITING)
+│   ├─ ResearchState dataclass with complete state tracking
+│   ├─ Explicit state transitions via can_transition()
+│   ├─ 5 loop detection mechanisms:
+│   │   ├─ Step limit (MAX_STEPS=20)
+│   │   ├─ Same state repetition (MAX_SAME_STATE_REPEATS=3)
+│   │   ├─ Search query redundancy (MAX_SEARCHES_PER_QUERY=5)
+│   │   ├─ Planning cycle limit (MAX_PLANNING_CYCLES=2)
+│   │   └─ Synthesizing cycle limit (MAX_SYNTHESIZING_CYCLES=2)
+│   ├─ ResearchAssistant class with 4 state-aware tools
+│   ├─ State recording with action tracking and error handling
+│   └─ Complete workflow loop: IDLE→PLANNING→SEARCHING→SYNTHESIZING→CITING
+│
+├─→ Implements patterns like
+│   ├─ Dataclass-based state with field defaults
+│   ├─ Explicit transition rules (no implicit state changes)
+│   ├─ State history for debugging and replay
+│   ├─ Multiple loop detection heuristics (no single point of failure)
+│   ├─ Tool call orchestration with state validation
+│   ├─ Session ID tracking for tracing
+│   ├─ Error collection without halting execution
+│   └─ Production-ready async structure
+│
+├─→ Tool Integration
+│   ├─ plan_tool() - IDLE→PLANNING
+│   ├─ search_tool() - PLANNING/SEARCHING→SEARCHING
+│   ├─ synthesize_tool() - SEARCHING→SYNTHESIZING
+│   └─ cite_tool() - SYNTHESIZING→CITING
+│
+├─→ Runs complete workflow
+│   ├─ Start in IDLE state
+│   ├─ Generate research plan (PLANNING)
+│   ├─ Execute searches with query tracking (SEARCHING)
+│   ├─ Synthesize results into coherent response (SYNTHESIZING)
+│   ├─ Add citations with verification (CITING)
+│   ├─ Exit with full execution trace
+│   └─ OR detect loop and halt gracefully
+│
+└─→ Complements
+    ├─ WP-2.2 (theory of state management in agents)
+    ├─ LangGraph (compatible graph-based agent execution)
+    ├─ LangSmith (structured logging and observability)
+    └─ tests/test_research_assistant_state_machine.py (comprehensive test coverage)
+```
+
+### tests/test_research_assistant_state_machine.py: State Machine Test Suite
+
+```
+tests/test_research_assistant_state_machine.py: 43 Comprehensive State Machine Tests
+│
+├─→ Test Coverage
+│   ├─ State Transitions (12 tests)
+│   │   ├─ IDLE → PLANNING, IDLE invalid transitions
+│   │   ├─ PLANNING → SEARCHING, self-refinement
+│   │   ├─ SEARCHING → SYNTHESIZING, self-continuation
+│   │   ├─ SYNTHESIZING → CITING, self-refinement, back-to-search
+│   │   └─ CITING → SYNTHESIZING, verification
+│   ├─ Loop Detection (13 tests)
+│   │   ├─ Step limit (3 tests): under, at, over limit
+│   │   ├─ Same state repetition (4 tests): no repeat, different states, 3x same
+│   │   ├─ Search redundancy (4 tests): new searches, at limit, exceeds limit
+│   │   └─ Planning/Synthesizing cycles (2 tests): within, exceeds limits
+│   ├─ State Recording (3 tests)
+│   │   ├─ Valid transition recording
+│   │   ├─ Invalid transition rejection
+│   │   └─ Looping state rejection
+│   ├─ Tool Integration (8 tests)
+│   │   ├─ plan_tool: state transition, context validation
+│   │   ├─ search_tool: from valid states, duplicate limits, invalid states
+│   │   ├─ synthesize_tool: requires results, valid transitions
+│   │   └─ cite_tool: from valid states, invalid state rejection
+│   ├─ Workflows (2 tests)
+│   │   ├─ Happy path (IDLE → PLANNING → SEARCHING → SYNTHESIZING → CITING)
+│   │   └─ Error handling (graceful state transitions on errors)
+│   └─ Edge Cases (4 tests)
+│       ├─ Empty query handling
+│       ├─ Very long query handling
+│       ├─ Session ID uniqueness
+│       └─ Status string generation
+│
+├─→ Test Categories
+│   ├─ Unit Tests (20 tests)
+│   │   ├─ State transition validation
+│   │   ├─ Loop detection heuristics
+│   │   ├─ State history tracking
+│   │   └─ Individual tool behavior
+│   ├─ Integration Tests (15 tests)
+│   │   ├─ Multi-step workflow execution
+│   │   ├─ Tool orchestration with state
+│   │   ├─ Error handling paths
+│   │   └─ Complete research loop
+│   └─ Regression Tests (8 tests)
+│       ├─ Edge cases (empty, long queries)
+│       ├─ Boundary conditions
+│       └─ State machine invariants
+│
+├─→ Example Test Scenarios
+│   ├─ Complete workflow happy path (5-step transition)
+│   ├─ Loop detection: step limit exceeded
+│   ├─ Loop detection: same state repeated 3x
+│   ├─ Loop detection: search query repeated >5x
+│   ├─ Loop detection: planning cycles exceed limit
+│   └─ Tool validation without state change
+│
+└─→ Validates patterns like
+    ├─ Explicit state machines prevent chaos (invalid transitions blocked)
+    ├─ Multiple loop detection prevents infinite loops
+    ├─ State history enables debugging and replay
+    ├─ Tool-level validation ensures correctness
+    └─ Production readiness (async support, session tracking, error collection)
 ```
 
 ---

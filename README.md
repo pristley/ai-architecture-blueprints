@@ -18,7 +18,7 @@ Use this guide to:
 - **Implement multi-agent architectures** using event-driven choreography (2 hours)
 - **Deploy at scale** with production-ready patterns, memory systems, and state management (varies)
 
-**Status**: 1.1.0 | Python 3.9+ | MIT License | 30 tests passing | [Release history](CHANGELOG.md)
+**Status**: 1.1.0 | Python 3.9+ | MIT License | 45 tests passing | [Release history](CHANGELOG.md)
 
 ---
 
@@ -33,6 +33,7 @@ Use this guide to:
 | I need to understand LangChain architecture | [WP-1.3: Runnable Protocol](WP-1.3-The-Runnable-Protocol.md) | 2 hours |
 | I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
 | I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
+| I need to manage state in agents | [WP-2.2: State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) + [research_assistant_state_machine.py](research_assistant_state_machine.py) | 1.5 hours |
 | I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
 | I want a visual map | [AGENTMAP: Knowledge Graph](AGENTMAP.md) | 15 min |
 
