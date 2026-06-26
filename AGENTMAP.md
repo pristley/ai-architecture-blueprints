@@ -33,6 +33,9 @@ graph TB
     WP23["⚙️ WP-2.3<br/>Orchestration Pattern: Controller Agent"]
     CONTROLLER["💻 controller_orchestration_agent.py<br/>Controller Orchestration"]
     TEST_CONTROLLER["🧪 test_controller_orchestration.py<br/>Orchestration Tests"]
+    WP24["🐝 WP-2.4<br/>Choreography Pattern: Hive Mind"]
+    HIVE["💻 choreography_hive_mind.py<br/>Event-Driven Hive Mind"]
+    TEST_HIVE["🧪 test_choreography_hive_mind.py<br/>Choreography Tests"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -69,6 +72,12 @@ graph TB
     ADR22 -->|Uses concepts from| WP22
     WP23 -->|Detailed implementation| ADR22
     WP23 -->|Contrasts with| ADR21
+    ADR21 -->|Foundation for| WP24
+    WP24 -->|See code| HIVE
+    HIVE -->|Tested by| TEST_HIVE
+    ADR21 -->|See code| HIVE
+    HIVE -->|Tested by| TEST_HIVE
+    WP24 -->|Contrasts with| WP23
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| ADR21
@@ -80,6 +89,7 @@ graph TB
     AGENTMAP -->|Shows relationships| WP21
     AGENTMAP -->|Shows relationships| WP22
     AGENTMAP -->|Shows relationships| WP23
+    AGENTMAP -->|Shows relationships| WP24
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -91,6 +101,9 @@ graph TB
     style ADR22 fill:#FF9800,stroke:#E65100,color:#fff
     style CONTROLLER fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style TEST_CONTROLLER fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style WP24 fill:#FF9800,stroke:#E65100,color:#fff
+    style HIVE fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style TEST_HIVE fill:#4CAF50,stroke:#2E7D32,color:#fff
     style WP13 fill:#FF9800,stroke:#E65100,color:#fff
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
@@ -126,6 +139,7 @@ graph TB
 | [WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
 | [ADR-2.2-Orchestration-Centralized-Control.md](ADR-2.2-Orchestration-Centralized-Control.md) | 🏗️ Architecture Decision | Orchestration vs choreography patterns with decision matrix | ~2600 | ✅ |
 | [WP-2.3-Orchestration-Pattern.md](WP-2.3-Orchestration-Pattern.md) | ⚙️ Design Pattern | Practical orchestration implementation with controller agent | ~1000 | ✅ |
+| [WP-2.4-Choreography-Pattern.md](WP-2.4-Choreography-Pattern.md) | 🐝 Design Pattern | Practical choreography implementation with event-driven Hive Mind | ~1000 | ✅ |
 
 ### Code Examples
 
@@ -614,6 +628,50 @@ WP-2.3: Orchestration Pattern - The "Controller" Agent
 │   ├─ Build complete audit trails for observability
 │   ├─ Create extensible orchestrators for your domain
 │   └─ Test orchestration patterns comprehensively
+│
+└─→ Contrasts with
+    └─ WP-2.4 (choreography pattern - opposite approach)
+```
+
+### WP-2.4 Relationships
+
+```
+WP-2.4: Choreography Pattern - The "Hive Mind" Agent
+│
+├─→ Depends on
+│   ├─ ADR-2.1 (architectural foundation and event-driven concepts)
+│   ├─ WP-2.2 (state management principles used in agent behavior)
+│   ├─ WP-1.7 (tracing for distributed workflow tracking)
+│   ├─ WP-1.5 (event serialization and validation)
+│   └─ WP-1.3 (async patterns for non-blocking agent communication)
+│
+├─→ Teaches implementation of
+│   ├─ Event-driven architecture via EventBus pub/sub
+│   ├─ Autonomous agent design with independent behavior
+│   ├─ Feedback loops for system self-regulation
+│   ├─ Correlation ID tracing across distributed agents
+│   ├─ Fire-and-forget messaging semantics
+│   ├─ Error isolation and resilience patterns
+│   ├─ Eventual consistency handling
+│   ├─ Multi-agent workflow orchestration
+│   └─ Emergent workflow patterns
+│
+├─→ Provides code examples in
+│   ├─ choreography_hive_mind.py (EventBus + autonomous agents)
+│   └─ tests/test_choreography_hive_mind.py (comprehensive choreography tests)
+│
+├─→ Learning outcomes
+│   ├─ Understand when choreography is better than orchestration
+│   ├─ Design loosely-coupled multi-agent systems
+│   ├─ Implement event-driven architectures with pub/sub
+│   ├─ Build autonomous agents with independent decision-making
+│   ├─ Create feedback loops for system homeostasis
+│   ├─ Trace workflows across distributed agents
+│   ├─ Handle eventual consistency and resilience
+│   └─ Test choreography patterns comprehensively
+│
+└─→ Contrasts with
+    └─ WP-2.3 (orchestration pattern - centralized approach)
 │
 ├─→ Contrasts with
 │   ├─ ADR-2.1 (choreography: distributed vs orchestration: centralized)

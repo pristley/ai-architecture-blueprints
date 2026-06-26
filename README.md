@@ -34,6 +34,7 @@ Use this guide to:
 | I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
 | I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
 | I need deterministic orchestrated workflows | [WP-2.3: Orchestration Pattern](WP-2.3-Orchestration-Pattern.md) + [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md) | 3.5 hours |
+| I need emergent multi-agent workflows | [WP-2.4: Choreography Pattern](WP-2.4-Choreography-Pattern.md) + [ADR-2.1](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 3.5 hours |
 | I need to manage state in agents | [WP-2.2: State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) + [research_assistant_state_machine.py](research_assistant_state_machine.py) | 1.5 hours |
 | I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
 | I want a visual map | [AGENTMAP: Knowledge Graph](AGENTMAP.md) | 15 min |
@@ -93,7 +94,7 @@ We follow these five principles in all patterns and implementations:
 - 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
 - 🏭 **Agent state (1 hour)** → [WP-2.2](#wp-22-state-management-in-single-agent-loop) - Prevent infinite loops
-- 🐝 **Multi-agent choreography (2 hours)** → [ADR-2.1](#adr-21-choreography---event-driven-agility-for-emergent-workflows) - Event-driven autonomous agents
+- 🐝 **Multi-agent choreography (3.5 hours)** → [WP-2.4](#wp-24-choreography-pattern---the-hive-mind-agent) - Event-driven autonomous agents with feedback loops
 - ⚙️ **Orchestrated workflows (3.5 hours)** → [WP-2.3](#wp-23-orchestration-pattern---the-controller-agent) - Build deterministic orchestrators
 - 🎯 **Orchestration architecture** → [ADR-2.2](#adr-22-orchestration---centralized-control-for-deterministic-workflows) - Decision framework
 - 📦 **Production setup** → See [Setup & Configuration](#setup--configuration)
@@ -992,6 +993,167 @@ Each step is evaluated before the next begins. If evaluation fails, the step is 
 - ❌ You have 1000s of independent agents
 - ❌ External events trigger workflows
 - ❌ Decoupling matters more than predictability
+
+---
+
+### WP-2.4: Choreography Pattern - The "Hive Mind" Agent
+
+**[WP-2.4-Choreography-Pattern.md](WP-2.4-Choreography-Pattern.md)** teaches you: *"How do I build event-driven multi-agent systems with emergent workflows?"*
+
+**WP-2.4 is a hands-on guide** to implementing the choreography pattern. While ADR-2.1 explains *why* choreography is valuable, WP-2.4 teaches you *how to build* autonomous agents that collaborate via events.
+
+#### What You'll Learn
+
+- **Event-Driven Architecture**: Design with pub/sub messaging
+- **Build Autonomous Agents**: Agents make independent decisions
+- **Implement Feedback Loops**: System self-regulates toward goals
+- **Trace Distributed Workflows**: Correlation IDs across agents
+- **Handle Eventual Consistency**: Accept delays for flexibility
+
+#### Key Concepts
+
+```python
+# 1. Define domain events
+class SearchRequested(Event):
+    query: str
+    max_results: int
+
+class DataFetched(Event):
+    query: str
+    results: List[Dict]
+
+class RevisionRequired(Event):
+    quality_score: float
+    feedback: str
+    revision_count: int
+
+# 2. Create EventBus for pub/sub
+bus = EventBus()
+
+# 3. Define autonomous agents
+class WebSearcher(Agent):
+    async def start(self):
+        self.bus.subscribe("search-requested", self.on_search_requested)
+    
+    async def on_search_requested(self, event):
+        # Fetch data independently
+        results = await fetch_from_web(event.query)
+        # Publish results
+        await self.publish_event(DataFetched(...))
+
+# 4. Agents coordinate via events (not direct calls!)
+searcher = WebSearcher(bus, "searcher")
+drafter = Drafter(bus, "drafter")
+critic = Critic(bus, "critic")
+
+await searcher.start()
+await drafter.start()
+await critic.start()
+
+# 5. Trigger workflow
+trigger = SearchRequested(query="AI trends", source_agent="user")
+await bus.publish(trigger)  # Workflow emerges!
+```
+
+#### The Complete Pattern
+
+```
+WebSearcher (Autonomous Agent 1)
+│
+├─→ Subscribes to: "search-requested"
+├─→ When event arrives:
+│   ├─→ Fetches data independently
+│   └─→ Publishes "data-fetched"
+│
+Drafter (Autonomous Agent 2)
+│
+├─→ Subscribes to: "data-fetched" + "revision-required"
+├─→ When data-fetched:
+│   ├─→ Drafts report
+│   └─→ Publishes "report-synthesized"
+├─→ When revision-required:
+│   ├─→ Improves draft with feedback
+│   └─→ Publishes "report-synthesized" (revised)
+│
+Critic (Autonomous Agent 3) - Feedback Loop
+│
+├─→ Subscribes to: "report-synthesized"
+├─→ When report arrives:
+│   ├─→ Evaluates quality
+│   ├─→ Quality ≥ threshold?
+│   │   ├─→ YES: Publish "report-finalized" ✅
+│   │   └─→ NO: Publish "revision-required" (feedback loop!)
+│   └─→ Max revisions exceeded?
+│       └─→ Publish "revision-abandoned" ❌
+
+EventBus (Shared Infrastructure)
+│
+├─→ Manages subscriptions
+├─→ Routes events to handlers
+├─→ Maintains audit trail
+└─→ Tracks correlation_ids
+```
+
+#### Implementation Example: Report Generation Hive Mind
+
+The included [choreography_hive_mind.py](choreography_hive_mind.py) demonstrates:
+
+- **WebSearcher Agent** - Fetches data when requested
+- **Drafter Agent** - Synthesizes reports with feedback awareness
+- **Critic Agent** - Reviews quality and provides feedback
+- **Feedback Loop** - Drafter responds to Critic feedback
+- **Correlation Tracking** - All events share workflow ID
+
+Workflow emerges from event interactions: SearchRequested → DataFetched → ReportSynthesized → ReviewCompleted → [RevisionRequired | ReportFinalized]
+
+#### Complete Test Coverage
+
+**[tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py)** includes comprehensive tests:
+
+- **Event validation tests** - Pydantic serialization and immutability
+- **EventBus tests** - Pub/sub mechanics and history
+- **Individual agent tests** - WebSearcher, Drafter, Critic behavior
+- **Multi-agent workflow tests** - Complete workflows with feedback
+- **Feedback loop tests** - Revision iteration and max revision handling
+- **Resilience tests** - Error isolation between agents
+- **Observability tests** - Event audit trails and statistics
+
+#### Learning Path (3.5 hours)
+
+1. **Understand ADR-2.1** (1 hour) - Know the architectural principles
+2. **Study WP-2.4 implementation** (1 hour) - Learn the concrete patterns
+3. **Review choreography_hive_mind.py** (45 min) - See complete code
+4. **Run tests and observe** (30 min) - Trace through async execution
+5. **Build your own agents** (1 hour) - Create domain-specific choreography
+
+#### When to Use WP-2.4 Patterns
+
+**Use choreography when you need:**
+- ✅ Emergent behavior from autonomous agents
+- ✅ Loosely coupled agents (don't depend on each other)
+- ✅ Feedback loops and self-regulation
+- ✅ Scaling to 100s of independent agents
+- ✅ Handling external events dynamically
+
+**Use orchestration instead when:**
+- ❌ You need predictable workflows
+- ❌ You require complete audit trails
+- ❌ Regulatory compliance demands explicit control
+- ❌ Debugging causality must be obvious
+- ❌ Few agents (< 10) with clear sequence
+
+#### Choreography vs Orchestration: Decision Matrix
+
+| Factor | Choreography | Orchestration |
+|--------|--------------|---------------|
+| **Control** | Distributed (agents autonomous) | Centralized (Controller directs) |
+| **Complexity** | Low until you have 100s agents | Low until you have 10+ steps |
+| **Observability** | Event audit trail | Workflow audit trail |
+| **Debugging** | Harder (distributed) | Easier (central) |
+| **Scaling** | Scales to 1000s agents | Bottleneck at Controller |
+| **Consistency** | Eventual | Strong |
+| **Coupling** | Loose (event-based) | Tight (direct calls) |
+| **Best For** | Emergent workflows | Deterministic workflows |
 
 ---
 
