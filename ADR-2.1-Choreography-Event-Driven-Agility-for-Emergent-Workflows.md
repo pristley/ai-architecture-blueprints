@@ -1,159 +1,370 @@
 # ADR-2.1: Choreography: Event-Driven Agility for Emergent Workflows
 
-## Status
-**ACCEPTED** — Adopted as the architectural pattern for multi-agent report generation systems.
+**Status**: ACCEPTED — Use choreography as the primary coordination pattern for multi-agent workflows.
 
 ---
 
-## Context
+## TL;DR
 
-### Problem Statement
-The previous **Orchestration-based** pattern centralized control of agent workflows through a master coordinator. While this provided explicit sequencing and immediate error visibility, it introduced critical architectural constraints:
+Use choreography when you need agents to work independently without a central coordinator. Agents publish events (e.g., "data-fetched") and subscribe to events they care about. This approach scales better than orchestration and recovers faster from failures, but requires more operational maturity.
 
-1. **Tight Coupling**: Agents depend on the orchestrator's existence and availability
-2. **Scalability Bottleneck**: The orchestrator becomes a performance ceiling as agent count grows
-3. **Brittleness**: Orchestrator failure cascades to all dependent agents
-4. **Reduced Autonomy**: Agents cannot act independently or respond to domain-specific triggers
-5. **Observability Paradox**: Centralized control masks distributed system dynamics
+**Choose choreography if you have**:
+- Multiple independent agents that need to scale separately
+- Tolerance for eventual consistency (results converge, not instant)
+- Investment in observability infrastructure (distributed tracing)
 
-### System Evolution Requirements
-The organization now requires:
-- **Rapid workflow composition** without orchestrator modification
-- **Emergent behavior** where agents collaborate through domain events, not directives
-- **Independent agent scaling** without re-architecting coordination logic
-- **Resilience through decoupling** where agent failures remain isolated
-- **Self-organizing adaptation** where feedback mechanisms enable system homeostasis
-
-### Reference Architecture: The "Hive Mind" System
-Three autonomous agents interact through an asynchronous pub/sub event bus:
-
-```
-┌─────────────────┐
-│   Web Searcher  │ ──→ [Data Fetched]
-└─────────────────┘
-        │
-        ↓
-┌──────────────────────┐
-│  Event Bus (Pub/Sub) │
-└──────────────────────┘
-        ↑
-        │ [Synthesis Ready]
-┌─────────────────┐
-│     Drafter     │ ──→ [Report Ready]
-└─────────────────┘
-        │
-        ↑ [Feedback + Critique]
-┌─────────────────┐
-│     Critic      │ ←── [Assessment Complete]
-└─────────────────┘
-```
-
-### Systems Thinking Context
-This system operates as a **dissipative structure** with:
-- **Input flux**: Raw data from the web
-- **Work**: Synthesis and critical evaluation
-- **Output flux**: Validated, feedback-informed reports
-- **Feedback loop**: Critic's assessment re-enters the system, enabling learning and adaptation
+**Choose orchestration if you need**:
+- Simple, centralized control flow that's easy to understand
+- Hard real-time latency guarantees
+- Immediate error detection and handling
 
 ---
 
 ## Decision
 
-### Adopt Choreography-Based Architecture
+**Adopt choreography-based coordination for multi-agent workflows.**
 
-We adopt **choreography** as the primary coordination pattern for multi-agent workflows. Agents will:
+Agents interact through an asynchronous event bus (pub/sub model). Each agent:
+1. Publishes domain events when work completes ("data-fetched", "report-synthesized", "review-completed")
+2. Subscribes to events relevant to its work
+3. Handles events independently, making its own decisions
+4. Manages its own state without external direction
 
-1. **Publish domain events** when work completes (e.g., "data-fetched", "report-synthesized")
-2. **Subscribe to relevant events** and respond autonomously
-3. **Manage their own state** without external orchestration
-4. **Encapsulate decision logic** within agent boundaries
-5. **Communicate via immutable event payloads** carrying sufficient context for downstream processing
-
-### Key Architectural Principles
-
-#### 1. Event-Driven Autonomy
-Each agent operates as an **independent entity** with:
-- **Local decision authority**: Agents decide when and how to process events
-- **Asynchronous responsiveness**: Event handling decouples from request-response coupling
-- **Reduced command surface**: No external directives; only event notifications
-
-**Contrast with Orchestration**:
+**Example flow**:
 ```
-ORCHESTRATION:  Orchestrator → Agent (command)
-                Agent → Orchestrator (response)
-                [Orchestrator owns control flow]
-
-CHOREOGRAPHY:   Agent A → Event Bus (publishes: "work-done")
-                Event Bus → Agent B (subscribes)
-                Agent B → Event Bus (publishes: "next-work-done")
-                [Agents own their decision logic]
+WebSearcher publishes:  "data-fetched" 
+                             ↓
+                      Event Bus (pub/sub)
+                             ↓
+Drafter subscribes, receives "data-fetched", publishes: "report-synthesized"
+                             ↓
+Critic subscribes, receives "report-synthesized", publishes: "review-completed"
+                             ↓
+Drafter subscribes, receives "review-completed"
 ```
 
-#### 2. Loose Coupling Through Event Abstraction
-Agents interact through **event contracts**, not direct method calls:
+---
 
-- **Producer independence**: Web Searcher doesn't know or care who consumes "data-fetched" events
-- **Consumer variability**: Multiple subscribers can process data-fetched events without affecting the Searcher
-- **Version evolution**: Event schemas can evolve with graceful degradation if fields are additive
-- **New workflow composition**: New agents join the ecosystem by subscribing to existing events
+## Why This Decision
 
-#### 3. Emergent Behavior Through Feedback Loops
-The Critic agent embodies a **negative feedback mechanism** that enables homeostasis:
+### Problem with Orchestration
+
+The orchestration pattern (where a central coordinator directs all agents) creates three pain points as workflows grow:
+
+1. **Single point of failure**: If the orchestrator fails, the entire workflow fails
+2. **Scaling bottleneck**: The orchestrator becomes the performance ceiling; you can't simply add more agents
+3. **Tight coupling**: Agents depend on the orchestrator for scheduling; changes to one agent require orchestrator updates
+
+### Choreography Solves These Problems
+
+**1. Resilience**: Agents fail independently. If the Critic agent fails, the WebSearcher and Drafter continue working. Failed agents recover asynchronously without timing out the entire system.
+
+**2. Scalability**: Add agents without modifying existing agents. New agents simply subscribe to existing events. The event bus (Kafka, RabbitMQ, Redis) remains the only bottleneck, and these systems scale to millions of events per second.
+
+**3. Autonomy**: Agents decide locally how to respond to events. The Drafter doesn't ask permission to draft; it sees "data-fetched" and drafts. The Critic doesn't wait for a command; it sees "report-synthesized" and critiques.
+
+### How Feedback Loops Enable Self-Regulation
+
+Choreography enables natural feedback loops that regulate system behavior without central control:
 
 ```
-Feedback Loop Structure:
-┌───────────────────────────────────────────┐
-│ System Goal: High-Quality Reports         │
-└───────────────────────────────────────────┘
-            ↓
-┌───────────────────────────────────────────┐
-│ Desired State: Quality Threshold Met      │
-└───────────────────────────────────────────┘
-            ↓
-┌───────────────────────────────────────────┐
-│ Sensor (Critic): Evaluates Report Quality│
-└───────────────────────────────────────────┘
-            ↓
-┌───────────────────────────────────────────┐
-│ Deviation Detected: Quality < Threshold  │
-└───────────────────────────────────────────┘
-            ↓
-┌───────────────────────────────────────────┐
-│ Corrective Action: Re-search or Re-draft │
-│ (Critic publishes "revision-required")   │
-└───────────────────────────────────────────┘
-            ↓
-┌───────────────────────────────────────────┐
-│ Web Searcher/Drafter React to Event      │
-│ System Returns to Desired State           │
-└───────────────────────────────────────────┘
+System Goal: High-Quality Reports
+    ↓
+Critic evaluates report quality
+    ↓
+Quality below threshold?  Yes → Publish "revision-required"
+    ↓
+Drafter sees "revision-required", re-drafts
+    ↓
+Process repeats until quality threshold met or max revisions exceeded
 ```
 
-This creates a **self-regulating system** without centralized control:
-- The Critic doesn't command re-work; it signals deviation
-- Searcher/Drafter autonomously decide to act on that signal
-- The system reaches equilibrium through distributed decision-making
-- Emergent quality levels arise from agent interaction, not design specification
+No orchestrator says "re-draft." The Drafter autonomously chooses to respond to the Critic's signal. This creates a **self-regulating system** where quality improvement emerges from agent interactions, not central mandates.
 
-#### 4. Second-Order Effects: The Observability Reversal
+**Key insight**: Choreography doesn't eliminate feedback loops; it distributes them. Each agent implements its own response logic.
 
-**Counterintuitive consequence**: Choreography initially appears less observable than orchestration.
+---
 
-**First-order effect**: 
-- Orchestration provides explicit, audit-able control flow
-- Choreography distributes logic across agents; control flow emerges implicitly
+## How to Implement
 
-**Second-order effects** (and their resolution):
+### Event Bus Requirements
 
-| Effect | Orchestration | Choreography | Implication |
-|--------|---------------|--------------|-------------|
-| **Tracing** | Linear, explicit call stack | Non-linear, event-driven causality | Requires distributed tracing infrastructure (e.g., correlation IDs in events) |
-| **Failure Propagation** | Predictable; orchestrator centralizes error handling | Emergent; agents fail independently | Resilience ↑; debugging complexity ↑; requires per-agent health checks |
-| **Workflow Visibility** | Static; orchestrator owns "happy path" | Dynamic; workflows compose at runtime | Enables adaptive workflows; requires event stream replay for audit trails |
-| **Latency Characteristics** | Synchronous request-response (predictable) | Asynchronous (variable, queued) | Trade: latency predictability ↔ throughput elasticity |
-| **System Coupling** | High (agents → orchestrator) | Low (agents → event contracts) | Enables independent scaling; introduces eventual consistency requirements |
+Use a pub/sub system that provides:
+- **Durability**: Events persist so late-joining subscribers don't miss work
+- **Ordering**: Events within a partition maintain order (Kafka partitions, Redis Streams, RabbitMQ queues)
+- **Replayability**: You can replay event history for debugging and auditing
 
-**Critical insight**: Choreography doesn't reduce observability—it **redistributes** it. Observability shifts from "orchestrator sees all" to "each agent knows its state, system state emerges from event audit logs."
+**Options**:
+- **Local development**: Redis Streams, RabbitMQ, or in-memory EventBus (see `choreography_hive_mind.py`)
+- **Production**: Kafka (highest throughput), RabbitMQ (high reliability), or managed services (AWS SQS+SNS, GCP Pub/Sub)
+
+### Event Payload Schema
+
+Every event must include:
+
+```json
+{
+  "event_id": "550e8400-e29b-41d4-a716-446655440000",
+  "correlation_id": "550e8400-e29b-41d4-a716-446655440111",
+  "event_type": "data-fetched",
+  "timestamp": "2026-06-26T10:30:00Z",
+  "source_agent": "web-searcher",
+  "payload": {
+    "query": "climate change mitigation",
+    "results": [...]
+  }
+}
+```
+
+**Why these fields**:
+- `correlation_id`: Link all events in a workflow together for distributed tracing
+- `event_id`: Detect duplicate processing (if an agent processes the same event twice)
+- `source_agent`: Understand what published this event
+- `timestamp`: Reconstruct event ordering for debugging
+
+### Agent Implementation Pattern
+
+```python
+class MyAgent:
+    def __init__(self, event_bus):
+        self.bus = event_bus
+        self.name = "my-agent"
+    
+    async def start(self):
+        # Subscribe to events this agent cares about
+        self.bus.subscribe("event-i-care-about", self.handle_event)
+    
+    async def handle_event(self, event):
+        # Process the event
+        result = self.do_work(event)
+        
+        # Publish the result
+        await self.bus.publish(Event(
+            event_type="work-complete",
+            source_agent=self.name,
+            correlation_id=event.correlation_id,
+            payload=result
+        ))
+    
+    def do_work(self, event):
+        # Your business logic here
+        return {"status": "complete"}
+```
+
+### Preventing Infinite Loops
+
+Choreography with feedback loops can theoretically create infinite re-work. Prevent this with:
+
+1. **Max revision counter**: Stop retrying after N attempts
+```python
+if event.revision_count >= MAX_REVISIONS:
+    publish("revision-abandoned", reason="max_revisions_exceeded")
+    return
+```
+
+2. **Quality threshold exit**: Stop if quality meets threshold
+```python
+if assess_quality(report) >= QUALITY_THRESHOLD:
+    publish("report-approved")
+    return
+```
+
+3. **Idempotency**: Process the same event safely multiple times
+```python
+# Each event has a unique event_id
+if self.has_processed(event.event_id):
+    return  # Don't re-process duplicates
+```
+
+See [choreography_hive_mind.py](choreography_hive_mind.py) for a complete working example.
+
+---
+
+## Trade-offs
+
+### Scalability vs. Observability
+
+| Aspect | Orchestration | Choreography |
+|--------|---------------|--------------|
+| **Visibility** | Orchestrator sees all state changes | Each agent knows its state; system state reconstructed from event logs |
+| **Debug complexity** | Simple: follow orchestrator logic | Complex: trace events across agents |
+| **Tracing** | Linear call stack | Distributed tracing (correlation IDs required) |
+
+**Resolution**: Invest in distributed tracing infrastructure. Use OpenTelemetry or Jaeger to link events by correlation_id.
+
+### Consistency vs. Availability
+
+| Aspect | Orchestration | Choreography |
+|--------|---------------|--------------|
+| **Consistency** | Strong (orchestrator enforces order) | Eventual (agents converge over time) |
+| **Availability** | Lower (orchestrator failure stops everything) | Higher (failures isolated) |
+
+**Resolution**: Design agents to be idempotent. Assume events arrive out-of-order or duplicate. Test failure scenarios explicitly.
+
+### Simplicity vs. Flexibility
+
+| Aspect | Orchestration | Choreography |
+|--------|---------------|--------------|
+| **Understanding** | Explicit control flow | Implicit control flow (emerges at runtime) |
+| **Modification** | Change orchestrator to add workflows | Add subscriptions to enable new patterns |
+
+**Resolution**: Document your event contracts. Use schema registries. Test event flow with property-based testing.
+
+---
+
+## When to Use Choreography
+
+**Use choreography when**:
+- You have 3+ independent agents that scale at different rates
+- Agents sometimes fail; you need to recover without restarting everything
+- New workflow patterns emerge and you can't predict all compositions upfront
+- You have a robust event bus (Kafka, RabbitMQ, managed pub/sub)
+
+**Use orchestration when**:
+- You have a single coordinator and a few agents
+- You need real-time, predictable latencies
+- You prefer explicit control flow over emergent behavior
+- Your event bus is unreliable or unmaintained
+
+---
+
+## Background: Choreography vs. Orchestration
+
+This section provides deeper context for those unfamiliar with choreography patterns.
+
+### Orchestration: "Director" Model
+
+In orchestration, a central coordinator (like a film director) directs agents:
+
+```
+┌──────────────────┐
+│  Orchestrator    │ → "WebSearcher, search climate data"
+└──────────────────┘
+        ↑
+        │ "Done searching"
+   ┌────┴────┐
+   │          │
+[WebSearcher] [Drafter]
+```
+
+The orchestrator:
+- Makes all scheduling decisions
+- Waits for agent responses synchronously
+- Sees the entire workflow state
+- Represents the single point of failure
+
+### Choreography: "Improvisation" Model
+
+In choreography, agents are like musicians in an ensemble—they watch for cues (events) and respond:
+
+```
+    Event Bus
+   ┌───────────┐
+   │ Pub / Sub │
+   └───────────┘
+   /     |      \
+[WS]  [Dr]  [Cr]  ← Agents subscribe and respond
+```
+
+Each agent:
+- Watches for events it cares about
+- Decides independently how to respond
+- Publishes events for others to consume
+- No central authority
+
+### Systems Thinking: Feedback
+
+Choreography enables **negative feedback loops**—the technical term for self-regulation:
+
+1. **Desired state**: High-quality reports
+2. **Measurement**: Critic evaluates quality
+3. **Deviation detected**: Quality below threshold
+4. **Corrective action**: Critic publishes "revision-required"
+5. **Response**: Drafter sees signal, re-drafts
+6. **Convergence**: System returns to desired state
+
+This is how thermostats work (measure temperature, signal heater), how supply chains work (measure inventory, order more), and how immune systems work. Choreography allows you to implement these patterns in software without a central "brain" making all decisions.
+
+---
+
+## Implementation Differences
+
+### Event Payload (Choreography)
+
+```json
+{
+  "event_type": "data-fetched",
+  "correlation_id": "workflow-123",
+  "payload": {"results": [...]}
+}
+```
+
+Each agent independently subscribes and decides to act.
+
+### Direct Call (Orchestration)
+
+```python
+data = orchestrator.call_web_searcher(query)
+report = orchestrator.call_drafter(data)
+review = orchestrator.call_critic(report)
+```
+
+The orchestrator coordinates every call.
+
+### Key Difference
+
+In choreography, **agents are autonomous**. They see events and decide to act. In orchestration, **agents are reactive**. They only act when the orchestrator tells them to.
+
+---
+
+## Monitoring Choreography Workflows
+
+### Correlation ID Propagation
+
+Every event must carry the correlation_id from the originating request. This allows you to trace the entire workflow:
+
+```
+User requests: "Report on climate change" → correlation_id: abc123
+
+Event 1: "search-requested" (correlation_id: abc123)
+Event 2: "data-fetched" (correlation_id: abc123)
+Event 3: "report-synthesized" (correlation_id: abc123)
+Event 4: "review-completed" (correlation_id: abc123)
+
+Query all events with correlation_id: abc123 to reconstruct the full workflow
+```
+
+### Event Audit Trail
+
+Preserve all events in your event bus. Use this for:
+- **Debugging**: Replay events to reproduce failures
+- **Auditing**: Full workflow history for compliance
+- **Analytics**: Understand which workflows succeed, which fail, why
+
+---
+
+## Real-World Example
+
+See [choreography_hive_mind.py](choreography_hive_mind.py) for a complete working implementation with:
+- Three autonomous agents (WebSearcher, Drafter, Critic)
+- Event bus with pub/sub
+- Bounded feedback loops
+- Distributed tracing with correlation IDs
+- Complete test suite (30 tests, 100% passing)
+
+Run the example:
+```bash
+python choreography_hive_mind.py
+```
+
+---
+
+## References
+
+- [Designing Microservices Using CQRS and Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) (Microsoft) — How large-scale systems use events
+- [Saga Pattern](https://microservices.io/patterns/data/saga.html) — Distributed coordination without orchestrators
+- [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) (Martin Fowler) — Event audit trails for systems
+- [Donella Meadows: Leverage Points](https://donellameadows.org/dancing-with-systems/) — Systems thinking framework
 
 ---
 
@@ -298,95 +509,6 @@ def evaluate_report(report: Report) -> Event:
             }
         )
 ```
-
-### Monitoring & Observability
-Implement:
-1. **Correlation ID tracking** across all services (inject into logs, metrics, traces)
-2. **Event flow dashboards** showing event volumes, latencies, error rates per event type
-3. **Agent health checks** that verify subscription processing and detect stuck agents
-4. **Dead-letter queue monitoring** that alerts on repeated failures
-5. **Event audit logs** persisted long-term for compliance and forensics
-
----
-
-## Risks and Mitigation
-
-| Risk | Severity | Mitigation |
-|------|----------|-----------|
-| **Event bus becomes bottleneck** | HIGH | Implement partitioning/sharding strategy; scale consumers independently |
-| **Feedback loops cause runaway re-work** | HIGH | Enforce bounded retry counters; implement exponential backoff; circuit breakers for Critic |
-| **Duplicate event processing** | HIGH | Mandate idempotent handlers; use event deduplication windows in consumers |
-| **Correlation data lost in failures** | MEDIUM | Require correlation_id in all event payloads; reject events missing this field |
-| **Workflow deadlock from event dependencies** | MEDIUM | Design event subscriptions to avoid circular dependencies; use timeouts to break deadlocks |
-| **Testing coverage gaps** | MEDIUM | Invest in event simulation frameworks; use property-based testing for emergent behavior |
-
----
-
-## Alignment with System Thinking Principles
-
-### Feedback Loops as Regulatory Mechanism
-The Critic agent embodies **negative feedback**—it senses deviation from the quality setpoint and initiates corrective action. This creates a **goal-oriented system** without centralized goals enforcement:
-- The system "wants" high-quality reports (distributed preference)
-- The Critic senses quality gaps and signals the need for correction
-- Searcher/Drafter respond autonomously, driving the system toward equilibrium
-
-### Leverage Points (Per Donella Meadows)
-1. **Feedback loop gain** (HIGH leverage): Increase Critic's sensitivity to quality issues
-2. **Information flow** (MEDIUM leverage): Ensure agents have sufficient context in events
-3. **System structure** (LOW leverage): Changing event bus implementation requires major refactoring
-
-### Emergent Properties
-- **Global coherence** emerges from local agent interactions
-- **Workflow patterns** arise without specification (e.g., agents naturally implement staged refinement)
-- **Resilience** emerges from decoupling (failures remain isolated)
-- **Adaptability** emerges from loose coupling (new agents integrate seamlessly)
-
----
-
-## Related Decisions
-
-- **ADR-1.2**: "Hello World: Three Ways" — Establishes baseline agent communication patterns
-- **WP-1.3**: "The Runnable Protocol" — Defines how agents encapsulate executable logic
-- **WP-2.1**: "Short-Term vs. Long-Term Memory: A Working Model" — Agent state management strategy
-
----
-
-## References
-
-- **Distributed Systems Literature**:
-  - Newman, S. (2015). *Building Microservices*. O'Reilly. — Choreography vs. Orchestration comparison
-  - Fowler, M., & Lewis, J. (2014). "Microservices." Retrieved from martinfowler.com — Event-driven architecture patterns
-
-- **Systems Thinking**:
-  - Meadows, D. H. (2008). *Thinking in Systems: A Primer*. Chelsea Green. — Feedback loops, leverage points, emergent behavior
-  - Sterman, J. D. (2000). *Business Dynamics*. McGraw-Hill. — System dynamics, stock-and-flow models
-
-- **Event-Driven Architecture**:
-  - Kafka Documentation. "Publish-Subscribe Semantics." — Durability and replay guarantees
-  - AWS. "Event-Driven Architecture" Pattern. — Cloud-native event system design
-
----
-
-## Appendix: Choreography vs. Orchestration Comparison Matrix
-
-| Dimension | Orchestration | Choreography |
-|-----------|---------------|--------------|
-| **Control Model** | Centralized (orchestrator) | Distributed (agents) |
-| **Coupling** | High (agents → orchestrator) | Low (agents → events) |
-| **Failure Isolation** | Cascading (orchestrator failure → all agents) | Isolated (agent failure → subscribers retry) |
-| **Scalability** | Limited by orchestrator throughput | Scales with pub/sub infrastructure |
-| **Workflow Composition** | Static (requires orchestrator update) | Dynamic (new subscriptions enable new workflows) |
-| **Observability** | Centralized view (orchestrator logs) | Distributed (event audit trail + correlation IDs) |
-| **Latency Predictability** | High (synchronous) | Low (asynchronous, queued) |
-| **Throughput** | Limited by orchestrator latency | Unbounded (asynchronous) |
-| **Consistency Model** | Strong (orchestrator enforces ordering) | Eventual (agents converge) |
-| **Failure Recovery** | Orchestrator-driven rollback | Event replay + idempotent handlers |
-| **Operational Burden** | Lower (single point of control) | Higher (distributed debugging required) |
-| **Tool Maturity** | Mature (workflow engines, BPMN tooling) | Maturing (event streaming platforms) |
-
----
-
-## Decision Log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|

@@ -1,102 +1,56 @@
 # AI Architecture Blueprints
 
 [![CI/CD Pipeline](https://github.com/pristley/ai-architecture-blueprints/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg?branch=main)](https://github.com/pristley/ai-architecture-blueprints/actions)
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](VERSION)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
-[![LangChain](https://img.shields.io/badge/LangChain-latest-orange.svg)](https://github.com/langchain-ai/langchain)
-[![Documentation](https://img.shields.io/badge/docs-latest-success.svg)](https://pristley.github.io/ai-architecture-blueprints)
 [![Status](https://img.shields.io/badge/status-production-brightgreen.svg)](#)
 
-**Production-Ready Design Patterns for LLM Systems**
-
-A comprehensive guide to building scalable, observable, and maintainable AI systems using LangChain. This repository contains architecture decision records, design patterns, and proven implementations for enterprise-grade AI applications.
+**Build production AI systems with proven architectural patterns.** This guide provides decision records, design patterns, and working implementations for building scalable, observable, and maintainable AI applications using LangChain.
 
 ---
 
-## 📊 Repository Status
+## What This Guide Covers
 
-| Metric | Value |
-|--------|-------|
-| **Version** | [1.0.3](VERSION) |
-| **Status** | ✅ Production-Ready |
-| **Python** | 3.9+ |
-| **License** | [MIT](LICENSE) |
-| **Documentation** | [11,500+ lines](AGENTMAP.md#document-statistics) |
-| **CI/CD** | 4-job pipeline, 52s deployment |
-| **Examples** | 20+ working demonstrations |
-| **Unit Tests** | 30/30 passing |
-| **Last Updated** | 2026-06-25 |
+Use this guide to:
+- **Choose the right pattern** for your AI workflow (30 minutes)
+- **Build observable systems** with complete tracing and debugging capabilities (2 hours)
+- **Implement multi-agent architectures** using event-driven choreography (2 hours)
+- **Deploy at scale** with production-ready patterns, memory systems, and state management (varies)
 
-See [CHANGELOG.md](CHANGELOG.md) for release history.
+**Status**: 1.1.0 | Python 3.9+ | MIT License | 30 tests passing | [Release history](CHANGELOG.md)
 
 ---
 
-## ⭐ Highlights
+## Get Started
 
-- 🏗️ **Architecture-First Design** - 8-dimension comparison matrix for making informed decisions
-- 🎯 **Production Patterns** - Real-world strategies for reliability, observability, and scaling
-- 📚 **Complete Documentation** - From fundamentals to advanced patterns with 15+ examples
-- ⚡ **Fast Iteration** - Automated CI/CD pipeline with instant GitHub Pages deployment
-- 🧪 **Tested & Proven** - All examples validated with 8+ unit tests and 100% syntax pass rate
-- 🔗 **Full Ecosystem** - Reference guide for entire LangChain stack (core, community, services)
-- 🤖 **Modern DevOps** - GitHub Actions automation with auto-documentation updates
-- 📖 **Visual Navigation** - Knowledge graph with Mermaid diagrams for quick orientation
-- 🔍 **Production Observability** - Complete tracing guide with LangSmith for debugging and optimization
+**New here?** Choose your path:
 
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Design Philosophy](#design-philosophy)
-3. [Getting Started](#getting-started)
-4. [Documentation](#documentation)
-5. [Technical Architecture](#technical-architecture)
-6. [Implementation Patterns](#implementation-patterns)
-7. [Learning Path](#learning-path)
-8. [Setup & Configuration](#setup--configuration)
+| Your Goal | Start Here | Time |
+|-----------|-----------|------|
+| I need to pick a pattern for my workflow | [ADR-1.2: Chain Abstractions](ADR-1.2-Hello-World-Three-Ways.md) | 30 min |
+| I want working code examples | [examples_1_2.py](examples_1_2.py) - then [AGENTMAP.md](AGENTMAP.md) | 30 min |
+| I need to understand LangChain architecture | [WP-1.3: Runnable Protocol](WP-1.3-The-Runnable-Protocol.md) | 2 hours |
+| I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
+| I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
+| I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
+| I want a visual map | [AGENTMAP: Knowledge Graph](AGENTMAP.md) | 15 min |
 
 ---
 
-## Overview
+## Design Principles
 
-### Purpose
+We follow these five principles in all patterns and implementations:
 
-This repository addresses the core challenge of building production AI systems: **how to compose unreliable components (LLMs, APIs) into reliable, observable, scalable systems.**
+**1. Observability First** — Instrument every component. Trace execution end-to-end. Monitor performance at each stage.
 
-We provide:
-- **Architectural decisions** backed by trade-off analysis
-- **Reference implementations** with complete observability
-- **Design patterns** proven in production
-- **Ecosystem guidance** for the LangChain stack
+**2. Composability by Design** — Build small, single-purpose units with standardized interfaces. Compose from simple to complex.
 
-### What You'll Get
+**3. Explicit Trade-offs** — Evaluate every pattern across latency, cost, accuracy, and flexibility. Document your choices.
 
-| Goal | Document | Time |
-|------|----------|------|
-| **Understand which pattern to use** | [ADR-1.2](#adr-12-chain-abstractions) | 30 min |
-| **See working implementations** | [examples_1_2.py](#examples) | 30 min |
-| **Master the architecture** | [WP-1.3](#wp-13-runnable-protocol) | 2 hours |
-| **Manage prompts in production** | [WP-1.4](#wp-14-prompt-engineering-as-code) | 90 min |
-| **Parse structured output safely** | [WP-1.5](#wp-15-output-parsing-for-system-integration) | 45 min |
-| **Choose a production model** | [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) | 45 min |
-| **Debug with observability** | [WP-1.7](#wp-17-tracing-with-langsmith) | 60 min |
-| **Build stateful memory systems** | [WP-2.1](#wp-21-short-term-vs-long-term-memory) | 90 min |
-| **Navigate the full ecosystem** | [AGENTMAP.md](#agentmap-visual-navigation) | 20 min |
-| **Reference component stack** | [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) | 45 min |
+**4. Defensive Implementation** — Handle errors at component boundaries. Provide retries and fallbacks. Fail loudly, never silently.
 
----
-
-## Design Philosophy
-
-### Five Core Principles
-
-**1. Observability First**
-- Every component reports what it's doing
-- Full execution traces for debugging
-- Automatic monitoring with LangSmith
-- Performance metrics at every stage
+**5. Production Readiness** — Design for scale from day one. Use async/await. Support batching and streaming.
 
 **2. Composability by Design**
 - Small, single-purpose units
