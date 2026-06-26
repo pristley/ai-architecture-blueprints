@@ -18,7 +18,7 @@ Use this guide to:
 - **Implement multi-agent architectures** using event-driven choreography (2 hours)
 - **Deploy at scale** with production-ready patterns, memory systems, and state management (varies)
 
-**Status**: 1.1.0 | Python 3.9+ | MIT License | 45 tests passing | [Release history](CHANGELOG.md)
+**Status**: 1.1.0 | Python 3.9+ | MIT License | 191 tests passing | [Release history](CHANGELOG.md)
 
 ---
 
@@ -33,6 +33,7 @@ Use this guide to:
 | I need to understand LangChain architecture | [WP-1.3: Runnable Protocol](WP-1.3-The-Runnable-Protocol.md) | 2 hours |
 | I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
 | I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
+| I need deterministic orchestrated workflows | [ADR-2.2: Orchestration](ADR-2.2-Orchestration-Centralized-Control.md) + [controller_orchestration_agent.py](controller_orchestration_agent.py) | 1.5 hours |
 | I need to manage state in agents | [WP-2.2: State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) + [research_assistant_state_machine.py](research_assistant_state_machine.py) | 1.5 hours |
 | I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
 | I want a visual map | [AGENTMAP: Knowledge Graph](AGENTMAP.md) | 15 min |
@@ -93,6 +94,7 @@ We follow these five principles in all patterns and implementations:
 - 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
 - 🏭 **Agent state (1 hour)** → [WP-2.2](#wp-22-state-management-in-single-agent-loop) - Prevent infinite loops
 - 🐝 **Multi-agent choreography (2 hours)** → [ADR-2.1](#adr-21-choreography---event-driven-agility-for-emergent-workflows) - Event-driven autonomous agents
+- ⚙️ **Orchestrated workflows (1.5 hours)** → [ADR-2.2](#adr-22-orchestration---centralized-control-for-deterministic-workflows) - Centralized deterministic workflows
 - 📦 **Production setup** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -704,6 +706,175 @@ To master choreography-based patterns:
 4. Modify the pattern for your use case (1 hour)
 
 See [AGENTMAP.md](AGENTMAP.md#path-8-multi-agent-choreography-for-emergent-workflows) for the complete "Multi-Agent Choreography" learning path.
+
+---
+
+### ADR-2.2: Orchestration - Centralized Control for Deterministic Workflows
+
+**[ADR-2.2-Orchestration-Centralized-Control.md](ADR-2.2-Orchestration-Centralized-Control.md)** answers: *"How do I ensure predictable, fully-auditable multi-step workflows?"*
+
+#### The Problem
+
+When you need deterministic execution with complete auditability, choreography's distributed autonomy creates challenges:
+- Hard to predict execution order (agents react independently)
+- Difficult to enforce constraints (no centralized validation)
+- Complex debugging (workflow emerges from event subscriptions)
+- Weak guarantees (eventual consistency, not strong guarantees)
+
+#### The Solution: Orchestration with Centralized Control
+
+```
+Controller (Centralized Decision-Maker)
+│
+├─→ [Step 1: Plan]
+│   ├─→ Validate output (≥3 steps)
+│   ├─→ Decision: CONTINUE or RETRY
+│   └─→ Record: timing, evaluation, decision
+│
+├─→ [Step 2: Fetch Data]
+│   ├─→ Validate output (≥8 sources)
+│   ├─→ Decision: CONTINUE or RETRY
+│   └─→ Record: complete audit
+│
+└─→ [Step 3-6: Continue with complete control and visibility]
+    ├─→ Analyze, Synthesize, Cite, Format
+    ├─→ Each step evaluated before next
+    └─→ Full execution trace available
+```
+
+**With orchestration you get:**
+- **Predictability** - Exact execution order known upfront
+- **Complete Audit Trail** - Every decision recorded with timing
+- **Strong Guarantees** - Each step validated before progression
+- **Reproducibility** - Same input always produces same output
+- **Easier Debugging** - Clear causality chain from start to finish
+
+#### Architecture Patterns
+
+The ADR includes a comprehensive comparison:
+
+- **Sequential Pipeline** - Linear progression through steps
+- **Conditional Branching** - Controller decides next step based on evaluation
+- **Retry with Backoff** - Graceful failure handling with exponential backoff
+- **Checkpoint & Restore** - Workflow recovery from failures
+
+#### Orchestration vs. Choreography Comparison Matrix
+
+| Dimension | Orchestration | Choreography |
+|-----------|---------------|--------------|
+| **Control** | Centralized (controller) | Distributed (agents) |
+| **Predictability** | High (order known) | Low (emergent) |
+| **Auditability** | Complete (full trace) | Distributed (events) |
+| **Flexibility** | Lower (rigid workflows) | Higher (adaptive) |
+| **Fault Tolerance** | Single point of failure | Resilient isolation |
+| **Time to Debug** | Fast (clear causality) | Slow (trace across agents) |
+| **Scalability** | Limited by controller | Scales with agents |
+| **Operational Burden** | Lower (centralized) | Higher (distributed) |
+
+#### Implementation Patterns
+
+The ADR provides:
+- Tool registration pattern (register_tool, register_evaluator)
+- Step execution with retry logic and exponential backoff
+- Evaluation gates ensuring output quality before progression
+- Complete state tracking with timing instrumentation
+- Decision tracking (CONTINUE, RETRY, BRANCH, SKIP, ABORT)
+- JSON serializable audit trails for observability
+
+#### Repository Implementation
+
+**[controller_orchestration_agent.py](controller_orchestration_agent.py)** is a complete, production-ready orchestration system:
+
+```python
+# Create controller
+orchestrator = ReportOrchestrator()
+
+# Register tools and evaluators (for report generation workflow)
+orchestrator.register_tool(StepName.PLANNING, plan_tool)
+orchestrator.register_evaluator(StepName.PLANNING, evaluate_plan)
+# ... (register remaining 5 steps)
+
+# Execute deterministic workflow
+report = await orchestrator.orchestrate("Write AI trends report")
+
+# Complete audit trail available
+print(orchestrator.state.step_history)  # All steps with timings
+print(json.dumps(audit_trail))          # Full workflow trace
+```
+
+**Key Components:**
+
+1. **Controller Base Class** - Abstract orchestration controller
+   - Tool and evaluator registration
+   - Step execution with retry logic
+   - State management and history tracking
+
+2. **OrchestrationState** - Complete workflow state
+   - Data at each stage (plan, fetched_data, facts, reports)
+   - Step history with timing and evaluation
+   - Error tracking and statistics
+
+3. **ReportOrchestrator** - Concrete implementation
+   - 6-step report generation: Plan → Fetch → Analyze → Synthesize → Cite → Format
+   - Each step has specific evaluator (≥3 steps, ≥8 sources, etc)
+   - Retry logic with exponential backoff (configurable per step)
+
+4. **Evaluation Gates**
+   - plan_tool: Requires ≥3 steps
+   - fetch_tool: Requires ≥8 sources with title+content
+   - analyze_tool: Requires ≥20 facts with source
+   - synthesize_tool: Requires ≥1000 words, ≥5 paragraphs
+   - cite_tool: Requires ≥10 citations
+   - format_tool: Requires headers + proper termination
+
+#### Complete Test Coverage
+
+**[tests/test_controller_orchestration.py](tests/test_controller_orchestration.py)** provides comprehensive testing:
+
+- **Evaluation tests** (13) - Each evaluator function
+- **State management tests** (5) - State tracking and history
+- **Tool execution tests** (6) - Individual tool behavior
+- **Step execution tests** (3) - Single step with retry
+- **Workflow tests** (4) - Complete orchestration
+- **Characteristic tests** (4) - Determinism, sequencing, audit trails
+- **Error handling tests** (1) - Error continuation
+- **Pattern comparison tests** (3) - Orchestration vs choreography
+
+Coverage includes:
+- Happy path workflows (all 6 steps succeed)
+- Step evaluation (valid vs invalid output)
+- State recording (timing, decision, result tracking)
+- Deterministic verification (multiple runs identical)
+- Audit trail generation (JSON serialization)
+
+#### Use Cases
+
+**Ideal for:**
+- Report generation workflows (multi-step, validated at each stage)
+- Data pipelines with quality gates
+- Compliance-heavy workflows (full audit trail required)
+- Reproducible experiments (deterministic execution)
+- Systems where predictability matters more than adaptability
+
+**Example workflow:**
+```
+Define Plan → Fetch Data (validate) → Extract Facts (validate) 
+  → Draft Report (validate) → Add Citations (validate) → Format → Deliver
+     ↑ Each step is evaluated before proceeding
+     ↑ Complete timing and decision recorded
+     ↑ Reproducible (same input = same output)
+```
+
+#### Learning Path
+
+To master orchestration patterns:
+
+1. Read ADR-2.2 for architectural concepts (1 hour)
+2. Study controller_orchestration_agent.py implementation (1 hour)
+3. Run the tests and observe orchestration in action (30 min)
+4. Adapt the pattern for your workflow (15 min)
+
+See [AGENTMAP.md](AGENTMAP.md#path-9-orchestrated-deterministic-workflows) for the complete "Orchestrated Deterministic Workflows" learning path.
 
 ---
 
