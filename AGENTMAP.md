@@ -29,6 +29,9 @@ graph TB
     EX21["💻 examples_2_1.py<br/>Dual-Memory Chatbot Examples"]
     WP22["🤖 WP-2.2<br/>State Management in Agent Loop"]
     EX22["💻 examples_2_2.py<br/>State Machine Agent Examples"]
+    ADR22["🏗️ ADR-2.2<br/>Orchestration: Centralized Control"]
+    CONTROLLER["💻 controller_orchestration_agent.py<br/>Controller Orchestration"]
+    TEST_CONTROLLER["🧪 test_controller_orchestration.py<br/>Orchestration Tests"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -56,6 +59,10 @@ graph TB
     ADR21 -->|See code| CHORE
     CHORE -->|Tested by| TEST_CHORE
     ADR21 -->|Foundation for multi-agent| WP22
+    ADR22 -->|See code| CONTROLLER
+    CONTROLLER -->|Tested by| TEST_CONTROLLER
+    ADR22 -->|Contrasts with| ADR21
+    ADR22 -->|Uses concepts from| WP22
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| ADR21
@@ -74,6 +81,9 @@ graph TB
     style ADR21 fill:#FF9800,stroke:#E65100,color:#fff
     style CHORE fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style TEST_CHORE fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style ADR22 fill:#FF9800,stroke:#E65100,color:#fff
+    style CONTROLLER fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style TEST_CONTROLLER fill:#4CAF50,stroke:#2E7D32,color:#fff
     style WP13 fill:#FF9800,stroke:#E65100,color:#fff
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
@@ -107,6 +117,7 @@ graph TB
 | [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
 | [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
 | [WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
+| [ADR-2.2-Orchestration-Centralized-Control.md](ADR-2.2-Orchestration-Centralized-Control.md) | 🏗️ Architecture Decision | Orchestration vs choreography patterns with decision matrix | ~2600 | ✅ |
 
 ### Code Examples
 
@@ -120,6 +131,7 @@ graph TB
 | [examples_2_2.py](examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
 | [choreography_hive_mind.py](choreography_hive_mind.py) | 💻 Code | Event-driven choreography pattern: EventBus, agents, feedback loops | ~1200 | ✅ |
 | [research_assistant_state_machine.py](research_assistant_state_machine.py) | 💻 Code | Production state machine for agent loops with comprehensive loop detection | ~600 | ✅ |
+| [controller_orchestration_agent.py](controller_orchestration_agent.py) | 💻 Code | Centralized orchestration controller: 6-step report workflow with evaluators | ~900 | ✅ |
 
 ### Test Examples
 
@@ -127,6 +139,7 @@ graph TB
 |----------|------|---------|-------|--------|
 | [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py) | 🧪 Tests | Comprehensive choreography pattern tests: events, bus, agents, workflows | ~800 | ✅ |
 | [tests/test_research_assistant_state_machine.py](tests/test_research_assistant_state_machine.py) | 🧪 Tests | 43 tests for state machine: transitions, loop detection, tools, workflows | ~600 | ✅ |
+| [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py) | 🧪 Tests | 41 tests for orchestration: step execution, workflows, audit trails | ~600 | ✅ |
 
 ### Meta Documents
 
@@ -515,6 +528,119 @@ choreography_hive_mind.py: Multi-Agent Report Generation via Choreography
     └─ tests/test_choreography_hive_mind.py (comprehensive test coverage)
 ```
 
+### ADR-2.2 Relationships
+
+```
+ADR-2.2: Orchestration: Centralized Control for Deterministic Workflows
+│
+├─→ Contrasts with
+│   ├─ ADR-2.1 (choreography: distributed autonomy vs orchestration: centralized control)
+│   └─ ADR-1.2 (orchestration as explicit workflow management strategy)
+│
+├─→ Depends on
+│   ├─ WP-2.2 (state management principles for controlling workflow progression)
+│   ├─ WP-1.7 (tracing for complete audit trails of orchestration decisions)
+│   ├─ WP-1.5 (structured validation of step outputs before proceeding)
+│   └─ WP-1.3 (tool composition in deterministic pipelines)
+│
+├─→ Provides code examples to
+│   └─ controller_orchestration_agent.py
+│
+├─→ Comparison Matrix
+│   ├─ Orchestration: predictable, auditable, inflexible, single point of failure
+│   ├─ Choreography: adaptable, emergent, complex, distributed
+│   └─ Decision matrix on 8 criteria (predictability, flexibility, debugging, scalability, etc)
+│
+├─→ Design Patterns
+│   ├─ Sequential Pipeline (linear workflow progression)
+│   ├─ Conditional Branching (controller decides next step)
+│   ├─ Retry with Backoff (graceful failure handling)
+│   └─ Checkpoint & Restore (workflow recovery)
+│
+├─→ Production Patterns
+│   ├─ Observability/Logging/Tracing (complete audit trail)
+│   ├─ Resilience/Circuit Breaker (fault tolerance)
+│   └─ Monitoring/Metrics (health tracking)
+│
+└─→ Introduces patterns for
+   ├─ Centralized control (controller orchestrates all transitions)
+   ├─ Explicit tool sequencing (no emergent behavior)
+   ├─ Evaluation gates (each step validated before next)
+   ├─ Complete audit trails (full workflow history)
+   ├─ Deterministic execution (same input → same output)
+   ├─ Step-specific retry logic (configurable per step)
+   └─ State recording with decisions and timings
+```
+
+### controller_orchestration_agent.py: Centralized Orchestration Implementation
+
+```
+controller_orchestration_agent.py: Multi-Step Report Generation via Orchestration
+│
+├─→ Demonstrates
+│   ├─ Controller base class (abstract orchestration controller)
+│   ├─ Tool registration pattern (register_tool, register_evaluator)
+│   ├─ Step execution with evaluation (execute_step with retry logic)
+│   ├─ State management (OrchestrationState with complete history)
+│   ├─ Evaluation gates (step-specific validators)
+│   ├─ Retry logic with exponential backoff (configurable max_retries)
+│   ├─ 6-step deterministic workflow (Plan → Fetch → Analyze → Synthesize → Cite → Format)
+│   ├─ ReportOrchestrator concrete implementation
+│   ├─ Complete audit trail with JSON serialization
+│   └─ Decision tracking (CONTINUE, RETRY, BRANCH, SKIP, ABORT)
+│
+├─→ Implements patterns like
+│   ├─ Explicit workflow definition (no implicit state changes)
+│   ├─ Sequential execution order (tools called in sequence)
+│   ├─ Step validation before progression (evaluation gates)
+│   ├─ State history for debugging and replay
+│   ├─ Timing instrumentation (duration_seconds per step)
+│   ├─ Error collection without halting (continue on step error)
+│   ├─ Tool composition (6 tools working in orchestrated sequence)
+│   ├─ Async/await support for tool execution
+│   └─ Production-ready exception handling
+│
+├─→ Workflow Steps
+│   ├─ PLANNING: Generate explicit 6-step plan (evaluate for ≥3 steps)
+│   ├─ FETCHING: Retrieve 9 data sources (evaluate for ≥8 with title+content)
+│   ├─ ANALYZING: Extract 22 facts from sources (evaluate for ≥20 facts with source)
+│   ├─ SYNTHESIZING: Draft 1190+ word report (evaluate for ≥1000 words, ≥5 paragraphs)
+│   ├─ CITING: Add 10+ citations to report (evaluate for [source: ...] patterns)
+│   └─ FORMATTING: Polish with References section (evaluate for headers + proper termination)
+│
+├─→ State Tracking
+│   ├─ workflow_id: unique identifier for tracing
+│   ├─ step_history: complete list of StepExecution records
+│   ├─ total_steps_completed: success count
+│   ├─ total_retries: retry count
+│   ├─ total_branches: conditional skip count
+│   ├─ errors: list of error messages
+│   ├─ timing: start_time, end_time for workflow duration
+│   └─ report data at each stage: plan, fetched_data, extracted_facts, draft_report, cited_report, final_report
+│
+├─→ Decision Making
+│   ├─ Evaluate step output against validator (evaluator returns bool + reason)
+│   ├─ If invalid: retry with exponential backoff (0.5s * attempt) or mark failed
+│   ├─ If valid: record step as SUCCESS and proceed to next step
+│   ├─ If exception: retry or raise RuntimeError after max_retries exhausted
+│   └─ Track decision type (CONTINUE, RETRY, SKIP, ABORT) in audit trail
+│
+├─→ Runs complete workflow
+│   ├─ Orchestrator.orchestrate(task) starts IDLE state
+│   ├─ Executes PLANNING → FETCHING → ANALYZING → SYNTHESIZING → CITING → FORMATTING
+│   ├─ Each step execution recorded with timing and evaluation
+│   ├─ Returns final report (10K+ characters)
+│   ├─ Generates audit trail JSON for full observability
+│   └─ OR halts gracefully if max_retries exceeded on any step
+│
+└─→ Complements
+    ├─ ADR-2.2 (theory of orchestration patterns)
+    ├─ WP-2.2 (state management principles)
+    ├─ WP-1.7 (tracing and observability)
+    ├─ LangGraph (compatible graph-based orchestration)
+    └─ tests/test_controller_orchestration.py (comprehensive test coverage)
+```
+
 ### tests/test_choreography_hive_mind.py: Choreography Test Suite
 
 ```
@@ -561,6 +687,87 @@ tests/test_choreography_hive_mind.py: Comprehensive Choreography Pattern Tests
     ├─ Feedback loops (Critic signals drive Drafter re-work)
     ├─ Decoupling benefits (agents don't know each other)
     └─ System resilience (failures remain isolated)
+```
+
+### tests/test_controller_orchestration.py: Orchestration Test Suite
+
+```
+tests/test_controller_orchestration.py: 41 Comprehensive Orchestration Tests
+│
+├─→ Test Coverage
+│   ├─ Evaluation Functions (13 tests)
+│   │   ├─ Plan validation (3 tests): valid, too short, empty, none
+│   │   ├─ Fetched data validation (3 tests): valid, insufficient, missing fields
+│   │   ├─ Extracted facts validation (3 tests): valid, insufficient, missing fields
+│   │   ├─ Draft report validation (2 tests): valid (1000+ words, 5+ paragraphs), too short
+│   │   ├─ Cited report validation (2 tests): valid (10+ citations), insufficient
+│   │   └─ Formatted report validation (2 tests): valid (headers + termination), missing headers
+│   ├─ State Management (5 tests)
+│   │   ├─ State initialization (correct defaults)
+│   │   ├─ Recording successful steps (increments counters)
+│   │   ├─ Recording failed steps (tracks errors)
+│   │   ├─ Tracking retries (increments retry count)
+│   │   └─ Status string generation (human-readable output)
+│   ├─ Tool Execution (6 tests)
+│   │   ├─ plan_tool (generates list of 6+ steps)
+│   │   ├─ fetch_tool (returns 8+ sources with fields)
+│   │   ├─ analyze_tool (extracts 20+ facts)
+│   │   ├─ synthesize_tool (generates 1000+ word draft)
+│   │   ├─ cite_tool (adds [source: ...] patterns)
+│   │   └─ format_tool (adds References section)
+│   ├─ Step Execution (3 tests)
+│   │   ├─ Successful step execution (result + execution record)
+│   │   ├─ Step execution tracked in state (history maintained)
+│   │   └─ Evaluation and decision (evaluator returns Decision enum)
+│   ├─ Orchestration Workflow (4 tests)
+│   │   ├─ Happy path (all 6 steps succeed)
+│   │   ├─ Workflow state tracking (complete history recorded)
+│   │   ├─ Audit trail generation (JSON serializable)
+│   │   └─ Workflow timing (start/end times accurate)
+│   ├─ Orchestration Characteristics (4 tests)
+│   │   ├─ Deterministic execution (same input → same output)
+│   │   ├─ Explicit evaluation (each step validated)
+│   │   ├─ Sequential execution (steps in order)
+│   │   └─ Complete audit trail (all decisions recorded)
+│   ├─ Error Handling (1 test)
+│   │   └─ Workflow continues on individual step errors
+│   └─ Orchestration vs Choreography (3 tests)
+│       ├─ Centralized control (controller decides all transitions)
+│       ├─ Explicit workflow definition (workflow known upfront)
+│       └─ Predictable output (reproducible results)
+│
+├─→ Test Categories
+│   ├─ Unit Tests (20 tests)
+│   │   ├─ Evaluation function behavior
+│   │   ├─ State management operations
+│   │   ├─ Individual tool execution
+│   │   └─ Step execution mechanics
+│   ├─ Integration Tests (15 tests)
+│   │   ├─ Complete workflow execution
+│   │   ├─ Tool orchestration in sequence
+│   │   ├─ State tracking across steps
+│   │   └─ Decision propagation
+│   └─ Pattern Validation (6 tests)
+│       ├─ Determinism (reproducibility)
+│       ├─ Sequencing (correct order)
+│       ├─ Audit trails (complete recording)
+│       └─ Pattern comparison (vs choreography)
+│
+├─→ Example Test Scenarios
+│   ├─ Complete workflow happy path (Plan → Fetch → Analyze → Synthesize → Cite → Format)
+│   ├─ Step evaluation: valid vs invalid output
+│   ├─ State recording: timing, decision, result tracking
+│   ├─ Tool execution: independent tool testing
+│   ├─ Deterministic verification: multiple runs produce identical output
+│   └─ Audit trail: JSON serialization of complete workflow history
+│
+└─→ Validates patterns like
+    ├─ Centralized control (explicit controller orchestration)
+    ├─ Evaluation gates (each step validated)
+    ├─ Sequential ordering (deterministic workflow)
+    ├─ Complete audit trails (full observability)
+    ├─ Reproducibility (same input → same output)
+    └─ Production readiness (async support, error handling, JSON logging)
 ```
 
 ### research_assistant_state_machine.py: Production State Machine Implementation
@@ -846,6 +1053,44 @@ tests/test_research_assistant_state_machine.py: 43 Comprehensive State Machine T
 
 ---
 
+### Path 9: "Orchestrated Deterministic Workflows" (3.5 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. ADR-2.2-Orchestration-Centralized-Control.md (1 hour)
+   ↓
+3. controller_orchestration_agent.py (study code structure - 1 hour)
+   ↓
+4. tests/test_controller_orchestration.py (understand test patterns - 45 min)
+   ↓
+5. Run controller_orchestration_agent.py and tests locally (15 min)
+   ↓
+6. Adapt pattern to your orchestrated workflow use case (30 min)
+```
+
+**Outcome**: Build deterministic, fully-auditable multi-step workflows with centralized control
+
+**Comparison to Path 8 (Choreography)**:
+- Orchestration: Centralized control, predictable, inflexible, single point of failure
+- Choreography: Distributed autonomy, emergent, adaptive, resilient to cascading failures
+- Choose orchestration for: audit trails, reproducibility, strict workflows
+- Choose choreography for: adaptability, emergent behavior, decoupled agents
+
+**Prerequisites**: Path 1 (basic understanding) or Path 3 (production systems knowledge)
+
+**Topics Covered**:
+- Centralized workflow control vs. distributed autonomy
+- Explicit tool sequencing and ordering
+- Evaluation gates for output validation
+- Complete audit trails with decisions and timings
+- Retry logic with exponential backoff
+- Orchestration vs choreography decision matrix
+- Production patterns (observability, resilience, monitoring)
+- State management for deterministic execution
+
+---
+
 ## 📖 Content Map
 
 ### Conceptual Layers
@@ -924,6 +1169,15 @@ Layer 5: Model Selection (Which model to use?)
 | What is tool-calling reliability? | WP-1.6 | Model evaluation criteria |
 | How to do sensitivity analysis? | WP-1.6 | Impact analysis section |
 | How to deploy? | LANGCHAIN_ECOSYSTEM_MAP.md | LangServe section |
+| What is choreography? | ADR-2.1 | Complete section |
+| How do autonomous agents work? | choreography_hive_mind.py | Code walkthrough |
+| Why choreography instead of orchestration? | ADR-2.1 | Feedback loops & emergence |
+| What is orchestration? | ADR-2.2 | Complete section |
+| How do I build deterministic workflows? | ADR-2.2 + controller_orchestration_agent.py | Decision matrix + Implementation |
+| How is orchestration different from choreography? | ADR-2.2 | Comparison section |
+| Why use orchestration instead of choreography? | ADR-2.2 | Pros/cons matrix |
+| How do I evaluate workflow steps? | controller_orchestration_agent.py | Evaluation functions |
+| How do I audit orchestrated workflows? | controller_orchestration_agent.py | State tracking + JSON audit trail |
 
 ---
 
@@ -973,6 +1227,20 @@ Conceptual Difficulty vs Code Complexity
 3. Understand Runnables: [WP-1.3](WP-1.3-The-Runnable-Protocol.md)
 4. Custom components: [examples_1_3.py Example 2](examples_1_3.py)
 5. Routing: [examples_1_3.py Example 5](examples_1_3.py)
+
+### "I need deterministic orchestrated workflows"
+1. Overview: [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md)
+2. Decision matrix: [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md) (compare to choreography)
+3. Implementation: [controller_orchestration_agent.py](controller_orchestration_agent.py)
+4. Test patterns: [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py)
+5. Deploy: [LangGraph](https://langchain-ai.github.io/langgraph/) for production orchestration
+
+### "I need emergent multi-agent systems"
+1. Comparison: [ADR-2.1 vs ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md)
+2. Choreography pattern: [ADR-2.1](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
+3. Implementation: [choreography_hive_mind.py](choreography_hive_mind.py)
+4. Test patterns: [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py)
+5. Deploy: [LangGraph](https://langchain-ai.github.io/langgraph/) for production choreography
 
 ### "I want to understand LangChain"
 1. Ecosystem: [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)
