@@ -1,5 +1,67 @@
 # Changelog
 
+## [1.2.0] - 2026-06-26
+
+### Added
+- **WP-2.3: Orchestration Pattern - The "Controller" Agent**
+  - Comprehensive hands-on guide to implementing centralized orchestration workflows
+  - Controller pattern for deterministic multi-step workflows (834 lines)
+  - Core concepts: Step lifecycle, evaluation gates, decision making
+  - Implementation architecture with 5-step guide:
+    * StepName enum (PLANNING, FETCHING, ANALYZING, SYNTHESIZING, CITING, FORMATTING)
+    * State management with StepStatus enum (PENDING, RUNNING, SUCCESS, FAILED, RETRY, SKIPPED)
+    * Decision enum (CONTINUE, RETRY, BRANCH, SKIP, ABORT)
+    * Evaluation functions for step output validation
+    * Controller base class with execute_step(), evaluate_and_decide(), get_audit_trail()
+  - Advanced patterns: Conditional branching, step skipping, recovery strategies
+  - Complete 6-step report generation example (ReportOrchestrator)
+  - Test coverage with 41 comprehensive tests (100% passing)
+  - When to use matrix: Orchestration vs Choreography decision guidance
+  - 3.5-hour structured learning path
+
+- **WP-2.4: Choreography Pattern - The "Hive Mind" Agent**
+  - Comprehensive hands-on guide to event-driven multi-agent systems (906 lines)
+  - Hive Mind pattern for emergent autonomous agent workflows
+  - Event-driven architecture overview and core concepts
+  - Implementation architecture with 5-step guide:
+    * Event types with Pydantic validation (immutable, serializable)
+    * EventBus pub/sub infrastructure with asyncio support
+    * Agent base class with autonomous behavior patterns
+    * WebSearcher agent (subscribes to search-requested, publishes data-fetched)
+    * Drafter agent (handles data-fetched and revision-required events)
+    * Critic agent (implements quality assessment and feedback loops)
+  - Advanced patterns: Correlation ID tracing, concurrent workflows, causality analysis
+  - Feedback loop mechanism for system self-regulation
+  - Complete multi-agent workflow examples with event audit trails
+  - Test coverage with 30 comprehensive tests (100% passing)
+  - When to use matrix: Choreography vs Orchestration decision guidance
+  - 3.5-hour structured learning path
+
+- **Documentation Integration**
+  - AGENTMAP.md: Added WP-2.3 and WP-2.4 nodes to knowledge graph
+  - AGENTMAP.md: Added comprehensive relationships sections for both patterns
+  - README.md: Added WP-2.3 to learning paths table (3.5 hours)
+  - README.md: Added WP-2.4 to learning paths table (3.5 hours)
+  - README.md: Quick navigation with pattern selection guidance
+  - README.md: Detailed sections for both orchestration and choreography patterns
+  - Decision matrix comparing all aspects of both approaches
+
+### Changed
+- Version: 1.1.0 → 1.2.0
+- AGENTMAP.md: Extended with orchestration and choreography pattern relationships
+- README.md: Expanded with two new design pattern sections (2000+ words)
+- Repository focus: Complete coverage of multi-agent orchestration and choreography patterns
+- Test suite: Expanded from 150+ to 191+ tests
+
+### Key Metrics
+- Architectural Decision Records: 2 (ADR-1.2, ADR-2.1)
+- Work Products: 9 (WP-1.3 through WP-2.4)
+- Python Implementation Files: 11 (examples + choreography + orchestration)
+- Test Files: 8 (all passing - 100% success rate, 191+ total tests)
+- Documentation: 9+ markdown work product files
+- Total Code: ~2500 lines (choreography + orchestration implementations + tests)
+- Pattern Coverage: Event-driven choreography, centralized orchestration, complete pattern library
+
 ## [1.1.0] - 2026-06-26
 
 ### Added
