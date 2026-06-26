@@ -30,6 +30,7 @@ graph TB
     WP22["🤖 WP-2.2<br/>State Management in Agent Loop"]
     EX22["💻 examples_2_2.py<br/>State Machine Agent Examples"]
     ADR22["🏗️ ADR-2.2<br/>Orchestration: Centralized Control"]
+    WP23["⚙️ WP-2.3<br/>Orchestration Pattern: Controller Agent"]
     CONTROLLER["💻 controller_orchestration_agent.py<br/>Controller Orchestration"]
     TEST_CONTROLLER["🧪 test_controller_orchestration.py<br/>Orchestration Tests"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
@@ -59,10 +60,15 @@ graph TB
     ADR21 -->|See code| CHORE
     CHORE -->|Tested by| TEST_CHORE
     ADR21 -->|Foundation for multi-agent| WP22
+    ADR22 -->|Foundation for| WP23
+    WP23 -->|See code| CONTROLLER
+    CONTROLLER -->|Tested by| TEST_CONTROLLER
     ADR22 -->|See code| CONTROLLER
     CONTROLLER -->|Tested by| TEST_CONTROLLER
     ADR22 -->|Contrasts with| ADR21
     ADR22 -->|Uses concepts from| WP22
+    WP23 -->|Detailed implementation| ADR22
+    WP23 -->|Contrasts with| ADR21
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| ADR21
@@ -73,6 +79,7 @@ graph TB
     AGENTMAP -->|Shows relationships| WP17
     AGENTMAP -->|Shows relationships| WP21
     AGENTMAP -->|Shows relationships| WP22
+    AGENTMAP -->|Shows relationships| WP23
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -118,6 +125,7 @@ graph TB
 | [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
 | [WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
 | [ADR-2.2-Orchestration-Centralized-Control.md](ADR-2.2-Orchestration-Centralized-Control.md) | 🏗️ Architecture Decision | Orchestration vs choreography patterns with decision matrix | ~2600 | ✅ |
+| [WP-2.3-Orchestration-Pattern.md](WP-2.3-Orchestration-Pattern.md) | ⚙️ Design Pattern | Practical orchestration implementation with controller agent | ~1000 | ✅ |
 
 ### Code Examples
 
@@ -570,6 +578,54 @@ ADR-2.2: Orchestration: Centralized Control for Deterministic Workflows
    ├─ Deterministic execution (same input → same output)
    ├─ Step-specific retry logic (configurable per step)
    └─ State recording with decisions and timings
+```
+
+### WP-2.3 Relationships
+
+```
+WP-2.3: Orchestration Pattern - The "Controller" Agent
+│
+├─→ Depends on
+│   ├─ ADR-2.2 (architectural foundation and concepts)
+│   ├─ WP-2.2 (state management principles used in orchestration)
+│   ├─ WP-1.7 (tracing for complete audit trails)
+│   ├─ WP-1.5 (structured validation of step outputs)
+│   └─ WP-1.3 (tool composition in deterministic pipelines)
+│
+├─→ Teaches implementation of
+│   ├─ Centralized control via Controller base class
+│   ├─ Tool registration and sequencing
+│   ├─ Evaluation gates for output validation
+│   ├─ Retry logic with exponential backoff
+│   ├─ State tracking with complete history
+│   ├─ Decision tracking (CONTINUE, RETRY, BRANCH, SKIP, ABORT)
+│   ├─ Audit trail generation and JSON serialization
+│   └─ Extensible design patterns for domain-specific orchestrators
+│
+├─→ Provides code examples in
+│   ├─ controller_orchestration_agent.py (base Controller + ReportOrchestrator)
+│   └─ tests/test_controller_orchestration.py (41 comprehensive tests)
+│
+├─→ Learning outcomes
+│   ├─ Understand when orchestration is better than choreography
+│   ├─ Design deterministic multi-step workflows
+│   ├─ Implement evaluation gates for quality assurance
+│   ├─ Handle errors gracefully with retry strategies
+│   ├─ Build complete audit trails for observability
+│   ├─ Create extensible orchestrators for your domain
+│   └─ Test orchestration patterns comprehensively
+│
+├─→ Contrasts with
+│   ├─ ADR-2.1 (choreography: distributed vs orchestration: centralized)
+│   └─ WP-2.2 (agent loop state management vs workflow orchestration)
+│
+└─→ Enables use cases like
+   ├─ Multi-step report generation with quality gates
+   ├─ ETL pipelines with validation at each stage
+   ├─ Compliance workflows requiring complete audit trails
+   ├─ Reproducible experiments (same input → same output)
+   ├─ Debugging tools (clear causality chain)
+   └─ Production systems with predictable behavior
 ```
 
 ### controller_orchestration_agent.py: Centralized Orchestration Implementation

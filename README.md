@@ -33,7 +33,7 @@ Use this guide to:
 | I need to understand LangChain architecture | [WP-1.3: Runnable Protocol](WP-1.3-The-Runnable-Protocol.md) | 2 hours |
 | I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
 | I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
-| I need deterministic orchestrated workflows | [ADR-2.2: Orchestration](ADR-2.2-Orchestration-Centralized-Control.md) + [controller_orchestration_agent.py](controller_orchestration_agent.py) | 1.5 hours |
+| I need deterministic orchestrated workflows | [WP-2.3: Orchestration Pattern](WP-2.3-Orchestration-Pattern.md) + [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md) | 3.5 hours |
 | I need to manage state in agents | [WP-2.2: State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) + [research_assistant_state_machine.py](research_assistant_state_machine.py) | 1.5 hours |
 | I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
 | I want a visual map | [AGENTMAP: Knowledge Graph](AGENTMAP.md) | 15 min |
@@ -94,7 +94,8 @@ We follow these five principles in all patterns and implementations:
 - 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
 - 🏭 **Agent state (1 hour)** → [WP-2.2](#wp-22-state-management-in-single-agent-loop) - Prevent infinite loops
 - 🐝 **Multi-agent choreography (2 hours)** → [ADR-2.1](#adr-21-choreography---event-driven-agility-for-emergent-workflows) - Event-driven autonomous agents
-- ⚙️ **Orchestrated workflows (1.5 hours)** → [ADR-2.2](#adr-22-orchestration---centralized-control-for-deterministic-workflows) - Centralized deterministic workflows
+- ⚙️ **Orchestrated workflows (3.5 hours)** → [WP-2.3](#wp-23-orchestration-pattern---the-controller-agent) - Build deterministic orchestrators
+- 🎯 **Orchestration architecture** → [ADR-2.2](#adr-22-orchestration---centralized-control-for-deterministic-workflows) - Decision framework
 - 📦 **Production setup** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
@@ -875,6 +876,122 @@ To master orchestration patterns:
 4. Adapt the pattern for your workflow (15 min)
 
 See [AGENTMAP.md](AGENTMAP.md#path-9-orchestrated-deterministic-workflows) for the complete "Orchestrated Deterministic Workflows" learning path.
+
+---
+
+### WP-2.3: Orchestration Pattern - The "Controller" Agent
+
+**[WP-2.3-Orchestration-Pattern.md](WP-2.3-Orchestration-Pattern.md)** teaches you: *"How do I implement deterministic, auditable workflows with evaluation gates?"*
+
+**WP-2.3 is a hands-on guide** to implementing the orchestration pattern. While ADR-2.2 explains *why* orchestration is valuable, WP-2.3 teaches you *how to build* robust orchestrators for your specific workflows.
+
+#### What You'll Learn
+
+- **Understand the Controller Pattern**: Centralized decision-making for multi-step workflows
+- **Build Evaluation Gates**: Validate step outputs before progression
+- **Implement Retry Logic**: Gracefully handle transient failures
+- **Design for Observability**: Complete audit trails with JSON serialization
+- **Create Extensible Orchestrators**: Base Controller class for domain-specific workflows
+
+#### Key Concepts
+
+```python
+# 1. Define steps and evaluation gates
+class StepName(str, Enum):
+    PLANNING = "PLANNING"
+    FETCHING = "FETCHING"
+    ANALYZING = "ANALYZING"
+    SYNTHESIZING = "SYNTHESIZING"
+
+# 2. Create evaluation functions (quality gates)
+def evaluate_plan(plan: Optional[List[str]]) -> Tuple[bool, str]:
+    if not plan or len(plan) < 3:
+        return False, f"Plan has {len(plan)} steps, need ≥3"
+    return True, f"Plan accepted: {len(plan)} steps"
+
+# 3. Register tools and evaluators in Controller
+orchestrator = ReportOrchestrator()
+orchestrator.register_tool(StepName.PLANNING, plan_tool)
+orchestrator.register_evaluator(StepName.PLANNING, evaluate_plan)
+
+# 4. Execute workflow with complete tracking
+report = await orchestrator.orchestrate("Write a report on AI trends")
+
+# 5. Get audit trail
+audit_trail = orchestrator.get_audit_trail()
+# Includes: steps executed, timings, evaluations, decisions, errors
+```
+
+#### The Complete Pattern
+
+```
+Controller (Centralized Decision-Maker)
+│
+├─→ [Step 1: Plan]
+│   ├─→ Execute plan_tool()
+│   ├─→ Evaluate output (≥3 steps)
+│   ├─→ Record timing, decision, result
+│   └─→ CONTINUE to Step 2 OR RETRY
+│
+├─→ [Step 2: Fetch Data]
+│   ├─→ Execute fetch_tool()
+│   ├─→ Evaluate output (≥8 sources with title+content)
+│   ├─→ Record timing, decision, result
+│   └─→ CONTINUE to Step 3 OR RETRY
+│
+├─→ [Step 3+: Continue with evaluation and tracking]
+│
+└─→ Return final result + complete audit trail
+    (workflow_id, timings, decisions, errors, JSON serialization)
+```
+
+#### Implementation Example: 6-Step Report Orchestrator
+
+The included [controller_orchestration_agent.py](controller_orchestration_agent.py) demonstrates:
+
+- **Plan** (controller generates 6-step plan)
+- **Fetch** (controller executes search for 9 data sources)
+- **Analyze** (controller extracts 22 facts from sources)
+- **Synthesize** (controller drafts 1250+ word report)
+- **Cite** (controller adds 15+ citations)
+- **Format** (controller finalizes with References section)
+
+Each step is evaluated before the next begins. If evaluation fails, the step is retried with exponential backoff.
+
+#### Complete Test Coverage
+
+**[tests/test_controller_orchestration.py](tests/test_controller_orchestration.py)** includes 41 tests:
+
+- **Evaluation tests** (13) - All evaluator functions
+- **State management tests** (5) - State tracking and history
+- **Tool execution tests** (6) - Individual tool behavior
+- **Step execution tests** (3) - Retry logic and evaluation
+- **Workflow tests** (4) - Complete orchestration
+- **Characteristics tests** (4) - Determinism, sequencing, audit trails
+- **Pattern tests** (3) - Orchestration vs choreography
+
+#### Learning Path (3.5 hours)
+
+1. **Understand ADR-2.2** (1 hour) - Know the architectural principles
+2. **Study WP-2.3 implementation** (1 hour) - Learn the concrete patterns
+3. **Review controller_orchestration_agent.py** (45 min) - See complete code
+4. **Run tests and observe** (30 min) - Trace through execution
+5. **Build your own orchestrator** (1 hour) - Adapt for your domain
+
+#### When to Use WP-2.3 Patterns
+
+**Use orchestration when you need:**
+- ✅ Predictable, reproducible workflows
+- ✅ Validation gates at each step
+- ✅ Complete audit trails for compliance
+- ✅ Deterministic execution (same input → same output)
+- ✅ Clear debugging (causality chain)
+
+**Use choreography instead when:**
+- ❌ You need emergent behavior from agent interactions
+- ❌ You have 1000s of independent agents
+- ❌ External events trigger workflows
+- ❌ Decoupling matters more than predictability
 
 ---
 
