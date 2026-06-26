@@ -136,7 +136,9 @@ We provide:
 - 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) - Pick the best model with a weighted matrix
 - 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
-- 🏭 **Production (1 hour)** → See [Setup & Configuration](#setup--configuration)
+- 🏭 **Agent state (1 hour)** → [WP-2.2](#wp-22-state-management-in-single-agent-loop) - Prevent infinite loops
+- 🐝 **Multi-agent choreography (2 hours)** → [ADR-2.1](#adr-21-choreography---event-driven-agility-for-emergent-workflows) - Event-driven autonomous agents
+- 📦 **Production setup** → See [Setup & Configuration](#setup--configuration)
 
 ### Installation
 
@@ -575,6 +577,178 @@ Each example includes:
 - Loop guard evaluation
 - State history tracking
 - Observability patterns
+
+---
+
+### ADR-2.1: Choreography - Event-Driven Agility for Emergent Workflows
+
+**[ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)** answers: *"How do I coordinate multiple agents without a central orchestrator?"*
+
+#### The Problem
+
+Traditional orchestration centralizes control: a master coordinator tells agents what to do. This creates:
+- Tight coupling (agents depend on orchestrator)
+- Bottleneck scaling (orchestrator throughput limits all agents)
+- Cascading failures (orchestrator down = system down)
+- Reduced autonomy (agents can't react independently)
+
+#### The Solution: Choreography with Event-Driven Architecture
+
+```
+┌──────────────┐
+│   Searcher   │ ──→ [data-fetched event]
+└──────────────┘
+        │
+        ↓
+┌──────────────────────┐
+│  Event Bus (Pub/Sub) │
+└──────────────────────┘
+        ↑
+        │ [report-synthesized event]
+┌──────────────┐
+│    Drafter   │ ──→ [revision-required feedback]
+└──────────────┘
+        ↑
+        │ [quality assessment]
+┌──────────────┐
+│    Critic    │ ←── Feedback Loop: Quality Homeostasis
+└──────────────┘
+```
+
+**With choreography you get:**
+- **Loose coupling** - Agents interact via event contracts, not direct calls
+- **Independent scaling** - Add agents without modifying others
+- **Resilience** - Agent failure remains isolated
+- **Emergent behavior** - Workflows compose dynamically from agent subscriptions
+- **Self-organizing** - Feedback loops enable system adaptation without centralized control
+
+#### Architecture Patterns
+
+The ADR includes systems thinking analysis:
+
+- **Feedback Loops**: The Critic agent implements negative feedback (like a thermostat) that drives the system toward quality equilibrium
+- **Second-Order Effects**: Analyzes how decoupling affects observability, latency, and consistency
+- **Emergent Workflows**: Shows how multi-agent patterns emerge from local event subscriptions
+- **Resilience Through Isolation**: Demonstrates how cascading failures become contained failures
+
+#### Choreography vs. Orchestration Comparison Matrix
+
+| Dimension | Orchestration | Choreography |
+|-----------|---------------|--------------|
+| **Coupling** | High (agents → orchestrator) | Low (agents → events) |
+| **Scaling** | Limited by orchestrator | Scales with pub/sub |
+| **Resilience** | Cascading (orchestrator failure) | Isolated (agent-level) |
+| **Workflow Composition** | Static (orchestrator owns it) | Dynamic (subscriptions enable new patterns) |
+| **Observability** | Centralized (orchestrator view) | Distributed (event audit trail + correlation IDs) |
+| **Consistency Model** | Strong (orchestrator enforces) | Eventual (agents converge) |
+| **Operational Burden** | Lower (single control point) | Higher (distributed debugging) |
+
+#### Implementation Patterns
+
+The ADR provides:
+- Event payload design with correlation IDs for distributed tracing
+- Agent state management for tracking workflow progress
+- Bounded feedback loops (max revision limits) preventing infinite loops
+- Dead-letter queue handling for repeated failures
+- Monitoring strategy using event flow dashboards
+
+#### Repository Implementation
+
+**[choreography_hive_mind.py](choreography_hive_mind.py)** is a complete, production-ready Hive Mind system:
+
+```python
+# Initialize event bus
+bus = EventBus()
+
+# Create autonomous agents that subscribe to events
+searcher = WebSearcher(bus, "web-searcher")
+drafter = Drafter(bus, "drafter")
+critic = Critic(bus, "critic")
+
+# Start agents (they register subscriptions)
+await searcher.start()  # Subscribes to "search-requested"
+await drafter.start()   # Subscribes to "data-fetched", "revision-required"
+await critic.start()    # Subscribes to "report-synthesized"
+
+# Trigger workflow by publishing an event
+await bus.publish(SearchRequested(query="climate change"))
+
+# Agents react autonomously; no orchestrator tells them what to do
+```
+
+**Key Components:**
+
+1. **EventBus** - Asynchronous pub/sub infrastructure
+   - Publish/subscribe with asyncio
+   - Event history tracking (audit trail)
+   - Statistics for monitoring
+
+2. **Event Types** (Pydantic models)
+   - `SearchRequested`, `DataFetched`
+   - `ReportSynthesized`, `ReviewCompleted`
+   - `RevisionRequired`, `RevisionAbandoned`
+   - All include correlation_id for distributed tracing
+
+3. **Autonomous Agents**
+   - `WebSearcher` - Fetches data independently
+   - `Drafter` - Synthesizes reports and handles revisions
+   - `Critic` - Assesses quality and provides feedback
+   - Each manages own state; no external control
+
+4. **Feedback Loops**
+   - Critic publishes `RevisionRequired` when quality is low
+   - Drafter subscribes and re-drafts with feedback
+   - System reaches equilibrium through repeated cycles
+   - Max revision limits prevent infinite loops
+
+#### Complete Test Coverage
+
+**[tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py)** provides comprehensive testing:
+
+- **Event tests** - Pydantic validation, immutability, serialization
+- **EventBus tests** - Publishing, subscribing, event history
+- **Agent tests** - Independent behavior, event publishing
+- **Integration tests** - Multi-agent workflows, feedback loops
+- **Resilience tests** - Error isolation, max revision limits
+- **Observability tests** - Statistics and audit trails
+
+Coverage includes:
+- Happy path workflows (Search → Draft → Approve)
+- Revision loops (Draft → Feedback → Revise → Approve)
+- Concurrent workflows (multiple queries simultaneously)
+- Correlation ID propagation (trace entire workflow)
+- Error isolation (handler failures don't cascade)
+
+#### Use Cases
+
+**Ideal for:**
+- Multi-stage report generation (search, synthesis, review, refinement)
+- Complex workflows requiring feedback loops
+- Systems needing independent agent scaling
+- Scenarios where failure isolation is critical
+- Production systems demanding high observability
+
+**Example workflow:**
+```
+Query → Search Web → Fetch Data → Draft Report → Review Quality
+                                          ↓
+                          Feedback Loop (if below quality threshold)
+                                          ↓
+                              Re-fetch data or re-draft
+                                          ↓
+                          Quality threshold met → Finalize
+```
+
+#### Learning Path
+
+To master choreography-based patterns:
+
+1. Read ADR-2.1 for architectural concepts (1 hour)
+2. Study choreography_hive_mind.py implementation (1 hour)
+3. Run the tests and observe agent interactions (30 min)
+4. Modify the pattern for your use case (1 hour)
+
+See [AGENTMAP.md](AGENTMAP.md#path-8-multi-agent-choreography-for-emergent-workflows) for the complete "Multi-Agent Choreography" learning path.
 
 ---
 

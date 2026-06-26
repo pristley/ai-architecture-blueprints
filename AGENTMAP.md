@@ -14,6 +14,9 @@ graph TB
     ECOSYSTEM["📚 Ecosystem<br/>LANGCHAIN_ECOSYSTEM_MAP.md"]
     ADR12["🏗️ ADR-1.2<br/>Hello World Three Ways"]
     EX12["💻 examples_1_2.py<br/>Working Implementations"]
+    ADR21["🏗️ ADR-2.1<br/>Choreography: Event-Driven Agility"]
+    CHORE["💻 choreography_hive_mind.py<br/>Hive Mind Implementation"]
+    TEST_CHORE["🧪 test_choreography_hive_mind.py<br/>Choreography Tests"]
     WP13["🔬 WP-1.3<br/>Runnable Protocol"]
     EX13["💻 examples_1_3.py<br/>Practical Demonstrations"]
     WP14["📋 WP-1.4<br/>Prompt Engineering as Code"]
@@ -50,8 +53,12 @@ graph TB
     WP22 -->|See code| EX22
     WP22 -->|Prevents loops in| WP17
     WP22 -->|Coordinates multiple| WP15
+    ADR21 -->|See code| CHORE
+    CHORE -->|Tested by| TEST_CHORE
+    ADR21 -->|Foundation for multi-agent| WP22
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
+    AGENTMAP -->|Shows relationships| ADR21
     AGENTMAP -->|Shows relationships| WP13
     AGENTMAP -->|Shows relationships| WP14
     AGENTMAP -->|Shows relationships| WP15
@@ -64,6 +71,9 @@ graph TB
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
     style ADR12 fill:#FF9800,stroke:#E65100,color:#fff
     style EX12 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style ADR21 fill:#FF9800,stroke:#E65100,color:#fff
+    style CHORE fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style TEST_CHORE fill:#4CAF50,stroke:#2E7D32,color:#fff
     style WP13 fill:#FF9800,stroke:#E65100,color:#fff
     style EX13 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP14 fill:#FF9800,stroke:#E65100,color:#fff
@@ -108,6 +118,13 @@ graph TB
 | [examples_1_7.py](examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
 | [examples_2_1.py](examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
 | [examples_2_2.py](examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
+| [choreography_hive_mind.py](choreography_hive_mind.py) | 💻 Code | Event-driven choreography pattern: EventBus, agents, feedback loops | ~1200 | ✅ |
+
+### Test Examples
+
+| Document | Type | Purpose | Lines | Status |
+|----------|------|---------|-------|--------|
+| [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py) | 🧪 Tests | Comprehensive choreography pattern tests: events, bus, agents, workflows | ~800 | ✅ |
 
 ### Meta Documents
 
@@ -424,6 +441,126 @@ examples_2_2.py: State Machine Agent Demonstrations
     └─ Production monitoring
 ```
 
+### ADR-2.1 Relationships
+
+```
+ADR-2.1: Choreography: Event-Driven Agility for Emergent Workflows
+│
+├─→ Contrasts with
+│   ├─ ADR-1.2 (orchestration vs. choreography approaches)
+│   └─ WP-2.2 (centralized control vs. distributed agent autonomy)
+│
+├─→ Depends on
+│   ├─ Systems thinking framework (feedback loops, emergent behavior)
+│   ├─ Event-driven architecture patterns
+│   └─ Asynchronous distributed systems theory
+│
+├─→ Provides code examples to
+│   └─ choreography_hive_mind.py
+│
+├─→ Introduces patterns for
+│   ├─ Event-driven pub/sub architecture
+│   ├─ Autonomous agent design (no centralized control)
+│   ├─ Feedback loops for system homeostasis
+│   ├─ Second-order effects analysis
+│   ├─ Eventual consistency vs. strong consistency tradeoffs
+│   ├─ Observability through distributed tracing (correlation IDs)
+│   ├─ Resilience through decoupling and isolation
+│   └─ Emergent workflow composition
+│
+└─→ Enables multi-agent systems with
+    ├─ Independent agent scaling
+    ├─ Failure isolation (agent failure doesn't cascade)
+    ├─ Dynamic workflow composition
+    ├─ Self-organizing adaptation
+    └─ Production-ready observability
+```
+
+### choreography_hive_mind.py: Event-Driven Hive Mind Implementation
+
+```
+choreography_hive_mind.py: Multi-Agent Report Generation via Choreography
+│
+├─→ Demonstrates
+│   ├─ EventBus (pub/sub infrastructure with asyncio)
+│   ├─ Event types (Pydantic models for validation)
+│   ├─ Agent base class and autonomous behavior
+│   ├─ WebSearcher agent (data fetching)
+│   ├─ Drafter agent (synthesis with revision feedback)
+│   ├─ Critic agent (quality assessment and homeostasis)
+│   ├─ Feedback loops (Critic→Drafter→Searcher)
+│   ├─ Correlation IDs for distributed tracing
+│   └─ Event audit trails for observability
+│
+├─→ Implements patterns like
+│   ├─ Loose coupling (agents interact via events, not direct calls)
+│   ├─ Asynchronous event propagation (fire-and-forget semantics)
+│   ├─ Error isolation (handler failures don't affect other subscribers)
+│   ├─ Bounded feedback loops (max revision limits prevent infinite loops)
+│   ├─ Event ordering and sequencing
+│   ├─ Workflow state tracking without central orchestrator
+│   └─ Distributed tracing with correlation IDs
+│
+├─→ Runs complete workflow
+│   ├─ SearchRequested → DataFetched → ReportSynthesized
+│   ├─ ReviewCompleted (approved) OR RevisionRequired (feedback loop)
+│   ├─ Revision loop: RevisionRequired → ReportSynthesized → ReviewCompleted
+│   └─ ReportFinalized or RevisionAbandoned (max revisions)
+│
+└─→ Complements
+    ├─ ADR-2.1 (theory of choreography patterns)
+    ├─ WP-2.2 (agent state management with events)
+    └─ tests/test_choreography_hive_mind.py (comprehensive test coverage)
+```
+
+### tests/test_choreography_hive_mind.py: Choreography Test Suite
+
+```
+tests/test_choreography_hive_mind.py: Comprehensive Choreography Pattern Tests
+│
+├─→ Test Coverage
+│   ├─ EventTypes (validation, serialization, immutability)
+│   ├─ EventBus (pub/sub, subscribing, publishing, history)
+│   ├─ WebSearcher (data fetching, event publishing)
+│   ├─ Drafter (synthesis, revision handling, feedback integration)
+│   ├─ Critic (quality assessment, approval logic, feedback generation)
+│   ├─ Choreography workflow (happy path, revision loops, multi-query)
+│   ├─ Resilience (error isolation, max revision limits)
+│   └─ Observability (statistics, event tracking)
+│
+├─→ Test Categories
+│   ├─ Unit Tests
+│   │   ├─ Event creation and validation (Pydantic)
+│   │   ├─ Event immutability and serialization
+│   │   ├─ EventBus pub/sub mechanics
+│   │   └─ Individual agent behavior
+│   ├─ Integration Tests
+│   │   ├─ Multi-agent workflow coordination
+│   │   ├─ Feedback loop execution
+│   │   ├─ Correlation ID propagation
+│   │   └─ Concurrent workflow handling
+│   ├─ Resilience Tests
+│   │   ├─ Handler error isolation
+│   │   └─ Max revision limit enforcement
+│   └─ Observability Tests
+│       ├─ Statistics tracking
+│       └─ Event history recording
+│
+├─→ Example Test Scenarios
+│   ├─ Complete workflow happy path (Search → Draft → Approve)
+│   ├─ Workflow with revision loop (Search → Draft → Revise → Approve)
+│   ├─ Multiple concurrent workflows
+│   ├─ Correlation ID flow through entire workflow
+│   └─ Handler failure isolation (error in one subscriber doesn't affect others)
+│
+└─→ Validates patterns like
+    ├─ Agent autonomy (agents react to events independently)
+    ├─ Choreography emergence (workflows emerge from agent interactions)
+    ├─ Feedback loops (Critic signals drive Drafter re-work)
+    ├─ Decoupling benefits (agents don't know each other)
+    └─ System resilience (failures remain isolated)
+```
+
 ---
 
 ## 🎓 Learning Paths
@@ -555,6 +692,37 @@ examples_2_2.py: State Machine Agent Demonstrations
 ```
 
 **Outcome**: Ready to build production-grade LLM systems with informed model selection
+
+---
+
+### Path 8: "Multi-Agent Choreography for Emergent Workflows" (4 hours)
+
+```
+1. README.md (15 min)
+   ↓
+2. ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md (1 hour)
+   ↓
+3. choreography_hive_mind.py (study code structure - 1 hour)
+   ↓
+4. tests/test_choreography_hive_mind.py (understand test patterns - 45 min)
+   ↓
+5. Run choreography_hive_mind.py and tests locally (15 min)
+   ↓
+6. Adapt pattern to your multi-agent use case (45 min)
+```
+
+**Outcome**: Build autonomous multi-agent systems with event-driven choreography instead of orchestration
+
+**Prerequisites**: Path 1 (basic understanding) or Path 3 (production systems knowledge)
+
+**Topics Covered**:
+- Event-driven architecture vs. orchestration
+- Autonomous agent design with pub/sub
+- Feedback loops for system homeostasis
+- Distributed tracing with correlation IDs
+- Resilience through decoupling
+- Emergent workflow composition
+- Second-order effects analysis
 
 ---
 

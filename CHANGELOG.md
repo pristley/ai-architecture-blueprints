@@ -1,5 +1,64 @@
 # Changelog
 
+## [1.1.0] - 2026-06-26
+
+### Added
+- **ADR-2.1: Choreography - Event-Driven Agility for Emergent Workflows**
+  - Comprehensive architectural decision record on choreography patterns
+  - Systems thinking analysis with feedback loops and second-order effects
+  - Comparison matrix: Choreography vs. Orchestration (11 dimensions)
+  - Implementation guidelines with event payload schemas
+  - Risk analysis with 6 identified risks and mitigation strategies
+  - Production deployment guidance and scaling strategies
+  - Complete with cost/complexity trade-offs analysis
+
+- **Multi-Agent Choreography Implementation (choreography_hive_mind.py)**
+  - Event-driven architecture with asyncio EventBus for non-blocking message passing
+  - Three autonomous agents:
+    * WebSearcher: Fetches data for queries (subscribes to search-requested)
+    * Drafter: Generates and revises reports (subscribes to data-fetched, revision-required)
+    * Critic: Reviews quality and provides feedback (subscribes to report-synthesized)
+  - Immutable Pydantic event types for reliability:
+    * SearchRequested, DataFetched, DraftingStarted, ReportSynthesized
+    * ReviewStarted, ReviewCompleted, RevisionRequired, RevisionAbandoned, ReportFinalized
+  - Distributed tracing via correlation_id propagation through entire workflow
+  - Bounded feedback loops with max revision limits (prevents infinite loops)
+  - Event audit trail for complete workflow visibility
+  - HiveMindOrchestrator for workflow coordination
+  - ~860 lines of production-ready code with comprehensive docstrings
+
+- **Comprehensive Test Suite (tests/test_choreography_hive_mind.py)**
+  - 30 unit tests with 100% pass rate
+  - Test coverage across:
+    * Event type creation, immutability, serialization, correlation ID propagation
+    * EventBus pub/sub mechanics, event routing, history tracking, statistics
+    * Individual agent subscriptions and behavior
+    * Complete end-to-end choreography workflows
+    * Resilience: handler error isolation, max revision limit enforcement
+    * Observability: bus statistics and orchestrator metrics
+  - Async test suite using pytest-asyncio
+  - ~800 lines of comprehensive test cases
+
+- **Documentation Updates**
+  - AGENTMAP.md: Added ADR-2.1 relationships, choreography flow topology, learning path
+  - README.md: Added comprehensive "Choreography Implementation" section (~2000 words)
+  - README.md: Added quick navigation link to choreography pattern
+  - New learning path: "Multi-Agent Choreography for Emergent Workflows" (4 hours)
+
+### Changed
+- Version: 1.0.3 → 1.1.0
+- AGENTMAP.md: Extended with choreography pattern relationships and implementation details
+- README.md: Expanded with choreography section including problem/solution/patterns
+- Repository focus: Added event-driven multi-agent patterns to core curriculum
+
+### Key Metrics
+- Architectural Decision Records: 2 (ADR-1.2, ADR-2.1)
+- Work Products: 7 (WP-1.3 through WP-2.2, plus new choreography implementation)
+- Python Implementation Files: 10 (examples + choreography)
+- Test Files: 7 (all passing - 100% success rate across all test suites)
+- Documentation: 7 markdown files (ADRs, WPs, guides)
+- Total Code: ~1700 lines (choreography implementation + tests)
+
 ## [1.0.3] - 2026-06-24
 
 ### Added
