@@ -1405,4 +1405,4 @@ prompt.format_messages(company_name="Test", history=[], input="Hi")
 
 ---
 
-*Part of the AI Architecture Blueprints series. See [AGENTMAP.md](AGENTMAP.md) for the complete knowledge graph.*
+*Part of the AI Architecture Blueprints series. See [AGENTMAP.md](../reference/AGENTMAP.md) for the complete knowledge graph.*

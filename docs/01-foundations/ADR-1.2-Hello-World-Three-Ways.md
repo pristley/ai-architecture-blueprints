@@ -8,7 +8,7 @@
 
 As LLM applications grow from simple prompts to multi-step workflows, developers must choose how to orchestrate chains of operations. LangChain provides three common patterns, each with different trade-offs and ecosystem positioning. We evaluated them through a simple task: generate a short poem, then summarize it.
 
-This ADR maps to the **langchain-community** and **langchain-core** layers of the [LangChain Ecosystem Map](LANGCHAIN_ECOSYSTEM_MAP.md), establishing patterns for chain composition that scale from prototyping through production deployment with LangServe and observability with LangSmith.
+This ADR maps to the **langchain-community** and **langchain-core** layers of the [LangChain Ecosystem Map](../reference/LANGCHAIN_ECOSYSTEM_MAP.md), establishing patterns for chain composition that scale from prototyping through production deployment with LangServe and observability with LangSmith.
 
 ## Decision
 

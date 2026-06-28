@@ -151,45 +151,45 @@ graph TB
 |----------|------|---------|-------|--------|
 | [README.md](README.md) | 📖 Guide | Project overview and navigation | ~800 | ✅ |
 | [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) | 📚 Reference | Complete LangChain stack documentation | ~1200 | ✅ |
-| [ADR-1.2-Hello-World-Three-Ways.md](ADR-1.2-Hello-World-Three-Ways.md) | 🏗️ Architecture Decision | Chain abstraction comparison and decision flow | ~500 | ✅ |
-| [WP-1.3-The-Runnable-Protocol.md](WP-1.3-The-Runnable-Protocol.md) | 🔬 Deep Dive | Runnable protocol explained in 12 parts | ~1100 | ✅ |
-| [WP-1.4-Prompt-Engineering-as-Code.md](WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
-| [WP-1.5-Output-Parsing-for-System-Integration.md](WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
-| [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
-| [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
-| [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
-| [WP-2.2-State-Management-in-Single-Agent-Loop.md](WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
-| [ADR-2.2-Orchestration-Centralized-Control.md](ADR-2.2-Orchestration-Centralized-Control.md) | 🏗️ Architecture Decision | Orchestration vs choreography patterns with decision matrix | ~2600 | ✅ |
-| [WP-2.3-Orchestration-Pattern.md](WP-2.3-Orchestration-Pattern.md) | ⚙️ Design Pattern | Practical orchestration implementation with controller agent | ~1000 | ✅ |
-| [WP-2.4-Choreography-Pattern.md](WP-2.4-Choreography-Pattern.md) | 🐝 Design Pattern | Practical choreography implementation with event-driven Hive Mind | ~1000 | ✅ |
-| [WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md](WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md) | 🔗 Framework Guide | Reimplementation of orchestrator using LangGraph StateGraph for production workflows | ~2000 | ✅ |
-| [WP-2.7-Checkpointing-and-Human-in-the-Loop.md](WP-2.7-Checkpointing-and-Human-in-the-Loop.md) | 🔐 Framework Guide | LangGraph checkpointing for human approval gates and state resumption | ~2500 | ✅ |
+| [ADR-1.2-Hello-World-Three-Ways.md](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md) | 🏗️ Architecture Decision | Chain abstraction comparison and decision flow | ~500 | ✅ |
+| [WP-1.3-The-Runnable-Protocol.md](../01-foundations/WP-1.3-The-Runnable-Protocol.md) | 🔬 Deep Dive | Runnable protocol explained in 12 parts | ~1100 | ✅ |
+| [WP-1.4-Prompt-Engineering-as-Code.md](../02-production-patterns/WP-1.4-Prompt-Engineering-as-Code.md) | 📋 Design Pattern | PromptRegistry pattern: versioning, composition, multi-turn | ~900 | ✅ |
+| [WP-1.5-Output-Parsing-for-System-Integration.md](../02-production-patterns/WP-1.5-Output-Parsing-for-System-Integration.md) | 📈 Design Pattern | Structured output, parser repair, and retry strategy | ~300 | ✅ |
+| [WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md](../02-production-patterns/WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md) | 🤖 Design Pattern | LLM decision matrix and ADR for production model selection | ~220 | ✅ |
+| [WP-1.7-Introduction-to-Tracing-with-LangSmith.md](../02-production-patterns/WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 🔍 Design Pattern | Observability-first debugging with LangSmith traces | ~740 | ✅ |
+| [WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md](../03-memory-state-agents/WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) | 💾 Design Pattern | Dual-memory architecture for scalable conversational systems | ~600 | ✅ |
+| [WP-2.2-State-Management-in-Single-Agent-Loop.md](../03-memory-state-agents/WP-2.2-State-Management-in-Single-Agent-Loop.md) | 🤖 Design Pattern | State machine for agent loops with infinite loop prevention | ~850 | ✅ |
+| [ADR-2.2-Orchestration-Centralized-Control.md](../04-multi-agent-architectures/ADR-2.2-Orchestration-Centralized-Control.md) | 🏗️ Architecture Decision | Orchestration vs choreography patterns with decision matrix | ~2600 | ✅ |
+| [WP-2.3-Orchestration-Pattern.md](../04-multi-agent-architectures/WP-2.3-Orchestration-Pattern.md) | ⚙️ Design Pattern | Practical orchestration implementation with controller agent | ~1000 | ✅ |
+| [WP-2.4-Choreography-Pattern.md](../04-multi-agent-architectures/WP-2.4-Choreography-Pattern.md) | 🐝 Design Pattern | Practical choreography implementation with event-driven Hive Mind | ~1000 | ✅ |
+| [WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md](../04-multi-agent-architectures/WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md) | 🔗 Framework Guide | Reimplementation of orchestrator using LangGraph StateGraph for production workflows | ~2000 | ✅ |
+| [WP-2.7-Checkpointing-and-Human-in-the-Loop.md](../04-multi-agent-architectures/WP-2.7-Checkpointing-and-Human-in-the-Loop.md) | 🔐 Framework Guide | LangGraph checkpointing for human approval gates and state resumption | ~2500 | ✅ |
 
 ### Code Examples
 
 | Document | Type | Purpose | Lines | Status |
 |----------|------|---------|-------|--------|
-| [examples_1_2.py](examples_1_2.py) | 💻 Code | 3 chain approaches with advanced patterns | ~900 | ✅ |
-| [examples_1_3.py](examples_1_3.py) | 💻 Code | 6 Runnable protocol examples with deep comments | ~1500 | ✅ |
-| [examples_1_4.py](examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
-| [examples_1_7.py](examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
-| [examples_2_1.py](examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
-| [examples_2_2.py](examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
-| [choreography_hive_mind.py](choreography_hive_mind.py) | 💻 Code | Event-driven choreography pattern: EventBus, agents, feedback loops | ~1200 | ✅ |
-| [research_assistant_state_machine.py](research_assistant_state_machine.py) | 💻 Code | Production state machine for agent loops with comprehensive loop detection | ~600 | ✅ |
-| [controller_orchestration_agent.py](controller_orchestration_agent.py) | 💻 Code | Centralized orchestration controller: 6-step report workflow with evaluators | ~900 | ✅ |
-| [examples_2_6.py](examples_2_6.py) | 💻 Code | LangGraph StateGraph implementation of 6-step orchestrator with conditional edges | ~450 | ✅ |
-| [examples_2_7.py](examples_2_7.py) | 💻 Code | LangGraph email approval workflow with checkpointing, interrupts, and state resumption | ~550 | ✅ |
+| [examples_1_2.py](../01-foundations/examples_1_2.py) | 💻 Code | 3 chain approaches with advanced patterns | ~900 | ✅ |
+| [examples_1_3.py](../01-foundations/examples_1_3.py) | 💻 Code | 6 Runnable protocol examples with deep comments | ~1500 | ✅ |
+| [examples_1_4.py](../02-production-patterns/examples_1_4.py) | 💻 Code | 6 PromptRegistry demos: registry, versioning, composition, testing | ~600 | ✅ |
+| [examples_1_7.py](../02-production-patterns/examples_1_7.py) | 💻 Code | 4 LangSmith tracing examples with observability patterns | ~603 | ✅ |
+| [examples_2_1.py](../03-memory-state-agents/examples_2_1.py) | 💻 Code | 3 Dual-memory chatbot examples with fact extraction | ~750 | ✅ |
+| [examples_2_2.py](../03-memory-state-agents/examples_2_2.py) | 💻 Code | 3 State machine agent examples with loop detection | ~900 | ✅ |
+| [choreography_hive_mind.py](../04-multi-agent-architectures/choreography_hive_mind.py) | 💻 Code | Event-driven choreography pattern: EventBus, agents, feedback loops | ~1200 | ✅ |
+| [research_assistant_state_machine.py](../03-memory-state-agents/research_assistant_state_machine.py) | 💻 Code | Production state machine for agent loops with comprehensive loop detection | ~600 | ✅ |
+| [controller_orchestration_agent.py](../04-multi-agent-architectures/controller_orchestration_agent.py) | 💻 Code | Centralized orchestration controller: 6-step report workflow with evaluators | ~900 | ✅ |
+| [examples_2_6.py](../04-multi-agent-architectures/examples_2_6.py) | 💻 Code | LangGraph StateGraph implementation of 6-step orchestrator with conditional edges | ~450 | ✅ |
+| [examples_2_7.py](../04-multi-agent-architectures/examples_2_7.py) | 💻 Code | LangGraph email approval workflow with checkpointing, interrupts, and state resumption | ~550 | ✅ |
 
 ### Test Examples
 
 | Document | Type | Purpose | Lines | Status |
 |----------|------|---------|-------|--------|
-| [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py) | 🧪 Tests | Comprehensive choreography pattern tests: events, bus, agents, workflows | ~800 | ✅ |
-| [tests/test_research_assistant_state_machine.py](tests/test_research_assistant_state_machine.py) | 🧪 Tests | 43 tests for state machine: transitions, loop detection, tools, workflows | ~600 | ✅ |
-| [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py) | 🧪 Tests | 41 tests for orchestration: step execution, workflows, audit trails | ~600 | ✅ |
-| [tests/test_langgraph_orchestration.py](tests/test_langgraph_orchestration.py) | 🧪 Tests | Comprehensive LangGraph tests: state, nodes, edges, evaluation, end-to-end | ~500 | ✅ |
-| [tests/test_langgraph_checkpointing.py](tests/test_langgraph_checkpointing.py) | 🧪 Tests | Comprehensive checkpointing tests: validation, nodes, routing, workflows, persistence | ~700 | ✅ |
+| [tests/test_choreography_hive_mind.py](../../tests/test_choreography_hive_mind.py) | 🧪 Tests | Comprehensive choreography pattern tests: events, bus, agents, workflows | ~800 | ✅ |
+| [tests/test_research_assistant_state_machine.py](../../tests/test_research_assistant_state_machine.py) | 🧪 Tests | 43 tests for state machine: transitions, loop detection, tools, workflows | ~600 | ✅ |
+| [tests/test_controller_orchestration.py](../../tests/test_controller_orchestration.py) | 🧪 Tests | 41 tests for orchestration: step execution, workflows, audit trails | ~600 | ✅ |
+| [tests/test_langgraph_orchestration.py](../../tests/test_langgraph_orchestration.py) | 🧪 Tests | Comprehensive LangGraph tests: state, nodes, edges, evaluation, end-to-end | ~500 | ✅ |
+| [tests/test_langgraph_checkpointing.py](../../tests/test_langgraph_checkpointing.py) | 🧪 Tests | Comprehensive checkpointing tests: validation, nodes, routing, workflows, persistence | ~700 | ✅ |
 
 ### Meta Documents
 
@@ -1563,45 +1563,45 @@ Conceptual Difficulty vs Code Complexity
 
 ### "I'm building a chatbot"
 1. Start: [README.md](README.md)
-2. Understand pattern: [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md)
-3. See examples: [examples_1_2.py](examples_1_2.py)
-4. Streaming: [WP-1.3 Part 2](WP-1.3-The-Runnable-Protocol.md#part-2-the-four-execution-modes)
-5. Tracing: [examples_1_3.py Example 4](examples_1_3.py)
+2. Understand pattern: [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md)
+3. See examples: [examples_1_2.py](../01-foundations/examples_1_2.py)
+4. Streaming: [WP-1.3 Part 2](../01-foundations/WP-1.3-The-Runnable-Protocol.md#part-2-the-four-execution-modes)
+5. Tracing: [examples_1_3.py Example 4](../01-foundations/examples_1_3.py)
 
 ### "I'm building a data pipeline"
 1. Start: [README.md](README.md)
-2. Choose pattern: [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md)
-3. Performance: [examples_1_3.py Example 6](examples_1_3.py)
-4. Batch processing: [WP-1.3 Part 2](WP-1.3-The-Runnable-Protocol.md)
+2. Choose pattern: [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md)
+3. Performance: [examples_1_3.py Example 6](../01-foundations/examples_1_3.py)
+4. Batch processing: [WP-1.3 Part 2](../01-foundations/WP-1.3-The-Runnable-Protocol.md)
 5. Deploy: [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)
 
 ### "I'm building an agent system"
 1. Start: [README.md](README.md)
 2. Components: [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)
-3. Understand Runnables: [WP-1.3](WP-1.3-The-Runnable-Protocol.md)
-4. Custom components: [examples_1_3.py Example 2](examples_1_3.py)
-5. Routing: [examples_1_3.py Example 5](examples_1_3.py)
+3. Understand Runnables: [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md)
+4. Custom components: [examples_1_3.py Example 2](../01-foundations/examples_1_3.py)
+5. Routing: [examples_1_3.py Example 5](../01-foundations/examples_1_3.py)
 
 ### "I need deterministic orchestrated workflows"
-1. Overview: [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md)
-2. Decision matrix: [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md) (compare to choreography)
-3. Implementation: [controller_orchestration_agent.py](controller_orchestration_agent.py)
-4. Test patterns: [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py)
+1. Overview: [ADR-2.2](../04-multi-agent-architectures/ADR-2.2-Orchestration-Centralized-Control.md)
+2. Decision matrix: [ADR-2.2](../04-multi-agent-architectures/ADR-2.2-Orchestration-Centralized-Control.md) (compare to choreography)
+3. Implementation: [controller_orchestration_agent.py](../04-multi-agent-architectures/controller_orchestration_agent.py)
+4. Test patterns: [tests/test_controller_orchestration.py](../../tests/test_controller_orchestration.py)
 5. Deploy: [LangGraph](https://langchain-ai.github.io/langgraph/) for production orchestration
 
 ### "I need emergent multi-agent systems"
-1. Comparison: [ADR-2.1 vs ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md)
-2. Choreography pattern: [ADR-2.1](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
-3. Implementation: [choreography_hive_mind.py](choreography_hive_mind.py)
-4. Test patterns: [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py)
+1. Comparison: [ADR-2.1 vs ADR-2.2](../04-multi-agent-architectures/ADR-2.2-Orchestration-Centralized-Control.md)
+2. Choreography pattern: [ADR-2.1](../04-multi-agent-architectures/ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
+3. Implementation: [choreography_hive_mind.py](../04-multi-agent-architectures/choreography_hive_mind.py)
+4. Test patterns: [tests/test_choreography_hive_mind.py](../../tests/test_choreography_hive_mind.py)
 5. Deploy: [LangGraph](https://langchain-ai.github.io/langgraph/) for production choreography
 
 ### "I want to understand LangChain"
 1. Ecosystem: [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)
-2. Decisions: [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md)
-3. Examples: [examples_1_2.py](examples_1_2.py)
-4. Deep dive: [WP-1.3](WP-1.3-The-Runnable-Protocol.md)
-5. Practice: [examples_1_3.py](examples_1_3.py)
+2. Decisions: [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md)
+3. Examples: [examples_1_2.py](../01-foundations/examples_1_2.py)
+4. Deep dive: [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md)
+5. Practice: [examples_1_3.py](../01-foundations/examples_1_3.py)
 
 ---
 
@@ -1639,34 +1639,34 @@ Week 4: Architecture
 
 ### From README.md, you can reach:
 - 📖 [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) - Full stack documentation
-- 📊 [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Chain abstraction decision
-- 💻 [examples_1_2.py](examples_1_2.py) - Working implementations
-- 🔬 [WP-1.3](WP-1.3-The-Runnable-Protocol.md) - Runnable protocol deep dive
-- 💻 [examples_1_3.py](examples_1_3.py) - Practical demonstrations
+- 📊 [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md) - Chain abstraction decision
+- 💻 [examples_1_2.py](../01-foundations/examples_1_2.py) - Working implementations
+- 🔬 [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md) - Runnable protocol deep dive
+- 💻 [examples_1_3.py](../01-foundations/examples_1_3.py) - Practical demonstrations
 
 ### From ADR-1.2, you can reach:
 - 📖 [README.md](README.md) - Back to overview
 - 📚 [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) - Component reference
-- 💻 [examples_1_2.py](examples_1_2.py) - See approaches work
-- 🔬 [WP-1.3](WP-1.3-The-Runnable-Protocol.md) - How approaches work underneath
+- 💻 [examples_1_2.py](../01-foundations/examples_1_2.py) - See approaches work
+- 🔬 [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md) - How approaches work underneath
 
 ### From WP-1.3, you can reach:
 - 📖 [README.md](README.md) - Back to overview
-- 🏗️ [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Prerequisite knowledge
-- 💻 [examples_1_3.py](examples_1_3.py) - See concepts in action
+- 🏗️ [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md) - Prerequisite knowledge
+- 💻 [examples_1_3.py](../01-foundations/examples_1_3.py) - See concepts in action
 - 📚 [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) - Component details
 
 ### From examples, you can reach:
 - 📖 [README.md](README.md) - Overview
-- 🏗️ [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Context for examples_1_2.py
-- 🔬 [WP-1.3](WP-1.3-The-Runnable-Protocol.md) - Theory for examples_1_3.py
-- 📋 [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md) - Theory for examples_1_4.py
+- 🏗️ [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md) - Context for examples_1_2.py
+- 🔬 [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md) - Theory for examples_1_3.py
+- 📋 [WP-1.4](../02-production-patterns/WP-1.4-Prompt-Engineering-as-Code.md) - Theory for examples_1_4.py
 
 ### From WP-1.6, you can reach:
 - 📖 [README.md](README.md) - Back to overview
-- 📈 [WP-1.5](WP-1.5-Output-Parsing-for-System-Integration.md) - Output reliability constraints
-- 📋 [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md) - Prompt strategy impact on costs
-- 🏗️ [ADR-1.2](ADR-1.2-Hello-World-Three-Ways.md) - Orchestration architecture effects
+- 📈 [WP-1.5](../02-production-patterns/WP-1.5-Output-Parsing-for-System-Integration.md) - Output reliability constraints
+- 📋 [WP-1.4](../02-production-patterns/WP-1.4-Prompt-Engineering-as-Code.md) - Prompt strategy impact on costs
+- 🏗️ [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md) - Orchestration architecture effects
 
 ---
 
@@ -1813,15 +1813,15 @@ Back to Read (deeper understanding)
 ## 📞 Quick Reference
 
 **Need to know how to...**
-- Use Runnables? → [WP-1.3 Part 1](WP-1.3-The-Runnable-Protocol.md)
-- Choose chain pattern? → [ADR-1.2 Decision Flow](ADR-1.2-Hello-World-Three-Ways.md)
-- Build custom component? → [examples_1_3.py Example 2](examples_1_3.py)
-- Stream output? → [WP-1.3 Part 2 - stream](WP-1.3-The-Runnable-Protocol.md) + [examples_1_3.py Example 1](examples_1_3.py)
-- Batch process? → [examples_1_3.py Example 6](examples_1_3.py)
-- Debug execution? → [examples_1_3.py Example 4](examples_1_3.py)
-- Route conditionally? → [examples_1_3.py Example 5](examples_1_3.py)
-- Manage prompts at scale? → [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md)
-- Choose a model? → [WP-1.6](WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md)
+- Use Runnables? → [WP-1.3 Part 1](../01-foundations/WP-1.3-The-Runnable-Protocol.md)
+- Choose chain pattern? → [ADR-1.2 Decision Flow](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md)
+- Build custom component? → [examples_1_3.py Example 2](../01-foundations/examples_1_3.py)
+- Stream output? → [WP-1.3 Part 2 - stream](../01-foundations/WP-1.3-The-Runnable-Protocol.md) + [examples_1_3.py Example 1](../01-foundations/examples_1_3.py)
+- Batch process? → [examples_1_3.py Example 6](../01-foundations/examples_1_3.py)
+- Debug execution? → [examples_1_3.py Example 4](../01-foundations/examples_1_3.py)
+- Route conditionally? → [examples_1_3.py Example 5](../01-foundations/examples_1_3.py)
+- Manage prompts at scale? → [WP-1.4](../02-production-patterns/WP-1.4-Prompt-Engineering-as-Code.md)
+- Choose a model? → [WP-1.6](../02-production-patterns/WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md)
 - Deploy to production? → [LANGCHAIN_ECOSYSTEM_MAP.md LangServe](LANGCHAIN_ECOSYSTEM_MAP.md)
 
 ---
