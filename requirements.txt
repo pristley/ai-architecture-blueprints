@@ -5,7 +5,6 @@ langchain-openai>=0.0.1
 
 # LangGraph for stateful workflows (WP-2.6)
 langgraph>=0.0.1
-langgraph-core>=0.0.1
 
 # Development dependencies
 ruff>=0.1.0
