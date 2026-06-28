@@ -176,7 +176,7 @@ tests/test_wp_2_1.py                                       (262 lines)
 ## Next Steps (Recommended)
 
 1. **Read the Document**
-   - Start with [WP-2.1](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md)
+   - Start with [WP-2.1](../03-memory-state-agents/WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md)
    - Focus on Parts 1-3 for overview
    - Study Parts 4-7 for implementation
 

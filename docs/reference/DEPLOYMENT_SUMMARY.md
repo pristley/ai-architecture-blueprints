@@ -52,7 +52,7 @@ graph TB
 - 📊 Calculate repository statistics (9,300+ lines)
 - 📝 Update [AGENTMAP.md](AGENTMAP.md) with file counts and timestamps
 - 📄 Process all work products: ADR-1.2, WP-1.3, WP-1.4, WP-1.5, WP-1.6
-- 🔖 Add CI/CD badge to [README.md](README.md)
+- 🔖 Add CI/CD badge to root README
 - 💾 Auto-commit with `[skip ci]` to prevent loops
 
 #### Job 3: Deploy to GitHub Pages (~2 min)
@@ -217,24 +217,19 @@ mkdocs serve  # http://localhost:8000
 
 ## 📚 Documentation
 
-Comprehensive guides have been created:
+Comprehensive guides are available:
 
-1. **[.github/PIPELINE.md](.github/PIPELINE.md)** - Complete pipeline documentation
-   - Detailed explanation of all jobs
+1. **CI/CD Pipeline** - Complete pipeline documentation
+   - Detailed explanation of all jobs in `.github/workflows/ci-cd.yml`
    - Configuration examples
    - Troubleshooting guide
-   - Future enhancements
 
-2. **[.github/QUICKSTART.md](.github/QUICKSTART.md)** - Quick reference
-   - Common operations
-   - Monitoring commands
-   - Pro tips
-   - Visual workflow diagram
-
-3. **[requirements.txt](requirements.txt)** - Python dependencies
+2. **Requirements** - Python dependencies
    - All LangChain packages
    - Development tools (Ruff, pytest)
    - Documentation tools (MkDocs)
+
+See [requirements.txt](../../requirements.txt) for the complete dependency list.
 
 ---
 

@@ -3,7 +3,7 @@
 **Work Product**: Practical implementation of the orchestration pattern for deterministic multi-step workflows  
 **Status**: Complete | Production-Ready  
 **Duration**: 3.5 hours  
-**Prerequisites**: [WP-2.2 State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) | [ADR-2.2 Architecture](ADR-2.2-Orchestration-Centralized-Control.md)
+**Prerequisites**: [WP-2.2 State Management](../03-memory-state-agents/WP-2.2-State-Management-in-Single-Agent-Loop.md) | [ADR-2.2 Architecture](ADR-2.2-Orchestration-Centralized-Control.md)
 
 ---
 
@@ -810,9 +810,9 @@ async def test_orchestration_audit_trail():
 ## References
 
 - **ADR-2.2**: [Orchestration - Centralized Control for Deterministic Workflows](ADR-2.2-Orchestration-Centralized-Control.md)
-- **WP-2.2**: [State Management in Single Agent Loop](WP-2.2-State-Management-in-Single-Agent-Loop.md)
+- **WP-2.2**: [State Management in Single Agent Loop](../03-memory-state-agents/WP-2.2-State-Management-in-Single-Agent-Loop.md)
 - **Implementation**: [controller_orchestration_agent.py](controller_orchestration_agent.py)
-- **Tests**: [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py)
+- **Tests**: [tests/test_controller_orchestration.py](../../tests/test_controller_orchestration.py)
 
 ---
 
@@ -821,9 +821,9 @@ async def test_orchestration_audit_trail():
 ✅ **Completed**: Understanding and implementing orchestration patterns  
 
 📚 **Continue Learning**:
-- Review [WP-2.1 Multi-Agent Choreography](WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) for contrasting pattern
-- Explore [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) for integration patterns
-- Review [AGENTMAP.md](AGENTMAP.md) for relationships between all patterns
+- Review [WP-2.1 Multi-Agent Choreography](../03-memory-state-agents/WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md) for contrasting pattern
+- Explore [LANGCHAIN_ECOSYSTEM_MAP.md](../reference/LANGCHAIN_ECOSYSTEM_MAP.md) for integration patterns
+- Review [AGENTMAP.md](../reference/AGENTMAP.md) for relationships between all patterns
 
 🚀 **Apply to Your Projects**:
 - Design orchestrators for your specific workflows

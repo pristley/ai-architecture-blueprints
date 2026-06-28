@@ -169,8 +169,7 @@ mkdocs serve  # Preview site at localhost:8000
 | Document | Purpose |
 |----------|---------|
 | [DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md) | Comprehensive deployment guide |
-| [.github/PIPELINE.md](.github/PIPELINE.md) | Complete pipeline documentation |
-| [.github/QUICKSTART.md](.github/QUICKSTART.md) | Quick reference and commands |
+| [.github/workflows/](../../.github/workflows/) | CI/CD workflow definitions |
 | [PIPELINE_STATUS.md](PIPELINE_STATUS.md) | This file - current status |
 
 ---

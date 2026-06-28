@@ -5,7 +5,7 @@
 **Current Document Version:** 1.0.2  
 **Date Created:** 2026-06-24  
 **Status:** Production  
-**Relationships:** Builds on [WP-1.3](WP-1.3-The-Runnable-Protocol.md), [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md), [WP-1.5](WP-1.5-Output-Parsing-for-System-Integration.md)
+**Relationships:** Builds on [WP-1.3](../01-foundations/WP-1.3-The-Runnable-Protocol.md), [WP-1.4](WP-1.4-Prompt-Engineering-as-Code.md), [WP-1.5](WP-1.5-Output-Parsing-for-System-Integration.md)
 
 ---
 
@@ -625,7 +625,7 @@ Ask yourself:
 ## References and Dependencies
 
 **Related Work Products:**
-- [WP-1.3: The Runnable Protocol](WP-1.3-The-Runnable-Protocol.md) – Chain structure
+- [WP-1.3: The Runnable Protocol](../01-foundations/WP-1.3-The-Runnable-Protocol.md) – Chain structure
 - [WP-1.4: Prompt Engineering as Code](WP-1.4-Prompt-Engineering-as-Code.md) – Prompt optimization
 - [WP-1.5: Output Parsing for System Integration](WP-1.5-Output-Parsing-for-System-Integration.md) – Parsing strategies
 

@@ -11,16 +11,16 @@
 ### 2. 📦 Current Version Status
 
 #### Professional Branding
-- **[LICENSE](LICENSE)** - MIT license
+- **[LICENSE](../../LICENSE)** - MIT license
   - Standard open-source license
   - Permissive terms for commercial and private use
   
-- **[VERSION](VERSION)** - Version tracking
+- **[VERSION](../../VERSION)** - Version tracking
   - Current version: **1.2.0** (updated to WP-2.3 + WP-2.4)
   - Reflects complete orchestration and choreography pattern implementations
   - Linked from badges
   
-- **[CHANGELOG.md](CHANGELOG.md)** - Release history
+- **[CHANGELOG.md](../../CHANGELOG.md)** - Release history
   - v1.2.0: Added WP-2.3 (Orchestration Pattern) & WP-2.4 (Choreography Pattern)
   - v1.1.0: Added ADR-2.1 & choreography_hive_mind.py with 30 tests
   - v1.0.3: Added WP-1.7 (Introduction to Tracing with LangSmith)

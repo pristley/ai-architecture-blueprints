@@ -3,7 +3,7 @@
 **Work Product**: Event-driven implementation of the choreography pattern for emergent multi-agent workflows  
 **Status**: Complete | Production-Ready  
 **Duration**: 3.5 hours  
-**Prerequisites**: [WP-2.2 State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) | [ADR-2.1 Architecture](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
+**Prerequisites**: [WP-2.2 State Management](../03-memory-state-agents/WP-2.2-State-Management-in-Single-Agent-Loop.md) | [ADR-2.1 Architecture](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
 
 ---
 
@@ -880,9 +880,9 @@ async def test_complete_workflow():
 ## References
 
 - **ADR-2.1**: [Choreography - Event-Driven Agility for Emergent Workflows](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md)
-- **WP-2.2**: [State Management in Single Agent Loop](WP-2.2-State-Management-in-Single-Agent-Loop.md)
+- **WP-2.2**: [State Management in Single Agent Loop](../03-memory-state-agents/WP-2.2-State-Management-in-Single-Agent-Loop.md)
 - **Implementation**: [choreography_hive_mind.py](choreography_hive_mind.py)
-- **Tests**: [tests/test_choreography_hive_mind.py](tests/test_choreography_hive_mind.py)
+- **Tests**: [tests/test_choreography_hive_mind.py](../../tests/test_choreography_hive_mind.py)
 - **Pattern Comparison**: [WP-2.3 Orchestration](WP-2.3-Orchestration-Pattern.md)
 
 ---
@@ -893,8 +893,8 @@ async def test_complete_workflow():
 
 📚 **Continue Learning**:
 - Compare with [WP-2.3 Orchestration Pattern](WP-2.3-Orchestration-Pattern.md)
-- Review [AGENTMAP.md](AGENTMAP.md) for relationships
-- Explore [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) for integrations
+- Review [AGENTMAP.md](../reference/AGENTMAP.md) for relationships
+- Explore [LANGCHAIN_ECOSYSTEM_MAP.md](../reference/LANGCHAIN_ECOSYSTEM_MAP.md) for integrations
 
 🚀 **Apply to Your Projects**:
 - Design event schemas for your domain
