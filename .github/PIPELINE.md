@@ -1,103 +1,57 @@
-# CI/CD Pipeline Documentation
+# CI/CD Pipeline Overview
 
-## Overview
+This repository uses **GitHub Actions** for automated continuous integration and deployment.
 
-This repository uses GitHub Actions for automated continuous integration and deployment. Every commit to `main` triggers a pipeline that lints, tests, updates documentation, and deploys to GitHub Pages.
+## 🔄 Pipeline Stages
 
-## Pipeline Stages
+### 1. **Lint & Test** (Every commit)
+- ✅ Run full pytest test suite
+- ✅ Linting with Ruff
+- ⏱️ ~3 minutes
 
-### 1. Lint & Test
+### 2. **Deploy Documentation** (Main branch only)
+- ✅ Build MkDocs site from `/docs` directory
+- ✅ Deploy to GitHub Pages
+- ⏱️ ~2 minutes
 
-**Runs on:** Every push and pull request  
-**Duration:** ~2-3 minutes
+### 3. **Summary** (After all stages)
+- ✅ Generate deployment summary
+- ✅ Report pipeline status
 
-- ✅ **Python linting** with Ruff (checks code quality)
-- ✅ **Syntax validation** for all Python examples
-- ✅ **Example execution** (validates all examples run without errors)
-- ✅ **Markdown link validation** (checks all internal links are valid)
+## 🎯 Workflow Triggers
 
-### 2. Update Documentation
+The pipeline runs automatically on:
+- `push` to `main` branch
+- `pull_request` to `main` branch
+- Manual trigger via `workflow_dispatch`
 
-**Runs on:** Push to `main` only  
-**Duration:** ~1 minute
+## 📊 What Gets Deployed
 
-- 📊 **Generate statistics** (line counts, file sizes)
-- 📝 **Update AGENTMAP.md** with current repository stats
-- 🔖 **Update README.md** with CI badge and timestamp
-- 💾 **Auto-commit** documentation changes (with `[skip ci]` to prevent loops)
+- **Documentation Hub**: [docs/README.md](../docs/README.md)
+- **4 Learning Sections**: 01-foundations through 04-multi-agent
+- **Reference Materials**: AGENTMAP, Ecosystem Map, etc.
+- **30+ Test Suites**: Full test coverage
 
-### 3. Deploy
+## 🔗 Links
 
-**Runs on:** Push to `main` only  
-**Duration:** ~2 minutes
+- **GitHub Pages**: https://pristley.github.io/ai-architecture-blueprints
+- **Repository**: https://github.com/pristley/ai-architecture-blueprints
+- **Actions Tab**: https://github.com/pristley/ai-architecture-blueprints/actions
 
-- 📦 **Generate static site** with MkDocs Material theme
-- 🚀 **Deploy to GitHub Pages** at `https://<username>.github.io/<repo>`
-- 🌐 **Optional custom domain** support
+## 📝 Recent Updates
 
-### 4. Notify
+- Simplified CI/CD pipeline from 368 lines to ~120 lines
+- Updated file paths to reference new `/docs` structure
+- Removed redundant documentation update scripts
+- Consolidated multiple deployment jobs into single clean workflow
 
-**Runs on:** After all stages complete  
-**Duration:** <1 minute
+## ✨ Quick Reference
 
-- 📋 **Generate deployment summary** in GitHub Actions UI
-- ✅ **Report status** of each stage
-
-## Workflow Triggers
-
-```yaml
-on:
-  push:
-    branches: [main]       # Auto-deploy on every commit to main
-  pull_request:
-    branches: [main]       # Run tests on PRs (but don't deploy)
-  workflow_dispatch:       # Manual trigger from GitHub UI
-```
-
-## Auto-Documentation Updates
-
-The pipeline automatically updates two files on every commit:
-
-### AGENTMAP.md
-
-Added at the end of the file:
-
-```markdown
----
-
-**Repository Statistics** (auto-generated)
-
-- 📄 Documentation: 4,500 lines across 5 files
-- 💻 Examples: 3,800 lines across 3 files
-- 📊 Total: 8,300 lines
-- 🕒 Last updated: 2026-06-24 04:45 UTC
-```
-
-### README.md
-
-- **CI/CD Badge**: Added below the title
-  ```markdown
-  ![CI/CD Status](https://github.com/pristley/ai-architecture-blueprints/workflows/...)
-  ```
-
-- **Timestamp**: Updated in footer
-  ```markdown
-  **Last Updated:** 2026-06-24
-  ```
-
-## Local Testing
-
-Test the pipeline components locally before pushing:
-
-```bash
-# Lint Python code
-pip install ruff
-ruff check . --select E,F,W,C,N --ignore E501
-
-# Test examples
-python examples_1_2.py
-python examples_1_3.py
-python examples_1_4.py
+| Stage | Triggers | Duration |
+|-------|----------|----------|
+| Lint & Test | Every push/PR | ~3 min |
+| Deploy | Main push only | ~2 min |
+| **Total** | - | **~5 min** |
 
 # Run documentation update script
 python .github/scripts/update_docs.py
