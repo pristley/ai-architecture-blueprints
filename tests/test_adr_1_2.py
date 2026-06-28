@@ -2,12 +2,12 @@ import pathlib
 
 
 def test_adr_1_2_exists():
-    path = pathlib.Path(__file__).resolve().parent.parent / "ADR-1.2-Hello-World-Three-Ways.md"
+    path = pathlib.Path(__file__).resolve().parent.parent / "docs" / "01-foundations" / "ADR-1.2-Hello-World-Three-Ways.md"
     assert path.exists(), "ADR-1.2-Hello-World-Three-Ways.md must exist"
 
 
 def test_adr_1_2_contains_comparison_dimensions():
-    path = pathlib.Path(__file__).resolve().parent.parent / "ADR-1.2-Hello-World-Three-Ways.md"
+    path = pathlib.Path(__file__).resolve().parent.parent / "docs" / "01-foundations" / "ADR-1.2-Hello-World-Three-Ways.md"
     text = path.read_text()
     assert "Traceability" in text, "ADR must discuss traceability"
     assert "Verbosity" in text, "ADR must discuss verbosity"

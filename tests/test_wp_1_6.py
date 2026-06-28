@@ -2,12 +2,12 @@ import pathlib
 
 
 def test_wp_1_6_exists():
-    path = pathlib.Path(__file__).resolve().parent.parent / "WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md"
+    path = pathlib.Path(__file__).resolve().parent.parent / "docs" / "02-production-patterns" / "WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md"
     assert path.exists(), "WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md must exist"
 
 
-def test_wp_1_6_contains_required_decision_axes_and_models():
-    path = pathlib.Path(__file__).resolve().parent.parent / "WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md"
+def test_wp_1_6_contains_model_comparison():
+    path = pathlib.Path(__file__).resolve().parent.parent / "docs" / "02-production-patterns" / "WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md"
     text = path.read_text()
 
     # Original models

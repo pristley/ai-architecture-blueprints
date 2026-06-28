@@ -17,6 +17,8 @@ def test_wp_2_1_document_exists():
     """WP-2.1 document file must exist."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     assert path.exists(), "WP-2.1 document must exist"
@@ -26,6 +28,8 @@ def test_wp_2_1_contains_dual_memory_concept():
     """WP-2.1 must explain the dual-memory pattern."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -45,6 +49,8 @@ def test_wp_2_1_contains_architecture_diagrams():
     """WP-2.1 must include architecture diagrams."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -58,6 +64,8 @@ def test_wp_2_1_contains_separation_of_concerns():
     """WP-2.1 must emphasize separation of concerns."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -74,6 +82,8 @@ def test_wp_2_1_contains_vector_store_reference():
     """WP-2.1 must mention vector stores for semantic search."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -88,6 +98,8 @@ def test_wp_2_1_contains_token_counting():
     """WP-2.1 must discuss token count bounding."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -101,7 +113,7 @@ def test_wp_2_1_contains_token_counting():
 def test_example_2_1_file_exists():
     """examples_2_1.py must exist."""
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     assert path.exists(), "examples_2_1.py must exist"
 
@@ -112,7 +124,8 @@ def test_example_2_1_is_importable():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -127,7 +140,8 @@ def test_example_2_1_has_dual_memory_chatbot():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -156,7 +170,8 @@ def test_example_2_1_has_examples():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -179,7 +194,8 @@ def test_dual_memory_chatbot_initialization():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -216,6 +232,8 @@ def test_wp_2_1_memory_architecture_described():
     """WP-2.1 must describe the complete memory architecture."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -235,6 +253,8 @@ def test_wp_2_1_includes_trade_offs():
     """WP-2.1 must discuss trade-offs and design decisions."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -249,6 +269,8 @@ def test_wp_2_1_includes_production_patterns():
     """WP-2.1 must discuss production considerations."""
     path = (
         pathlib.Path(__file__).resolve().parent.parent
+        / "docs"
+        / "03-memory-state-agents"
         / "WP-2.1-Short-Term-vs-Long-Term-Memory-A-Working-Model.md"
     )
     text = path.read_text()
@@ -270,7 +292,8 @@ def test_dual_memory_chatbot_short_term_buffer_bounded():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -299,7 +322,8 @@ def test_dual_memory_chatbot_long_term_accumulates():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -335,7 +359,8 @@ def test_dual_memory_chatbot_memory_separation():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -374,7 +399,8 @@ def test_short_term_memory_empty_buffer():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -394,7 +420,8 @@ def test_short_term_memory_clear():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -423,7 +450,8 @@ def test_long_term_memory_empty_profile():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -443,7 +471,8 @@ def test_dual_memory_chatbot_get_stats():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
@@ -466,7 +495,8 @@ def test_dual_memory_chatbot_multiple_exchanges():
     import importlib.util
 
     path = (
-        pathlib.Path(__file__).resolve().parent.parent / "examples_2_1.py"
+        pathlib.Path(__file__).resolve().parent.parent
+        / "docs" / "03-memory-state-agents" / "examples_2_1.py"
     )
     spec = importlib.util.spec_from_file_location("examples_2_1", path)
     module = importlib.util.module_from_spec(spec)
