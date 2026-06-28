@@ -16,14 +16,15 @@ This repository provides decision records, design patterns, and working implemen
 
 ## 📂 Project Structure
 
-Documentation is organized into **4 learning sections** plus reference materials:
+Documentation is organized into **5 learning sections** plus reference materials:
 
 ```
 📚 docs/
 ├── 01-foundations/          Learn core abstractions (2.5 hours)
 ├── 02-production-patterns/  Master production patterns (5 hours)
 ├── 03-memory-state-agents/  Build scalable conversational systems (4 hours)
-├── 04-multi-agent-architectures/  Coordinate multiple agents (7 hours)
+├── 04-multi-agent-architectures/  Coordinate multiple agents (10 hours)
+├── 05-capstone-rag-patterns/  Deep comparative analysis & portfolio (8-10 hours)
 ├── reference/               Navigation hubs & reference docs
 └── README.md               👈 START HERE
 ```
@@ -42,6 +43,7 @@ Documentation is organized into **4 learning sections** plus reference materials
 | Learn production code | [Production Patterns](./docs/02-production-patterns/README.md) | 5 hrs |
 | Build memory-aware agents | [Memory & State](./docs/03-memory-state-agents/README.md) | 4 hrs |
 | Coordinate multiple agents | [Multi-Agent Systems](./docs/04-multi-agent-architectures/README.md) | 10 hrs |
+| Build RAG systems | [Capstone: RAG Patterns](./docs/05-capstone-rag-patterns/README.md) | 8-10 hrs |
 | See the big picture | [AGENTMAP Visual](./docs/reference/AGENTMAP.md) | 20 min |
 | Ecosystem reference | [LangChain Docs](./docs/reference/LANGCHAIN_ECOSYSTEM_MAP.md) | 30 min |
 
@@ -86,6 +88,13 @@ Coordinate multiple agents using choreography or orchestration.
 - WP-2.3 & WP-2.4: Complete implementations
 - WP-2.6: LangGraph framework (60% less boilerplate)
 - WP-2.7: Checkpointing & Human-in-the-Loop (guardrails for critical actions)
+
+### 🎓 Section 5: Capstone — RAG Patterns & Deep Comparisons (8-10 hours)
+Transform theoretical knowledge into production RAG systems with deep comparative analysis.
+- WP-3.1: RAG Architecture — Naive Baseline (vector stores, semantic search, 5 failure modes)
+- WP-3.2: Advanced Retrieval — Reranking & Filtering (accuracy improvement)
+- WP-3.3: Hierarchical Indexing — Scale to 100K+ documents
+- WP-3.4: Evaluation & Metrics — Measure and debug RAG performance
 
 ---
 
