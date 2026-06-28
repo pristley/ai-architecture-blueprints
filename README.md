@@ -1,10 +1,12 @@
 # AI Architecture Blueprints
 
-[![CI/CD Pipeline](https://github.com/pristley/ai-architecture-blueprints/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg?branch=main)](https://github.com/pristley/ai-architecture-blueprints/actions)
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](VERSION)
+[![CI/CD Pipeline](https://github.com/pristley/ai-architecture-blueprints/workflows/CI%2FCD%20Pipeline/badge.svg?branch=main)](https://github.com/pristley/ai-architecture-blueprints/actions)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue.svg)](VERSION)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![Status](https://img.shields.io/badge/status-production-brightgreen.svg)](#)
+[![Code Quality](https://img.shields.io/badge/quality-strict_linting-brightgreen.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-30+-green.svg)](#)
 
 **Build production AI systems with proven architectural patterns.**
 
