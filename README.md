@@ -41,7 +41,7 @@ Documentation is organized into **4 learning sections** plus reference materials
 | Understand patterns | [Foundations](./docs/01-foundations/README.md) | 2.5 hrs |
 | Learn production code | [Production Patterns](./docs/02-production-patterns/README.md) | 5 hrs |
 | Build memory-aware agents | [Memory & State](./docs/03-memory-state-agents/README.md) | 4 hrs |
-| Coordinate multiple agents | [Multi-Agent Systems](./docs/04-multi-agent-architectures/README.md) | 7 hrs |
+| Coordinate multiple agents | [Multi-Agent Systems](./docs/04-multi-agent-architectures/README.md) | 10 hrs |
 | See the big picture | [AGENTMAP Visual](./docs/reference/AGENTMAP.md) | 20 min |
 | Ecosystem reference | [LangChain Docs](./docs/reference/LANGCHAIN_ECOSYSTEM_MAP.md) | 30 min |
 
@@ -79,12 +79,13 @@ Build conversational systems with scalable memory and loop prevention.
 - WP-2.2: State management and loop detection
 - Production implementations and tests
 
-### 🐝 Section 4: Multi-Agent Architectures (7 hours)
+### 🐝 Section 4: Multi-Agent Architectures (10 hours)
 Coordinate multiple agents using choreography or orchestration.
 - ADR-2.1: Choreography (event-driven, emergent)
 - ADR-2.2: Orchestration (centralized, deterministic)
 - WP-2.3 & WP-2.4: Complete implementations
 - WP-2.6: LangGraph framework (60% less boilerplate)
+- WP-2.7: Checkpointing & Human-in-the-Loop (guardrails for critical actions)
 
 ---
 
