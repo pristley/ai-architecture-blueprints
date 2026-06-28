@@ -47,6 +47,5 @@ jobs:
       - name: Lint with Ruff
         run: |
           echo "🔍 Linting code..."
-          ruff check docs/ --exit-zero || true
+          python -m ruff check docs/
           echo "✅ Linting complete"
-        continue-on-error: true

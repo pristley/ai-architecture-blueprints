@@ -802,7 +802,7 @@ class ReportOrchestrator(Controller):
             self.state.final_report = final
             
             # Success
-            logger.info(f"\n✅ Workflow succeeded!")
+            logger.info("\n✅ Workflow succeeded!")
             logger.info(f"   {self.state.get_status_string()}\n")
             
             return final

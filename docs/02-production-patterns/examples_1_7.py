@@ -114,15 +114,13 @@ Each example is self-contained and can be run independently.
 """
 
 import os
-import json
-from typing import Any, Dict, Optional
 from datetime import datetime
 
 # Import LangChain components
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.runnables import RunnableConfig, RunnableLambda
+from langchain_core.runnables import RunnableConfig
 
 # ============================================================================
 # SETUP: Configuration for LangSmith Tracing
@@ -432,7 +430,7 @@ Respond helpfully and concisely."""
             {"inquiry": "My order is late and I need it tomorrow!"},
             config=config
         )
-        print(f"\n✅ Response generated successfully!")
+        print("\n✅ Response generated successfully!")
         print(f"\n📤 Response:\n{result.content}")
         
         print("\n📊 Trace breakdown (what LangSmith captured):")
@@ -532,15 +530,15 @@ def example_4_custom_metadata():
             {"question": "What's the weather in Paris?"},
             config=config
         )
-        print(f"\n✅ Request processed successfully!")
+        print("\n✅ Request processed successfully!")
         print(f"\n📤 Response:\n{result.content}")
         
         print("\n📊 Metadata saved to trace:")
         print(f"   • User ID: {user_id}")
         print(f"   • Request ID: {request_id}")
-        print(f"   • Model: gpt-4-mini")
-        print(f"   • Latency SLA: 2000ms")
-        print(f"   • Feature flags: structured_output")
+        print("   • Model: gpt-4-mini")
+        print("   • Latency SLA: 2000ms")
+        print("   • Feature flags: structured_output")
         
         print("\n💡 Now you can filter/analyze traces by:")
         print("   • Traces for user CUST-12345")

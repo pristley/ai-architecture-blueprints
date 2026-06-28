@@ -20,8 +20,6 @@ By the end of these examples, you will understand:
   ✓ How to combine both memory systems into a coherent architecture
 """
 
-import json
-from typing import Optional
 from datetime import datetime
 from collections import deque
 
@@ -164,7 +162,6 @@ class ConversationSummaryMemory:
             # Summary now includes tags: [location-related], [job-related]
         """
         user_msg = inputs.get("input", "")
-        assistant_msg = outputs.get("output", "")
 
         self.message_count += 1
 
@@ -173,11 +170,11 @@ class ConversationSummaryMemory:
             # Append to existing summary
             self.summary += f"\n- User said: {user_msg[:50]}..."
             if any(keyword in user_msg.lower() for keyword in ["from", "live", "location"]):
-                self.summary += f" [location-related]"
+                self.summary += " [location-related]"
             if any(keyword in user_msg.lower() for keyword in ["engineer", "developer", "programmer", "role"]):
-                self.summary += f" [job-related]"
+                self.summary += " [job-related]"
             if any(keyword in user_msg.lower() for keyword in ["love", "like", "hobby", "interest", "enjoy"]):
-                self.summary += f" [interest-related]"
+                self.summary += " [interest-related]"
         else:
             # Initialize summary
             self.summary = f"Conversation started. User: {user_msg[:50]}..."

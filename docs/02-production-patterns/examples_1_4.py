@@ -53,12 +53,11 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Iterator, Optional
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import (
     ChatPromptTemplate,
     MessagesPlaceholder,
-    SystemMessagePromptTemplate,
 )
 
 
@@ -1288,7 +1287,6 @@ def example_6_testing_prompts() -> None:
         history=[], input="test"
     )
     system_content = composed_messages[0].content
-    has_base = "professional assistant" in system_content or "Acme" in system_content or "engineer" in system_content or "role" in system_content
     has_specialist = "SPECIALIST RULES" in system_content
 
     # Check variables from both are in composed

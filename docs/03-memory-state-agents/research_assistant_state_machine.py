@@ -16,13 +16,11 @@ Usage:
 """
 
 import asyncio
-import json
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Dict, List, Literal, Optional, Tuple
+from typing import Dict, List, Tuple
 
 
 class AgentState(str, Enum):
@@ -270,7 +268,7 @@ class ResearchAssistant:
             return {"error": "No search results to synthesize"}
         
         # Simulate synthesis
-        print(f"\n✍️  Synthesizing answer...")
+        print("\n✍️  Synthesizing answer...")
         result_text = "\n".join(
             f"- {result}" 
             for results in self.state.search_results.values()
@@ -303,7 +301,7 @@ class ResearchAssistant:
             }
         
         # Simulate citation extraction
-        print(f"\n📚 Adding citations...")
+        print("\n📚 Adding citations...")
         self.state.citations = [
             {
                 "source": f"Search Result {i}",
@@ -379,7 +377,7 @@ async def run_research_agent(query: str) -> Dict:
             else:
                 # All plan items searched, force transition to synthesizing
                 if not state.record_action(AgentState.SEARCHING, "all_plans_searched"):
-                    print(f"   ❌ Cannot transition to SEARCHING")
+                    print("   ❌ Cannot transition to SEARCHING")
                     break
         
         elif state.state == AgentState.SEARCHING:
@@ -387,7 +385,7 @@ async def run_research_agent(query: str) -> Dict:
             if len(state.search_results) >= len(state.plan):
                 print("   → Transitioning to SYNTHESIZING")
                 if not state.record_action(AgentState.SYNTHESIZING, "enough_results"):
-                    print(f"   ❌ Cannot transition to SYNTHESIZING")
+                    print("   ❌ Cannot transition to SYNTHESIZING")
                     break
             else:
                 # Continue searching
@@ -432,7 +430,7 @@ async def run_research_agent(query: str) -> Dict:
     print(f"Citations: {len(state.citations)}")
     
     if state.errors:
-        print(f"\nErrors:")
+        print("\nErrors:")
         for error in state.errors:
             print(f"  - {error}")
     
@@ -502,7 +500,7 @@ async def demo_loop_prevention():
 async def main():
     """Run demonstrations."""
     # Demo 1: Normal research flow
-    result = await run_research_agent("What is machine learning?")
+    await run_research_agent("What is machine learning?")
     
     # Demo 2: Loop prevention
     await demo_loop_prevention()

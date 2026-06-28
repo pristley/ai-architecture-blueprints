@@ -20,8 +20,6 @@ Usage:
 
 from pydantic import BaseModel, Field
 from typing import Literal
-from dataclasses import dataclass
-from datetime import datetime
 import uuid
 import json
 
@@ -386,7 +384,7 @@ def research_agent_with_state(query: str, verbose: bool = True) -> dict:
     
     if verbose:
         print(f"\n{'='*70}")
-        print(f"🤖 Research Agent Starting")
+        print("🤖 Research Agent Starting")
         print(f"{'='*70}")
         print(f"Query: {query}")
         print(f"Session: {state.session_id}")
@@ -423,7 +421,7 @@ def research_agent_with_state(query: str, verbose: bool = True) -> dict:
                 # All plan items searched, force transition to searching
                 state.state = "SEARCHING"
                 if verbose:
-                    print(f"   ✓ All queries planned, moving to SEARCHING")
+                    print("   ✓ All queries planned, moving to SEARCHING")
         
         elif state.state == "SEARCHING":
             # Check if we have enough results
@@ -435,7 +433,7 @@ def research_agent_with_state(query: str, verbose: bool = True) -> dict:
             else:
                 # All searches done, move to synthesis
                 if verbose:
-                    print(f"   ✓ All searches complete, moving to SYNTHESIZING")
+                    print("   ✓ All searches complete, moving to SYNTHESIZING")
                 # Call synthesize which handles the state transition
                 result = assistant.synthesize_tool()
                 if verbose and result["success"]:
@@ -455,7 +453,7 @@ def research_agent_with_state(query: str, verbose: bool = True) -> dict:
                 # Move to citations
                 state.state = "CITING"
                 if verbose:
-                    print(f"   ✓ Synthesis done, moving to CITING")
+                    print("   ✓ Synthesis done, moving to CITING")
         
         elif state.state == "CITING":
             result = assistant.cite_tool()
@@ -471,7 +469,7 @@ def research_agent_with_state(query: str, verbose: bool = True) -> dict:
     if verbose:
         print(f"\n{'='*70}")
         if success:
-            print(f"✅ Research Complete!")
+            print("✅ Research Complete!")
         else:
             print(f"⚠️  Research Incomplete (state: {state.state})")
         print(f"{'='*70}")

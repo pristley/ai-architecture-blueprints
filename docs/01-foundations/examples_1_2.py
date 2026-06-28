@@ -269,15 +269,15 @@ def approach_2_simple_sequential_chain():
     # Execute chains (manual sequencing)
     print("\n[Execution] Running chains...")
     poem = chain1.run(topic="artificial intelligence")
-    print(f"✓ Step 1 complete: Generated poem")
+    print("✓ Step 1 complete: Generated poem")
     
     summary = chain2.run(text=poem)
-    print(f"✓ Step 2 complete: Generated summary")
+    print("✓ Step 2 complete: Generated summary")
     
     print("\n[Observability] Metrics:")
     print(f"  - Chain 1 type: {type(chain1).__name__}")
     print(f"  - Chain 2 type: {type(chain2).__name__}")
-    print(f"  - Can trace: Via chain_type attribute")
+    print("  - Can trace: Via chain_type attribute")
     
     return {
         "poem": poem,
@@ -434,14 +434,14 @@ def approach_3_runnable_sequence_lcel():
     # Execute with input
     print("\n[Execution] Running pipeline...")
     result = full_chain.invoke({"topic": "artificial intelligence"})
-    print(f"✓ Pipeline executed successfully")
+    print("✓ Pipeline executed successfully")
     
     print("\n[Observability] Metrics:")
     print(f"  - Chain type: {type(full_chain).__name__}")
-    print(f"  - Supports streaming: Yes")
-    print(f"  - Supports batching: Yes")
-    print(f"  - Supports async: Yes")
-    print(f"  - LangSmith integration: Automatic (set LANGCHAIN_TRACING_V2=true)")
+    print("  - Supports streaming: Yes")
+    print("  - Supports batching: Yes")
+    print("  - Supports async: Yes")
+    print("  - LangSmith integration: Automatic (set LANGCHAIN_TRACING_V2=true)")
     
     return {
         "summary": result.content,

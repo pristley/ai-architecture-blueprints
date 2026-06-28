@@ -121,7 +121,7 @@ Read the comments carefully—they explain the WHY, not just the WHAT.
 
 import asyncio
 import time
-from typing import Any, Iterator, Optional, List
+from typing import Iterator, Optional, List
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import (
@@ -286,7 +286,7 @@ def example_1_four_modes():
         
         print(f"   ✓ Result: {result.content[:60]}...")
         print(f"   ⏱️  Time: {elapsed:.2f}s")
-        print(f"   ℹ️  Event loop was not blocked (other tasks could run)")
+        print("   ℹ️  Event loop was not blocked (other tasks could run)")
     
     # Run the async function
     asyncio.run(async_example())
@@ -548,7 +548,7 @@ def example_2_custom_runnable():
     
     results = chain.batch([1, 2, 3])
     print(f"   ✓ chain.batch([1,2,3]) = {results}")
-    print(f"      (Each input goes through: *2, then *3)")
+    print("      (Each input goes through: *2, then *3)")
     
     # ─────────────────────────────────────────────────────────────────
     # SUMMARY & KEY INSIGHTS
@@ -869,7 +869,7 @@ def example_4_tracing():
                 outputs: The output produced by the Runnable
                 **kwargs: Additional context
             """
-            print(f"  ◀️  END")
+            print("  ◀️  END")
             print(f"      Output type: {type(outputs).__name__}")
         
         def on_llm_start(self, serialized, prompts, **kwargs):
@@ -1275,7 +1275,7 @@ def example_6_batch_performance():
     
     print(f"\n   Total Time: {serial_time:.2f}s")
     print(f"   Per item:  {serial_time/len(topics):.2f}s")
-    print(f"   Method:    Sequential (one after another)")
+    print("   Method:    Sequential (one after another)")
     
     # ─────────────────────────────────────────────────────────────────
     # APPROACH 2: Parallel batch()
@@ -1293,12 +1293,12 @@ def example_6_batch_performance():
     
     print(f"      Processing {len(topics)} items in parallel...")
     start = time.time()
-    results_batch = chain.batch([{"topic": t} for t in topics])
+    chain.batch([{"topic": t} for t in topics])
     batch_time = time.time() - start
     
     print(f"   Total Time: {batch_time:.2f}s")
     print(f"   Per item:  {batch_time/len(topics):.2f}s")
-    print(f"   Method:    Parallel (all at once)")
+    print("   Method:    Parallel (all at once)")
     
     # ─────────────────────────────────────────────────────────────────
     # COMPARISON AND ANALYSIS
