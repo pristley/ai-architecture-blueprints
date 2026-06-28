@@ -34,6 +34,7 @@ Use this guide to:
 | I need structured output from LLMs | [WP-1.5: Output Parsing](WP-1.5-Output-Parsing-for-System-Integration.md) | 45 min |
 | I want multi-agent systems | [ADR-2.1: Choreography](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 2 hours |
 | I need deterministic orchestrated workflows | [WP-2.3: Orchestration Pattern](WP-2.3-Orchestration-Pattern.md) + [ADR-2.2](ADR-2.2-Orchestration-Centralized-Control.md) | 3.5 hours |
+| I need LangGraph for stateful workflows | [WP-2.6: LangGraph StateGraph](WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md) | 2-2.5 hours |
 | I need emergent multi-agent workflows | [WP-2.4: Choreography Pattern](WP-2.4-Choreography-Pattern.md) + [ADR-2.1](ADR-2.1-Choreography-Event-Driven-Agility-for-Emergent-Workflows.md) | 3.5 hours |
 | I need to manage state in agents | [WP-2.2: State Management](WP-2.2-State-Management-in-Single-Agent-Loop.md) + [research_assistant_state_machine.py](research_assistant_state_machine.py) | 1.5 hours |
 | I need help debugging | [WP-1.7: Tracing with LangSmith](WP-1.7-Introduction-to-Tracing-with-LangSmith.md) | 60 min |
