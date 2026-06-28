@@ -1565,7 +1565,7 @@ Conceptual Difficulty vs Code Complexity
 1. Start: [README.md](README.md)
 2. Understand pattern: [ADR-1.2](../01-foundations/ADR-1.2-Hello-World-Three-Ways.md)
 3. See examples: [examples_1_2.py](../01-foundations/examples_1_2.py)
-4. Streaming: [WP-1.3 Part 2](../01-foundations/WP-1.3-The-Runnable-Protocol.md#part-2-the-four-execution-modes)
+4. Streaming: [WP-1.3 The Runnable Protocol](../01-foundations/WP-1.3-The-Runnable-Protocol.md)
 5. Tracing: [examples_1_3.py Example 4](../01-foundations/examples_1_3.py)
 
 ### "I'm building a data pipeline"
