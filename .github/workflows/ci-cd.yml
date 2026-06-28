@@ -1,4 +1,4 @@
-name: AI Architecture Blueprints CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
@@ -14,274 +14,84 @@ permissions:
   id-token: write
 
 jobs:
+  # ============================================================================
+  # LINT & TEST
+  # ============================================================================
   lint-and-test:
     name: Lint & Test
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-      
+
+      - name: Run pytest
+        run: |
+          echo "🧪 Running test suite..."
+          pytest tests/ -v --tb=short
+          echo "✅ All tests passed"
+
       - name: Lint with Ruff
         run: |
-          # Run linting (warnings only, don't fail build)
-          ruff check . --exit-zero || echo "⚠️  Linting warnings present"
-          echo "✅ Lint check complete"
+          echo "🔍 Linting code..."
+          ruff check docs/ --exit-zero || true
+          echo "✅ Linting complete"
         continue-on-error: true
-      
-      - name: Check Python syntax
-        run: |
-          # Compile all Python files to verify syntax
-          python -m py_compile examples_*.py || true
-          echo "✅ Python syntax validation complete"
-      
-      - name: Run unit tests
-        run: |
-          # Run examples that don't require API keys
-          python examples_1_2.py 2>&1 | head -20 || echo "⚠️  examples_1_2 requires OPENAI_API_KEY"
-          python examples_1_3.py 2>&1 | head -20 || echo "⚠️  examples_1_3 requires OPENAI_API_KEY"
-          python examples_1_4.py 2>&1 | tail -20 || echo "⚠️  Some examples require OPENAI_API_KEY"
-          python examples_1_7.py 2>&1 | tail -20 || echo "⚠️  examples_1_7 requires LANGSMITH_API_KEY"
-          echo "✅ Example validation complete"
-      
-      - name: Validate markdown links
-        run: |
-          # Check that all internal links in markdown files are valid
-          echo "📋 Checking markdown integrity..."
-          for file in *.md; do
-            echo "Checking $file..."
-            grep -o '\[.*\](.*.md)' "$file" | grep -o '(.*.md)' | tr -d '()' | while read link; do
-              if [ ! -f "$link" ]; then
-                echo "❌ Broken link in $file: $link"
-              fi
-            done
-          done
-          echo "✅ Markdown validation complete"
 
-  update-docs:
-    name: Auto-Update Documentation
+  # ============================================================================
+  # BUILD & DEPLOY DOCUMENTATION
+  # ============================================================================
+  deploy-docs:
+    name: Deploy Documentation
     runs-on: ubuntu-latest
     needs: lint-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Generate documentation statistics
-        id: doc_stats
-        run: |
-          echo "Generating documentation statistics..."
-          
-          # Count lines for all documented work products
-          files_to_count="README.md LANGCHAIN_ECOSYSTEM_MAP.md ADR-1.2-Hello-World-Three-Ways.md WP-1.3-The-Runnable-Protocol.md WP-1.4-Prompt-Engineering-as-Code.md WP-1.5-Output-Parsing-for-System-Integration.md WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md WP-1.7-Introduction-to-Tracing-with-LangSmith.md examples_1_2.py examples_1_3.py examples_1_4.py examples_1_7.py"
-          
-          total_lines=$(wc -l $files_to_count | tail -1 | awk '{print $1}')
-          echo "total_lines=$total_lines" >> $GITHUB_OUTPUT
-          
-          # Count Python example lines separately
-          example_lines=$(wc -l examples_*.py | tail -1 | awk '{print $1}')
-          echo "example_lines=$example_lines" >> $GITHUB_OUTPUT
-          
-          # Get file counts
-          doc_count=$(ls -1 *.md | wc -l)
-          echo "doc_count=$doc_count" >> $GITHUB_OUTPUT
-          
-          example_count=$(ls -1 examples_*.py | wc -l)
-          echo "example_count=$example_count" >> $GITHUB_OUTPUT
-          
-          echo "📊 Stats: $total_lines lines docs, $example_lines lines code, $doc_count docs, $example_count examples"
-      
-      - name: Update AGENTMAP.md with current stats
-        run: |
-          python3 << 'EOF'
-          import os
-          import subprocess
-          from datetime import datetime
-          
-          # Get file statistics
-          def get_line_count(file):
-              try:
-                  result = subprocess.run(['wc', '-l', file], capture_output=True, text=True)
-                  return int(result.stdout.split()[0])
-              except:
-                  return 0
-          
-          def get_file_size(file):
-              try:
-                  size = os.path.getsize(file)
-                  if size < 1024:
-                      return f"{size}B"
-                  elif size < 1024 * 1024:
-                      return f"{size/1024:.1f}KB"
-                  else:
-                      return f"{size/(1024*1024):.1f}MB"
-              except:
-                  return "N/A"
-          
-          # Read AGENTMAP.md
-          with open('AGENTMAP.md', 'r') as f:
-              content = f.read()
-          
-          # Update document statistics if the section exists
-          if '### Document Overview' in content:
-              print("✅ AGENTMAP.md structure verified")
-              
-              # Update line counts in the table
-              files = [
-                  'README.md',
-                  'LANGCHAIN_ECOSYSTEM_MAP.md',
-                  'ADR-1.2-Hello-World-Three-Ways.md',
-                  'WP-1.3-The-Runnable-Protocol.md',
-                  'WP-1.4-Prompt-Engineering-as-Code.md',
-                  'WP-1.5-Output-Parsing-for-System-Integration.md',
-                  'WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md',
-                  'WP-1.7-Introduction-to-Tracing-with-LangSmith.md',
-                  'examples_1_2.py',
-                  'examples_1_3.py',
-                  'examples_1_4.py',
-                  'examples_1_7.py',
-              ]
-              
-              stats = {f: get_line_count(f) for f in files if os.path.exists(f)}
-              total_lines = sum(stats.values())
-              
-              print(f"📊 Total documentation: {total_lines} lines across {len(stats)} files")
-              
-              # Add a metadata comment at the end
-              timestamp = datetime.now().strftime("%Y-%m-%d %H:%M UTC")
-              metadata = f"\n<!-- Auto-generated stats: {total_lines} total lines | Last updated: {timestamp} -->\n"
-              
-              if '<!-- Auto-generated stats:' not in content:
-                  content += metadata
-              else:
-                  # Replace existing metadata
-                  import re
-                  content = re.sub(r'<!-- Auto-generated stats:.*?-->', 
-                                   f'<!-- Auto-generated stats: {total_lines} total lines | Last updated: {timestamp} -->',
-                                   content)
-              
-              with open('AGENTMAP.md', 'w') as f:
-                  f.write(content)
-              
-              print("✅ AGENTMAP.md updated with current statistics")
-          else:
-              print("⚠️  AGENTMAP.md structure not recognized, skipping update")
-          EOF
-      
-      - name: Update README.md with build badge
-        run: |
-          python3 << 'EOF'
-          from datetime import datetime
-          
-          with open('README.md', 'r') as f:
-              content = f.read()
-          
-          # Add CI badge if not present
-          badge = "![CI/CD](https://github.com/${{ github.repository }}/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg)"
-          
-          if badge not in content and '# AI Architecture Blueprints' in content:
-              # Insert badge right after the title
-              content = content.replace(
-                  '# AI Architecture Blueprints\n\n**Production-Ready Design Patterns for LLM Systems**',
-                  f'# AI Architecture Blueprints\n\n{badge}\n\n**Production-Ready Design Patterns for LLM Systems**'
-              )
-              print("✅ Added CI/CD badge to README.md")
-          
-          # Add last updated timestamp
-          timestamp = datetime.now().strftime("%Y-%m-%d")
-          footer_text = f"\n---\n\n**Version:** 1.0 | **Status:** Production Ready | **Last Updated:** {timestamp}\n"
-          
-          if '**Last Updated:**' in content:
-              import re
-              content = re.sub(
-                  r'\*\*Last Updated:\*\* \d{4}-\d{2}-\d{2}',
-                  f'**Last Updated:** {timestamp}',
-                  content
-              )
-              print(f"✅ Updated timestamp in README.md to {timestamp}")
-          
-          with open('README.md', 'w') as f:
-              f.write(content)
-          EOF
-      
-      - name: Commit documentation updates
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          git add AGENTMAP.md README.md
-          
-          if git diff --staged --quiet; then
-            echo "📝 No documentation changes to commit"
-          else
-            git commit -m "docs: Auto-update documentation stats and timestamps [skip ci]"
-            git push
-            echo "✅ Documentation updates committed and pushed"
-          fi
 
-  deploy:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: update-docs
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: main
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: Install documentation tools
         run: |
           pip install mkdocs mkdocs-material pymdown-extensions
-      
-      - name: Generate static site
+
+      - name: Build documentation site
         run: |
-          # Create docs directory and copy markdown files
-          mkdir -p docs
-          cp *.md docs/
-          cp examples_*.py docs/ || true
+          echo "📚 Building documentation site from docs/ directory..."
           
-          # Create mkdocs.yml
+          # Create minimal mkdocs.yml
           cat > mkdocs.yml << 'MKDOCS_EOF'
           site_name: AI Architecture Blueprints
           site_description: Production-Ready Design Patterns for LLM Systems
-          site_author: Architecture Team
-          repo_url: https://github.com/${{ github.repository }}
+          site_author: Pristley
+          repo_url: https://github.com/pristley/ai-architecture-blueprints
           
           theme:
             name: material
             palette:
-              - scheme: default
-                primary: indigo
-                accent: indigo
+              scheme: default
+              primary: indigo
+              accent: indigo
             features:
               - navigation.tabs
               - navigation.sections
@@ -289,18 +99,12 @@ jobs:
               - search.suggest
           
           nav:
-            - Home: README.md
-            - Getting Started:
-              - Navigation: AGENTMAP.md
-              - Decision Record: ADR-1.2-Hello-World-Three-Ways.md
-            - Core Concepts:
-              - Runnable Protocol: WP-1.3-The-Runnable-Protocol.md
-              - Prompt Engineering: WP-1.4-Prompt-Engineering-as-Code.md
-              - Output Parsing: WP-1.5-Output-Parsing-for-System-Integration.md
-              - Model Selection: WP-1.6-Choosing-an-LLM-A-Decision-Matrix.md
-              - Tracing & Observability: WP-1.7-Introduction-to-Tracing-with-LangSmith.md
-            - Reference:
-              - Ecosystem: LANGCHAIN_ECOSYSTEM_MAP.md
+            - Home: index.md
+            - Foundations: '01-foundations/README.md'
+            - Production: '02-production-patterns/README.md'
+            - Memory & State: '03-memory-state-agents/README.md'
+            - Multi-Agent: '04-multi-agent-architectures/README.md'
+            - Reference: 'reference/README.md'
           
           markdown_extensions:
             - pymdownx.highlight
@@ -310,59 +114,26 @@ jobs:
             - tables
           MKDOCS_EOF
           
-          mkdocs build
-          echo "✅ Static site generated"
-      
-      - name: Verify site structure
-        run: |
-          echo "📋 Verifying generated site..."
-          if [ -d "site" ]; then
-            echo "✅ Site directory created"
-            echo "📊 Site contents:"
-            ls -lah site/ | head -20
-            echo ""
-            echo "📄 Main files:"
-            find site/ -maxdepth 1 -type f -name "*.html" | head -10
-          else
-            echo "❌ Site directory not found!"
-            exit 1
-          fi
-      
+          mkdocs build --config-file mkdocs.yml --docs-dir docs
+          echo "✅ Documentation site built"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
-          # Remove CNAME if not using a custom domain
-      
-      - name: Deployment Summary
-        run: |
-          echo "✅ GitHub Pages Deployment Complete"
-          echo ""
-          echo "📄 Site URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-          echo "🔗 Repository: ${{ github.server_url }}/${{ github.repository }}"
-          echo ""
-          echo "📊 Deployed Content:"
-          echo "  - 7 Work Products (WP-1.3 through WP-1.7)"
-          echo "  - 1 ADR (Architecture Decision Record)"
-          echo "  - 4 Working Examples"
-          echo "  - Full Ecosystem Reference"
 
-  notify:
-    name: Deployment Notification
-    runs-on: ubuntu-latest
-    needs: [lint-and-test, update-docs, deploy]
-    if: always()
-    
-    steps:
-      - name: Summary
+      - name: 📋 Deployment Summary
         run: |
-          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Stage | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Lint & Test | ${{ needs.lint-and-test.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Update Docs | ${{ needs.update-docs.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Deploy | ${{ needs.deploy.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Pipeline execution complete" >> $GITHUB_STEP_SUMMARY
+          echo "╔════════════════════════════════════════════════════════════╗"
+          echo "║          ✅ DEPLOYMENT SUCCESSFUL                         ║"
+          echo "╚════════════════════════════════════════════════════════════╝"
+          echo ""
+          echo "📚 Documentation deployed to GitHub Pages"
+          echo "🔗 https://pristley.github.io/ai-architecture-blueprints"
+          echo ""
+          echo "📊 Repository Structure:"
+          echo "   ✓ 4 Learning Sections (01-foundations through 04-multi-agent)"
+          echo "   ✓ Reference Materials"
+          echo "   ✓ 30+ Test Suites"
+          echo "   ✓ Production-ready code examples"

@@ -1,63 +1,71 @@
-# CI/CD Pipeline Quick Start
+# CI/CD Quick Start Guide
 
-## ✅ Pipeline Deployed Successfully
+## ✅ Pipeline Ready
 
-The GitHub Actions CI/CD pipeline has been deployed to this repository. Every commit to `main` now triggers automated testing, documentation updates, and deployment.
+The GitHub Actions CI/CD pipeline is active and deployed. Every commit automatically runs tests and deploys documentation.
 
-## 🚀 What Happens on Each Commit
+## 🚀 What Happens on Push
 
-```mermaid
-graph LR
-    A[git push main] --> B[Lint & Test]
-    B --> C{Tests Pass?}
-    C -->|Yes| D[Update Docs]
-    C -->|No| E[❌ Pipeline Fails]
-    D --> F[Deploy to GitHub Pages]
-    F --> G[✅ Complete]
+```
+git push origin main
+    ↓
+[Lint & Test] ~3 min
+    ↓ (if main branch)
+[Deploy to GitHub Pages] ~2 min
+    ↓
+[Summary Report] <1 min
+    ↓
+✅ Complete!
 ```
 
-### Stage 1: Lint & Test (~2 min)
-- ✅ Ruff linting (code quality)
-- ✅ Python syntax validation
-- ✅ Run all examples
-- ✅ Validate markdown links
+## 📊 Pipeline Stages
 
-### Stage 2: Update Documentation (~1 min)
-- 📊 Calculate repository statistics
-- 📝 Update AGENTMAP.md footer
-- 🔖 Add CI badge to README.md
-- 💾 Auto-commit changes with `[skip ci]`
+1. **Test** - Run pytest, lint code
+2. **Deploy** - Build docs site, push to GitHub Pages
+3. **Report** - Show status summary
 
-### Stage 3: Deploy (~2 min)
-- 📦 Build static site with MkDocs
-- 🚀 Deploy to GitHub Pages
-- 🌐 Available at `https://pristley.github.io/ai-architecture-blueprints`
+## 🔍 Monitor Pipeline
 
-### Stage 4: Notify (<1 min)
-- 📋 Generate deployment summary
-- ✅ Report pipeline status
+### View Runs
+- Go to: https://github.com/pristley/ai-architecture-blueprints/actions
+- See all workflow runs with status
 
-## 📊 Monitoring Your Pipeline
-
-### View Pipeline Runs
-1. Go to your repository on GitHub
-2. Click the **Actions** tab
-3. See all workflow runs with status indicators
-
-### Check Latest Run
+### Watch Latest Run
 ```bash
-# View recent workflow runs
-gh run list --limit 5
-
-# Watch the latest run in real-time
 gh run watch
 ```
 
-### Pipeline Status Badge
-Added to README.md:
-```markdown
-![CI/CD Status](https://github.com/pristley/ai-architecture-blueprints/workflows/AI%20Architecture%20Blueprints%20CI%2FCD/badge.svg)
+### Check Logs
+- Click any workflow run to see detailed logs
+- Useful for debugging test failures
+
+## 📚 Documentation Deploy
+
+The pipeline automatically:
+- Builds MkDocs site from `/docs` directory
+- Deploys to: https://pristley.github.io/ai-architecture-blueprints
+- Updates every time `main` is pushed
+
+## ⚡ Local Testing
+
+Test before pushing:
+
+```bash
+# Run tests
+pytest tests/ -v
+
+# Lint code
+ruff check docs/
 ```
+
+## 🔧 Configuration
+
+Pipeline config: [`.github/workflows/ci-cd.yml`](./workflows/ci-cd.yml)
+
+Key paths:
+- Tests: `tests/`
+- Docs: `docs/`
+- Configuration: `.github/workflows/ci-cd.yml`
 
 ## 🛠️ Common Operations
 
