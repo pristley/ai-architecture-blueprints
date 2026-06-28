@@ -36,6 +36,12 @@ graph TB
     WP24["🐝 WP-2.4<br/>Choreography Pattern: Hive Mind"]
     HIVE["💻 choreography_hive_mind.py<br/>Event-Driven Hive Mind"]
     TEST_HIVE["🧪 test_choreography_hive_mind.py<br/>Choreography Tests"]
+    WP26["🔗 WP-2.6<br/>LangGraph for Stateful Graphs"]
+    EX26["💻 examples_2_6.py<br/>StateGraph Implementation"]
+    TEST26["🧪 test_langgraph_orchestration.py<br/>LangGraph Tests"]
+    WP27["🔐 WP-2.7<br/>Checkpointing & Human-in-the-Loop"]
+    EX27["💻 examples_2_7.py<br/>Email Approval Workflow"]
+    TEST27["🧪 test_langgraph_checkpointing.py<br/>Checkpointing Tests"]
     AGENTMAP["🗺️ AGENTMAP.md<br/>This Document"]
     
     START -->|Learn about| ECOSYSTEM
@@ -78,6 +84,14 @@ graph TB
     ADR21 -->|See code| HIVE
     HIVE -->|Tested by| TEST_HIVE
     WP24 -->|Contrasts with| WP23
+    ADR22 -->|Framework implementation| WP26
+    WP23 -->|Reimplemented in| WP26
+    WP26 -->|See code| EX26
+    EX26 -->|Tested by| TEST26
+    WP26 -->|Extends| WP27
+    WP27 -->|See code| EX27
+    EX27 -->|Tested by| TEST27
+    WP27 -->|Adds guardrails to| ADR22
     AGENTMAP -->|Shows relationships| START
     AGENTMAP -->|Shows relationships| ADR12
     AGENTMAP -->|Shows relationships| ADR21
@@ -90,6 +104,8 @@ graph TB
     AGENTMAP -->|Shows relationships| WP22
     AGENTMAP -->|Shows relationships| WP23
     AGENTMAP -->|Shows relationships| WP24
+    AGENTMAP -->|Shows relationships| WP26
+    AGENTMAP -->|Shows relationships| WP27
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -116,6 +132,12 @@ graph TB
     style EX21 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style WP22 fill:#FF9800,stroke:#E65100,color:#fff
     style EX22 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style WP26 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX26 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style TEST26 fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style WP27 fill:#FF9800,stroke:#E65100,color:#fff
+    style EX27 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style TEST27 fill:#4CAF50,stroke:#2E7D32,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -141,6 +163,7 @@ graph TB
 | [WP-2.3-Orchestration-Pattern.md](WP-2.3-Orchestration-Pattern.md) | ⚙️ Design Pattern | Practical orchestration implementation with controller agent | ~1000 | ✅ |
 | [WP-2.4-Choreography-Pattern.md](WP-2.4-Choreography-Pattern.md) | 🐝 Design Pattern | Practical choreography implementation with event-driven Hive Mind | ~1000 | ✅ |
 | [WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md](WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md) | 🔗 Framework Guide | Reimplementation of orchestrator using LangGraph StateGraph for production workflows | ~2000 | ✅ |
+| [WP-2.7-Checkpointing-and-Human-in-the-Loop.md](WP-2.7-Checkpointing-and-Human-in-the-Loop.md) | 🔐 Framework Guide | LangGraph checkpointing for human approval gates and state resumption | ~2500 | ✅ |
 
 ### Code Examples
 
@@ -156,6 +179,7 @@ graph TB
 | [research_assistant_state_machine.py](research_assistant_state_machine.py) | 💻 Code | Production state machine for agent loops with comprehensive loop detection | ~600 | ✅ |
 | [controller_orchestration_agent.py](controller_orchestration_agent.py) | 💻 Code | Centralized orchestration controller: 6-step report workflow with evaluators | ~900 | ✅ |
 | [examples_2_6.py](examples_2_6.py) | 💻 Code | LangGraph StateGraph implementation of 6-step orchestrator with conditional edges | ~450 | ✅ |
+| [examples_2_7.py](examples_2_7.py) | 💻 Code | LangGraph email approval workflow with checkpointing, interrupts, and state resumption | ~550 | ✅ |
 
 ### Test Examples
 
@@ -165,6 +189,7 @@ graph TB
 | [tests/test_research_assistant_state_machine.py](tests/test_research_assistant_state_machine.py) | 🧪 Tests | 43 tests for state machine: transitions, loop detection, tools, workflows | ~600 | ✅ |
 | [tests/test_controller_orchestration.py](tests/test_controller_orchestration.py) | 🧪 Tests | 41 tests for orchestration: step execution, workflows, audit trails | ~600 | ✅ |
 | [tests/test_langgraph_orchestration.py](tests/test_langgraph_orchestration.py) | 🧪 Tests | Comprehensive LangGraph tests: state, nodes, edges, evaluation, end-to-end | ~500 | ✅ |
+| [tests/test_langgraph_checkpointing.py](tests/test_langgraph_checkpointing.py) | 🧪 Tests | Comprehensive checkpointing tests: validation, nodes, routing, workflows, persistence | ~700 | ✅ |
 
 ### Meta Documents
 
