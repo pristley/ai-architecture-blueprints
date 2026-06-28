@@ -91,14 +91,14 @@ We follow these five principles in all patterns and implementations:
 - 🚀 **Fast track (30 min)** → [ADR-1.2](#adr-12-chain-abstractions) - Which pattern to use
 - � **Deep dive** → [WP-1.3](#wp-13-runnable-protocol) - How it works
 - 📈 **Typed extraction (45 min)** → [WP-1.5](#wp-15-output-parsing-for-system-integration) - Parse and recover structured output
-- 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm---a-decision-matrix) - Pick the best model with a weighted matrix
+- 🤖 **Model selection (45 min)** → [WP-1.6](#wp-16-choosing-an-llm-a-decision-matrix) - Pick the best model with a weighted matrix
 - 🔍 **Observability (60 min)** → [WP-1.7](#wp-17-tracing-with-langsmith) - Debug with LangSmith tracing
 - 💾 **Memory systems (90 min)** → [WP-2.1](#wp-21-short-term-vs-long-term-memory) - Build scalable conversational memory
 - 🏭 **Agent state (1 hour)** → [WP-2.2](#wp-22-state-management-in-single-agent-loop) - Prevent infinite loops
-- 🐝 **Multi-agent choreography (3.5 hours)** → [WP-2.4](#wp-24-choreography-pattern---the-hive-mind-agent) - Event-driven autonomous agents with feedback loops
-- ⚙️ **Orchestrated workflows (3.5 hours)** → [WP-2.3](#wp-23-orchestration-pattern---the-controller-agent) - Build deterministic orchestrators
-- 🎯 **Orchestration architecture** → [ADR-2.2](#adr-22-orchestration---centralized-control-for-deterministic-workflows) - Decision framework
-- 📦 **Production setup** → See [Setup & Configuration](#setup--configuration)
+- 🐝 **Multi-agent choreography (3.5 hours)** → [WP-2.4](#wp-24-choreography-pattern-the-hive-mind-agent) - Event-driven autonomous agents with feedback loops
+- ⚙️ **Orchestrated workflows (3.5 hours)** → [WP-2.3](#wp-23-orchestration-pattern-the-controller-agent) - Build deterministic orchestrators
+- 🎯 **Orchestration architecture** → [ADR-2.2](#adr-22-orchestration-centralized-control-for-deterministic-workflows) - Decision framework
+- 📦 **Production setup** → See [Setup & Configuration](#setup-configuration)
 
 ### Installation
 
@@ -708,7 +708,7 @@ To master choreography-based patterns:
 3. Run the tests and observe agent interactions (30 min)
 4. Modify the pattern for your use case (1 hour)
 
-See [AGENTMAP.md](AGENTMAP.md#path-8-multi-agent-choreography-for-emergent-workflows) for the complete "Multi-Agent Choreography" learning path.
+See [AGENTMAP.md](AGENTMAP.md#path-8-multi-agent-choreography-for-emergent-workflows-4-hours) for the complete "Multi-Agent Choreography" learning path.
 
 ---
 
@@ -877,7 +877,7 @@ To master orchestration patterns:
 3. Run the tests and observe orchestration in action (30 min)
 4. Adapt the pattern for your workflow (15 min)
 
-See [AGENTMAP.md](AGENTMAP.md#path-9-orchestrated-deterministic-workflows) for the complete "Orchestrated Deterministic Workflows" learning path.
+See [AGENTMAP.md](AGENTMAP.md#path-9-orchestrated-deterministic-workflows-35-hours) for the complete "Orchestrated Deterministic Workflows" learning path.
 
 ---
 
@@ -1311,7 +1311,7 @@ result = chain.invoke({"input": "..."})
 
 **Goal:** Know which pattern to use
 
-1. Read [README (this file)](#overview)
+1. Read [README (this file)](#what-this-guide-covers)
 2. Read [ADR-1.2](#adr-12-chain-abstractions) - 30 min
 3. Run `python examples_1_2.py` - 30 min
 4. Review recommendation for your use case
@@ -1322,10 +1322,10 @@ result = chain.invoke({"input": "..."})
 
 **Goal:** Understand how LangChain works
 
-1. Read [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem)
+1. Read [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md)
 2. Read [WP-1.3](#wp-13-runnable-protocol) - Parts 1-5
 3. Run `python examples_1_3.py` - All examples
-4. Review [examples_1_3.py code](#examples)
+4. Review [examples_1_3.py code](#practice-examples)
 
 **Outcome:** Can build custom Runnables, optimize for performance
 
@@ -1478,7 +1478,7 @@ add_routes(app, my_chain, path="/chain")
 → See [WP-1.3](#wp-13-runnable-protocol) Part 7 + examples_1_3.py Example 6
 
 **How do I deploy to production?**
-→ See [LANGCHAIN_ECOSYSTEM_MAP.md](#langchain-ecosystem) LangServe section
+→ See [LANGCHAIN_ECOSYSTEM_MAP.md](LANGCHAIN_ECOSYSTEM_MAP.md) for LangServe and deployment options
 
 **How do I manage prompts across a team?**
 → See [WP-1.4](#wp-14-prompt-engineering-as-code) PromptRegistry pattern
