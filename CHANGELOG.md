@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.1] - 2026-06-28
+
+### Changed
+- **Repository Reorganization - New docs/ Structure**
+  - Moved all educational materials into organized `docs/` directory with 4 learning sections
+  - New structure improves discoverability and learning flow:
+    * `docs/01-foundations/` - Core abstractions and decision patterns (ADR-1.2, WP-1.3)
+    * `docs/02-production-patterns/` - Production-ready patterns (WP-1.4 through WP-1.7)
+    * `docs/03-memory-state-agents/` - Memory and agent state patterns (WP-2.1, WP-2.2)
+    * `docs/04-multi-agent-architectures/` - Orchestration and choreography (ADR-2.1, ADR-2.2, WP-2.3, WP-2.4, WP-2.6)
+    * `docs/reference/` - Navigation hubs and reference documents
+  - Created section README files with learning paths and document indices
+  - Created main `docs/README.md` as entry point with learning path recommendations
+  - Updated root `README.md` to redirect to `docs/README.md`
+  - All internal links updated to reflect new file locations
+  - Verified all 100+ cross-references work correctly
+
+### Fixed
+- Broken anchor links in README.md (extra hyphens from special characters)
+- Link paths across all sections now use correct relative paths
+
 ## [1.2.0] - 2026-06-26
 
 ### Added
