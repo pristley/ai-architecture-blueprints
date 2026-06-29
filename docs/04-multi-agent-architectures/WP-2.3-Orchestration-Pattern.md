@@ -45,21 +45,58 @@ The **Controller** is a centralized decision-maker that:
 4. **Decides**: Determines next action (CONTINUE, RETRY, BRANCH, SKIP, ABORT)
 5. **Audits**: Records everything for observability
 
-```
-┌────────────────────────────────────────────────┐
-│     Controller Agent (Central Decision Maker)  │
-└────────────────────────────────────────────────┘
-         │
-         ├─→ [Step 1: Plan]  ──→ ✅ Validate ──→ 📊 Record
-         │
-         ├─→ [Step 2: Fetch] ──→ ✅ Validate ──→ 📊 Record
-         │
-         ├─→ [Step 3: Analyze]──→ ✅ Validate ──→ 📊 Record
-         │
-         └─→ [Step N: ...]  ──→ ✅ Validate ──→ 📊 Record
-                ▲                                    │
-                │ If validation fails             │
-                └────────── Retry Loop ────────────┘
+```mermaid
+graph TD
+    Controller["🎯 Controller Agent<br/>Central Decision Maker"]
+    
+    S1["📋 Step 1: Plan<br/>Create execution plan"]
+    V1["✅ Validate<br/>Check output"]
+    R1["📊 Record<br/>Log result"]
+    
+    S2["📚 Step 2: Fetch<br/>Retrieve data"]
+    V2["✅ Validate<br/>Check output"]
+    R2["📊 Record<br/>Log result"]
+    
+    S3["🔍 Step 3: Analyze<br/>Process data"]
+    V3["✅ Validate<br/>Check output"]
+    R3["📊 Record<br/>Log result"]
+    
+    SN["⚙️ Step N: ...<br/>Continue steps"]
+    VN["✅ Validate<br/>Check output"]
+    RN["📊 Record<br/>Log result"]
+    
+    Retry["🔄 Retry Logic<br/>Exponential Backoff"]
+    
+    Controller --> S1
+    S1 --> V1
+    V1 -->|Valid| R1
+    V1 -->|Invalid| Retry
+    R1 --> S2
+    
+    S2 --> V2
+    V2 -->|Valid| R2
+    V2 -->|Invalid| Retry
+    R2 --> S3
+    
+    S3 --> V3
+    V3 -->|Valid| R3
+    V3 -->|Invalid| Retry
+    R3 --> SN
+    
+    SN --> VN
+    VN -->|Valid| RN
+    VN -->|Invalid| Retry
+    
+    Retry -->|Retry Attempt| S1
+    RN --> Output["✅ Final Output"]
+    
+    style Controller fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Output fill:#c8e6c9
+    style Retry fill:#ffb74d
+    style V1 fill:#fff9c4
+    style V2 fill:#fff9c4
+    style V3 fill:#fff9c4
+    style VN fill:#fff9c4
 ```
 
 ### Decision Enum: What the Controller Can Decide

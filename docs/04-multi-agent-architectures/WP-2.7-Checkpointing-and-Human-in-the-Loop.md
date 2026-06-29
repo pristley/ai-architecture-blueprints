@@ -171,40 +171,43 @@ async def simple_report_workflow(query: str) -> str:
 
 LangGraph introduces **three key abstractions**:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    LangGraph Workflow                        │
-└─────────────────────────────────────────────────────────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-        ▼                     ▼                     ▼
-    ┌─────────┐         ┌─────────┐         ┌──────────┐
-    │  Node   │         │  Node   │         │  Node    │
-    │ (Step)  │         │(Step)   │         │(Step)    │
-    └────┬────┘         └────┬────┘         └────┬─────┘
-         │                   │                    │
-         └─────────────────┬─────────────────────┘
-                           │
-                      ┌────▼──────────┐
-                      │  Conditional  │
-                      │   Routing     │
-                      └────┬──────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-         ┌─────────┐           ┌──────────────┐
-         │  Resume │           │ Interrupt    │
-         │ (Approved)          │ (Waiting)    │
-         └─────────┘           └──────────────┘
-              │                         │
-              └────────────┬────────────┘
-                           │
-                      ┌────▼──────────────┐
-                      │   Checkpointer    │
-                      │  (State Storage)  │
-                      └───────────────────┘
+```mermaid
+graph TD
+    Workflow["🕸️ LangGraph Workflow"]
+    
+    N1["📌 Node<br/>Step 1"]
+    N2["📌 Node<br/>Step 2"]
+    N3["📌 Node<br/>Step 3"]
+    
+    Router["🔀 Conditional<br/>Routing"]
+    
+    Resume["▶️ Resume<br/>Approved"]
+    Interrupt["⏸️ Interrupt<br/>Waiting for Human"]
+    
+    Checkpointer["💾 Checkpointer<br/>State Storage"]
+    
+    Workflow --> N1
+    Workflow --> N2
+    Workflow --> N3
+    
+    N1 --> Router
+    N2 --> Router
+    N3 --> Router
+    
+    Router -->|Resume| Resume
+    Router -->|Interrupt| Interrupt
+    
+    Resume --> Checkpointer
+    Interrupt --> Checkpointer
+    
+    style Workflow fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style N1 fill:#e8f5e9
+    style N2 fill:#e8f5e9
+    style N3 fill:#e8f5e9
+    style Router fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Resume fill:#c8e6c9
+    style Interrupt fill:#ffb74d
+    style Checkpointer fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
 ```
 
 **Three Key Concepts:**

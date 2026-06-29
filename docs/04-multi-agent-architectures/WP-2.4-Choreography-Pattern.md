@@ -45,27 +45,47 @@ The **Hive Mind** is a choreography-based architecture where:
 4. **Feedback loops guide** - System homeostasis via feedback mechanisms
 5. **Loose coupling** - Agents don't know about each other
 
-```
-┌──────────────┐
-│ WebSearcher  │──┐ [SearchRequested]
-└──────────────┘  │
-                  ↓
-           ┌─────────────────┐
-           │  EventBus (Pub) │
-           │      /Sub       │
-           └─────────────────┘
-                  ↑
-        ┌─────────┼─────────┐
-        │         │         │
-   [DataFetched]  │  [RevisionRequired]
-        │         │         │
-        ↓         ↓         ↓
-   ┌────────┐ ┌────────┐ ┌──────────┐
-   │Drafter │ │ Critic │ │ Feedback │
-   └────────┘ └────────┘ │ Homeostasis
-       │         │        └──────────┘
-       └─────────┘
-   [ReportSynthesized]
+```mermaid
+graph TB
+    subgraph Agents["🤖 Autonomous Agents"]
+        A1["WebSearcher<br/>Publishes: data-fetched"]
+        A2["Drafter<br/>Subscribes: data-fetched<br/>Publishes: report-synthesized"]
+        A3["Critic<br/>Subscribes: report-synthesized<br/>Publishes: review-completed"]
+    end
+
+    subgraph Events["📡 Event Bus (Pub/Sub)"]
+        E1["Event: SearchRequested"]
+        E2["Event: DataFetched"]
+        E3["Event: ReportSynthesized"]
+        E4["Event: ReviewCompleted"]
+        E5["Event: RevisionRequired"]
+    end
+
+    A1 -->|1. fetch data| A1
+    A1 -->|2. publish| E2
+    E2 -->|3. subscribe| A2
+    A2 -->|4. draft| A2
+    A2 -->|5. publish| E3
+    E3 -->|6. subscribe| A3
+    A3 -->|7. critique| A3
+    A3 -->|quality check| A3
+    A3 -->|8a. approved| E4
+    A3 -->|8b. revision needed| E5
+    E5 -->|9. subscribe| A2
+    A2 -->|10. revise| A2
+    A2 -->|11. publish| E3
+    E4 -->|Final| Output["✅ Report Complete"]
+
+    style Agents fill:#e8f5e9
+    style Events fill:#e3f2fd
+    style A1 fill:#a5d6a7
+    style A2 fill:#a5d6a7
+    style A3 fill:#a5d6a7
+    style E1 fill:#bbdefb
+    style E2 fill:#bbdefb
+    style E3 fill:#bbdefb
+    style E4 fill:#81c784
+    style E5 fill:#ffb74d
 ```
 
 ### Event-Driven Architecture

@@ -67,72 +67,48 @@ This reduces:
 
 ### Traditional Knowledge Architecture
 
-```
-┌─────────────────────────────────────────────────────┐
-│  LLM / AI Agent                                      │
-│  (Limited context window)                           │
-└──────────────┬──────────────────────────────────────┘
-               │
-               │ Unstructured queries
-               ▼
-┌─────────────────────────────────────────────────────┐
-│  API / Query Layer (Stateless)                      │
-│  • REST endpoints                                   │
-│  • GraphQL queries                                  │
-│  • SQL queries                                      │
-│  • Custom SDK methods                              │
-└──────────────┬──────────────────────────────────────┘
-               │
-               │ Formatted responses
-               │ (Multiple transforms needed)
-               ▼
-┌─────────────────────────────────────────────────────┐
-│  Data Layer (Heterogeneous)                         │
-│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐│
-│  │  Database    │ │ Document     │ │  File        ││
-│  │  (Schema A)  │ │  Store       │ │  System      ││
-│  │              │ │  (MongoDB)   │ │  (S3)        ││
-│  └──────────────┘ └──────────────┘ └──────────────┘│
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    Agent1["🤖 LLM / AI Agent<br/>(Limited context window)"]
+    Query["❓ Unstructured queries"]
+    APILayer["🔌 API / Query Layer<br/>• REST endpoints<br/>• GraphQL queries<br/>• SQL queries<br/>• Custom SDK methods"]
+    Transform["🔄 Formatted responses<br/>(Multiple transforms needed)"]
+    DataLayer["💾 Data Layer (Heterogeneous)<br/>┌─────────────┬──────────┬──────────┐<br/>│ Database    │ Document │ File     │<br/>│ Schema A    │ Store    │ System   │<br/>│             │ MongoDB  │ S3       │<br/>└─────────────┴──────────┴──────────┘"]
+    
+    Agent1 --> Query
+    Query --> APILayer
+    APILayer --> Transform
+    Transform --> DataLayer
+    
+    style Agent1 fill:#e3f2fd
+    style APILayer fill:#fff3e0
+    style DataLayer fill:#f3e5f5
 ```
 
-**Flow**: Agent → Query → API → Data Layer → Format Transform → Response
-
+**Flow**: Agent → Query → API → Data Layer → Format Transform → Response  
 **Cost per query**: 1 API call + N transformations + Context re-parsing
 
 ### OKF Knowledge Architecture
 
-```
-┌─────────────────────────────────────────────────────┐
-│  LLM / AI Agent                                      │
-│  (Semantic navigation aware)                        │
-└──────────────┬──────────────────────────────────────┘
-               │
-               │ Semantic path navigation
-               │ (e.g., "/customers/2024/high-value")
-               ▼
-┌─────────────────────────────────────────────────────┐
-│  OKF File System Abstraction Layer                  │
-│  • Semantic index (in-memory)                       │
-│  • Relationship resolution                          │
-│  • Lazy loading with hints                          │
-│  • Version awareness                                │
-└──────────────┬──────────────────────────────────────┘
-               │
-               │ Direct semantic lookups
-               │ (filesystem or cloud storage)
-               ▼
-┌─────────────────────────────────────────────────────┐
-│  OKF Repository (Unified Format)                    │
-│  • All knowledge in OKF structure                   │
-│  • Semantic metadata embedded                       │
-│  • Versioning & audit trails                        │
-│  • Cross-domain relationships                       │
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    Agent2["🤖 LLM / AI Agent<br/>(Semantic navigation aware)"]
+    NavQuery["🧭 Semantic path navigation<br/>/customers/2024/high-value"]
+    OKFLayer["📂 OKF File System Abstraction<br/>• Semantic index in-memory<br/>• Relationship resolution<br/>• Lazy loading with hints<br/>• Version awareness"]
+    DirectLookup["⚡ Direct semantic lookups<br/>(filesystem or cloud storage)"]
+    OKFRepo["📚 OKF Repository<br/>• All knowledge in OKF structure<br/>• Semantic metadata embedded<br/>• Versioning & audit trails<br/>• Cross-domain relationships"]
+    
+    Agent2 --> NavQuery
+    NavQuery --> OKFLayer
+    OKFLayer --> DirectLookup
+    DirectLookup --> OKFRepo
+    
+    style Agent2 fill:#e3f2fd
+    style OKFLayer fill:#e8f5e9
+    style OKFRepo fill:#a5d6a7
 ```
 
-**Flow**: Agent → Semantic Navigation → OKF Index → Direct Filesystem/Cloud Read
-
+**Flow**: Agent → Semantic Navigation → OKF Index → Direct Filesystem/Cloud Read  
 **Cost per query**: 1 semantic lookup + 1 filesystem/cloud read (no format transforms)
 
 ---

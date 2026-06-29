@@ -91,41 +91,27 @@ This work product documents the **naive baseline** as the starting point, then e
 
 ### The Naive RAG Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        USER INTERFACE                       │
-│  Input Query: "What are the licensing terms for product X?" │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-        ┌────────────────▼────────────────┐
-        │     QUERY EMBEDDING              │
-        │  (OpenAI Embedding API)          │
-        │  query → 1536-dim vector         │
-        └────────────────┬────────────────┘
-                         │
-        ┌────────────────▼────────────────────────────┐
-        │     RETRIEVAL STAGE                         │
-        │  Search in Chroma Vector Store (in-memory)  │
-        │  k=5: Get top 5 most similar chunks         │
-        └────────────────┬────────────────────────────┘
-                         │
-        ┌────────────────▼────────────────────────────┐
-        │     CONTEXT ASSEMBLY                        │
-        │  Format: "Relevant documents:\n" + chunks   │
-        │  Total tokens: query + context + prompt     │
-        └────────────────┬────────────────────────────┘
-                         │
-        ┌────────────────▼──────────────────────────┐
-        │     LLM INFERENCE                         │
-        │  ChatOpenAI (gpt-4-turbo or gpt-4-mini)   │
-        │  System prompt + context + query          │
-        └────────────────┬──────────────────────────┘
-                         │
-        ┌────────────────▼──────────────────────────┐
-        │     RESPONSE GENERATION                   │
-        │  Streaming output to user                 │
-        │  ~10-50 tokens per response               │
-        └──────────────────────────────────────────┘
+```mermaid
+graph TD
+    A["📝 USER INTERFACE<br/>Input: 'What are the licensing terms for product X?'"]
+    B["🔍 QUERY EMBEDDING<br/>(OpenAI Embedding API)<br/>query → 1536-dim vector"]
+    C["📚 RETRIEVAL STAGE<br/>(Chroma Vector Store)<br/>k=5: Top 5 similar chunks"]
+    D["🧩 CONTEXT ASSEMBLY<br/>Format: 'Relevant documents:' + chunks<br/>Total tokens ≤ 3000"]
+    E["🤖 LLM INFERENCE<br/>(ChatOpenAI: gpt-4-turbo)<br/>System prompt + context + query"]
+    F["✅ RESPONSE GENERATION<br/>Streaming output to user<br/>~10-50 tokens"]
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style D fill:#fff3e0
+    style E fill:#f3e5f5
+    style F fill:#c8e6c9
 ```
 
 ### Core Components
@@ -327,23 +313,32 @@ parallel_chain = RunnableParallel(
 
 Every stage of naive RAG creates observable spans:
 
-```
-RAG Pipeline (parent span)
-├── query_embedding (span)
-│   ├── api_call: OpenAI Embeddings
-│   └── output: 1536-dim vector
-├── retrieval (span)
-│   ├── search_query: "licensing terms"
-│   ├── results: 5 chunks
-│   └── scores: [0.87, 0.82, 0.79, 0.65, 0.52]
-├── context_formatting (span)
-│   ├── chunks_formatted: 5
-│   └── total_tokens: 1850
-└── llm_generation (span)
-    ├── model: gpt-4-turbo
-    ├── prompt_tokens: 1900
-    ├── completion_tokens: 42
-    └── output: "The licensing terms are..."
+```mermaid
+graph TD
+    Root["🌳 RAG Pipeline<br/>(Parent Span)"]
+    
+    Embed["📊 query_embedding<br/>API: OpenAI Embeddings<br/>Output: 1536-dim vector"]
+    Embed_Child["query_embedding details"]
+    
+    Retrieval["🔍 retrieval<br/>Search Query: 'licensing terms'<br/>Results: 5 chunks<br/>Scores: [0.87, 0.82, 0.79, 0.65, 0.52]"]
+    Retrieval_Child["retrieval details"]
+    
+    Context["🧩 context_formatting<br/>Chunks Formatted: 5<br/>Total Tokens: 1850"]
+    Context_Child["formatting details"]
+    
+    LLM["🤖 llm_generation<br/>Model: gpt-4-turbo<br/>Prompt Tokens: 1900<br/>Completion Tokens: 42<br/>Output: 'The licensing terms are...'"]
+    LLM_Child["generation details"]
+    
+    Root --> Embed
+    Root --> Retrieval
+    Root --> Context
+    Root --> LLM
+    
+    style Root fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style Embed fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Retrieval fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Context fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style LLM fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
 ```
 
 ### Enabling Tracing

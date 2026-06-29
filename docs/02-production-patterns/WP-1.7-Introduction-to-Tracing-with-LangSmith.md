@@ -177,147 +177,41 @@ Let's trace a realistic example: a **customer support decision chain** that:
 
 ### Trace Structure (Annotated Breakdown)
 
+```mermaid
+graph TD
+    Overview["📊 TRACE OVERVIEW<br/>ID: abc123def456 | Project: my-project<br/>Duration: 1,247ms | Cost: $0.0045<br/>Status: ✅ Success"]
+    
+    Input["📥 INPUT<br/>inquiry: 'My order arrived damaged, need replacement'<br/>customer_id: 'CUST-12345'"]
+    
+    Span1["📋 SPAN 1: format_classification_prompt<br/>Type: ChatPromptTemplate<br/>Duration: 0-2ms | Tokens: 187"]
+    
+    Span2["🤖 SPAN 2: classify_model<br/>Type: ChatOpenAI LLM | Model: gpt-4-mini<br/>Duration: 2-512ms (510ms)<br/>📊 Input: 187 tokens ($0.00094)<br/>📊 Output: 40 tokens ($0.0002)<br/>⏱️ TTFT: 145ms | Token Gen: 365ms"]
+    
+    Span3["⚙️ SPAN 3: parse_classification<br/>Type: JsonOutputParser<br/>Duration: 512-520ms (8ms)<br/>Input: Classification JSON<br/>Cost: $0.00 (no LLM call)<br/>💡 Negligible overhead"]
+    
+    Span4["📋 SPAN 4: format_response_prompt<br/>Type: ChatPromptTemplate<br/>Duration: 520-525ms (5ms)<br/>Tokens: 245"]
+    
+    Span5["🤖 SPAN 5: response_model<br/>Type: ChatOpenAI LLM | Model: gpt-4-mini<br/>Duration: 525-1200ms (675ms)<br/>📊 Input: 245 tokens ($0.001225)<br/>📊 Output: 62 tokens ($0.00031)<br/>⏱️ TTFT: 180ms | Token Gen: 495ms"]
+    
+    Output["✅ FINAL OUTPUT<br/>Classification + Response<br/>Ready to send to user"]
+    
+    Overview --> Input
+    Input --> Span1
+    Span1 --> Span2
+    Span2 --> Span3
+    Span3 --> Span4
+    Span4 --> Span5
+    Span5 --> Output
+    
+    style Overview fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style Input fill:#fff3e0
+    style Span1 fill:#e8f5e9
+    style Span2 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Span3 fill:#fff9c4
+    style Span4 fill:#e8f5e9
+    style Span5 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Output fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                          TRACE OVERVIEW                                 │
-├─────────────────────────────────────────────────────────────────────────┤
-│ Trace ID: abc123def456                                                  │
-│ Project: my-project                                                     │
-│ Total Duration: 1,247 ms                                                │
-│ Total Cost: $0.0045                                                     │
-│ Status: Success ✅                                                       │
-└─────────────────────────────────────────────────────────────────────────┘
-
-┌─ ROOT SPAN: classify_and_respond Chain ─────────────────────────────────┐
-│                                          Start: 0ms    End: 1,247ms      │
-│                                                                          │
-│  ┌─ INPUT ──────────────────────────────────────────────────────────┐   │
-│  │ inquiry: "My order arrived damaged, need replacement"            │   │
-│  │ customer_id: "CUST-12345"                                        │   │
-│  └──────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│  ┌─ SPAN 1: format_classification_prompt (ChatPromptTemplate) ──────┐   │
-│  │                                    Start: 0ms      End: 2ms      │   │
-│  │ Input: {inquiry, customer_id}                                    │   │
-│  │ Output:                                                          │   │
-│  │   "You are a support triage agent. Classify this inquiry:       │   │
-│  │    Inquiry: My order arrived damaged, need replacement           │   │
-│  │    Customer ID: CUST-12345                                       │   │
-│  │    Respond with JSON: {\"category\": ..., \"urgency\": ...}"     │   │
-│  │                                                                  │   │
-│  │ 💡 This is where prompt engineering adds tokens!                │   │
-│  └──────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│  ┌─ SPAN 2: classify_model (ChatOpenAI LLM) ──────────────────────┐    │
-│  │                                 Start: 2ms      End: 512ms      │    │
-│  │                                                                 │    │
-│  │ 📊 TOKENS (Input)                                              │    │
-│  │    Prompt Tokens: 187                                          │    │
-│  │    Cost: $0.00094 (187 × $5e-6 per token for gpt-4-mini)      │    │
-│  │                                                                 │    │
-│  │ ⏱️  TIMING                                                       │    │
-│  │    Time-to-First-Token (TTFT): 145ms                           │    │
-│  │      └─ Network latency + model startup                        │    │
-│  │    Token Generation Time: 365ms (at ~110 TPS)                  │    │
-│  │      └─ How long to generate completion tokens                 │    │
-│  │                                                                 │    │
-│  │ 📊 TOKENS (Output)                                             │    │
-│  │    Completion Tokens: 40                                       │    │
-│  │    Cost: $0.0002 (40 × $5e-6 per token)                        │    │
-│  │                                                                 │    │
-│  │ 📤 OUTPUT                                                       │    │
-│  │    {                                                            │    │
-│  │      "category": "damaged_goods",                              │    │
-│  │      "urgency": "high",                                        │    │
-│  │      "requires_shipping": true                                 │    │
-│  │    }                                                            │    │
-│  │                                                                 │    │
-│  │ 💡 INSIGHT: TTFT (145ms) is relatively high!                   │    │
-│  │    Could be due to:                                            │    │
-│  │    - OpenAI API queueing                                       │    │
-│  │    - Network latency                                           │    │
-│  │    - Model loading (rare with cached instances)                │    │
-│  └─────────────────────────────────────────────────────────────────┘    │
-│                                                                          │
-│  ┌─ SPAN 3: parse_classification (LangChain JsonOutputParser) ────────┐ │
-│  │                                Start: 512ms    End: 520ms        │ │
-│  │ Input: "{\"category\": \"damaged_goods\", ...}"                 │ │
-│  │ Parser: JsonOutputParser                                        │ │
-│  │ Duration: 8ms                                                   │ │
-│  │ Cost: $0.00 (no LLM call!)                                      │ │
-│  │ Output: {category: "damaged_goods", urgency: "high", ...}      │ │
-│  │                                                                 │ │
-│  │ 💡 INSIGHT: Parser is very fast (~8ms << LLM call 510ms)       │ │
-│  │    Parsing overhead is negligible here.                        │ │
-│  │    But if parsing fails, it shows up here!                     │ │
-│  └─────────────────────────────────────────────────────────────────┘ │
-│                                                                          │
-│  ┌─ SPAN 4: format_response_prompt (ChatPromptTemplate) ─────────────┐ │
-│  │                                Start: 520ms    End: 525ms       │ │
-│  │ Input: {inquiry, classification, customer_id}                  │ │
-│  │ Output:                                                         │ │
-│  │   "You are a helpful support agent. Here's the customer's      │ │
-│  │    issue and our internal classification:                      │ │
-│  │    Issue: My order arrived damaged...                          │ │
-│  │    Classification: {"category": "damaged_goods", ...}          │ │
-│  │    Generate a professional response: ..."                      │ │
-│  │                                                                 │ │
-│  │ ✅ Token count: 245 tokens                                      │ │
-│  └─────────────────────────────────────────────────────────────────┘ │
-│                                                                          │
-│  ┌─ SPAN 5: response_model (ChatOpenAI LLM) ────────────────────────┐  │
-│  │                                Start: 525ms    End: 1,200ms     │  │
-│  │                                                                 │  │
-│  │ 📊 TOKENS (Input)                                              │  │
-│  │    Prompt Tokens: 245                                          │  │
-│  │    Cost: $0.001225 (245 × $5e-6)                               │  │
-│  │                                                                 │  │
-│  │ ⏱️  TIMING                                                       │  │
-│  │    TTFT: 180ms (longer this time! Why?)                        │  │
-│  │    Token Generation: 495ms (at ~125 TPS)                       │  │
-│  │                                                                 │  │
-│  │ 📊 TOKENS (Output)                                             │  │
-│  │    Completion Tokens: 62                                       │  │
-│  │    Cost: $0.00031                                              │  │
-│  │                                                                 │  │
-│  │ 📤 OUTPUT                                                       │  │
-│  │    "Thank you for bringing this to our attention. We're sorry  │  │
-│  │     your order arrived damaged. We'll arrange a replacement    │  │
-│  │     immediately. Your replacement will arrive within 2-3       │  │
-│  │     business days. Is there anything else I can help with?"    │  │
-│  │                                                                 │  │
-│  │ 💡 INSIGHT: TTFT increased from 145ms to 180ms!                │  │
-│  │    Possible causes:                                            │  │
-│  │    - OpenAI API is busier now                                  │  │
-│  │    - Connection to different availability zone                 │  │
-│  │    - But still acceptable for support responses                │  │
-│  └─────────────────────────────────────────────────────────────────┘  │
-│                                                                          │
-│  ┌─ FINAL OUTPUT ────────────────────────────────────────────────────┐ │
-│  │ {                                                                 │ │
-│  │   "classification": {                                            │ │
-│  │     "category": "damaged_goods",                                 │ │
-│  │     "urgency": "high",                                           │ │
-│  │     "requires_shipping": true                                    │ │
-│  │   },                                                             │ │
-│  │   "response": "Thank you for bringing this..."                   │ │
-│  │ }                                                                 │ │
-│  └────────────────────────────────────────────────────────────────────┘ │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
-
-╔════════════════════════════════════════════════════════════════════════════╗
-║                        TRACE SUMMARY METRICS                              ║
-╠════════════════════════════════════════════════════════════════════════════╣
-║                                                                            ║
-║ ⏱️  LATENCY BREAKDOWN                                                      ║
-║    ├─ LLM Call #1 (classify):     510ms (40.9%)                          ║
-║    ├─ Prompt Format #1:              2ms (0.2%)                          ║
-║    ├─ Parsing:                       8ms (0.6%)                          ║
-║    ├─ LLM Call #2 (response):     675ms (54.1%)                          ║
-║    ├─ Prompt Format #2:              5ms (0.4%)                          ║
-║    └─ Total:                     1,247ms                                  ║
-║                                                                            ║
 ║ 💰 COST BREAKDOWN                                                          ║
 ║    ├─ Classify LLM (input):      $0.000935                               ║
 ║    ├─ Classify LLM (output):     $0.000200                               ║
@@ -414,17 +308,32 @@ Solution: Implement smart history truncation (keep last 5 messages only)
 
 **Trace Analysis:**
 
-```
-Failed Request Trace:
-
-SPAN 5: response_model (ChatOpenAI)
-├─ Output: "The answer is foo_bar_baz"  ← NOT JSON!
-└─ Expected: {"answer": "..."}
-
-SPAN 6: parse_response (JsonOutputParser)
-├─ Input: "The answer is foo_bar_baz"
-├─ Attempted to parse: FAILED ❌
-└─ Error: "JSONDecodeError: Expecting value"
+```mermaid
+graph TD
+    A["🔴 FAILED REQUEST TRACE"]
+    B["SPAN 5: response_model<br/>Type: ChatOpenAI LLM"]
+    C["Output: 'The answer is foo_bar_baz'<br/>❌ NOT JSON!"]
+    D["Expected: JSON format<br/>{'answer': '...'}'"]
+    E["SPAN 6: parse_response<br/>Type: JsonOutputParser"]
+    F["Input: 'The answer is foo_bar_baz'"]
+    G["Parse Attempt: ❌ FAILED<br/>Error: JSONDecodeError"]
+    H["💡 Root Cause<br/>Model hallucination (5% rate)<br/>Doesn't follow JSON instructions"]
+    I["✅ Solution<br/>Use structured output<br/>WP-1.5 patterns<br/>Reduces error to 0.1%"]
+    
+    A --> B
+    B --> C
+    B --> D
+    E --> F
+    C --> E
+    G --> H
+    H --> I
+    
+    style A fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    style B fill:#fff3e0
+    style C fill:#ffcdd2
+    style G fill:#ffcdd2
+    style H fill:#ffb74d
+    style I fill:#c8e6c9
 ```
 
 **Root Cause:** Model doesn't always follow JSON format instructions (5% hallucination rate).

@@ -130,29 +130,24 @@
 - Session/cache data (high-volume, temporary)
 
 ### 🔀 Hybrid Approach (Recommended for Most Enterprises):
-```
-┌─────────────────────────────────┐
-│ OKF (Knowledge Management)      │
-│ - Master data                   │
-│ - Configurations                │
-│ - AI context extraction         │
-│ - Team collaboration            │
-└────────────┬────────────────────┘
-             │
-        ┌────┴────┐
-        ▼         ▼
-    ┌────────┐  ┌──────────┐
-    │ Export │  │ Cache    │
-    │ to DB  │  │ Layer    │
-    └────┬───┘  └────┬─────┘
-         │           │
-         ▼           ▼
-    ┌────────────────────────┐
-    │ Traditional Systems    │
-    │ - OLTP (Transactions)  │
-    │ - OLAP (Analytics)     │
-    │ - Caching/Search       │
-    └────────────────────────┘
+```mermaid
+graph TD
+    OKF["📚 OKF<br/>Knowledge Management<br/>• Master data<br/>• Configurations<br/>• AI context<br/>• Collaboration"]
+    
+    Export["📤 Export to DB<br/>for OLTP"]
+    Cache["⚡ Cache Layer<br/>for Performance"]
+    
+    Traditional["🗄️ Traditional Systems<br/>• OLTP (Transactions)<br/>• OLAP (Analytics)<br/>• Caching/Search"]
+    
+    OKF --> Export
+    OKF --> Cache
+    Export --> Traditional
+    Cache --> Traditional
+    
+    style OKF fill:#a5d6a7,stroke:#388e3c,stroke-width:2px
+    style Export fill:#81c784
+    style Cache fill:#81c784
+    style Traditional fill:#fff3e0
 ```
 
 **Use OKF as source of truth, export to traditional systems for high-throughput workloads.**
@@ -236,47 +231,42 @@ Speedup: 15-30x faster
 ### The Structure/Content Inversion
 
 **Traditional Architecture:**
-```
-┌─────────────────────────────────────┐
-│ Application Code                    │
-└────────────────┬────────────────────┘
-                 │ (Multiple queries, must know schema)
-                 ▼
-    ┌──────────────────────────────┐
-    │ API/Query Layer (Stateless)  │
-    │ - REST, GraphQL, SQL         │
-    └────────────────┬─────────────┘
-                     │
-                     ▼
-           ┌──────────────────┐
-           │ Data Layer       │
-           │ (DB, APIs, etc.) │
-           └──────────────────┘
-
-Problem: Structure is implicit, buried in schema
+```mermaid
+graph TD
+    App1["📱 Application Code"]
+    Query1["❓ Multiple queries<br/>Must know schema"]
+    API1["🔌 API/Query Layer<br/>• REST, GraphQL, SQL"]
+    Data1["🗄️ Data Layer<br/>Database, APIs, etc."]
+    
+    App1 --> Query1
+    Query1 --> API1
+    API1 --> Data1
+    
+    Note1["⚠️ Problem:<br/>Structure implicit<br/>buried in schema"]
+    
+    style App1 fill:#e3f2fd
+    style API1 fill:#fff3e0
+    style Data1 fill:#fff3e0
+    style Note1 fill:#ffebee
 ```
 
 **OKF Architecture:**
-```
-┌─────────────────────────────────────┐
-│ Application Code                    │
-└────────────────┬────────────────────┘
-                 │ (One semantic lookup)
-                 ▼
-    ┌──────────────────────────────┐
-    │ OKF Semantic Navigation      │
-    │ - See structure upfront      │
-    │ - Lazy load content          │
-    └────────────────┬─────────────┘
-                     │
-                     ▼
-        ┌────────────────────────┐
-        │ OKF Repository         │
-        │ - Filesystem/Cloud     │
-        │ - Relationships first  │
-        └────────────────────────┘
-
-Advantage: Structure is explicit, self-describing
+```mermaid
+graph TD
+    App2["📱 Application Code"]
+    Nav["🧭 OKF Semantic Navigation<br/>• See structure upfront<br/>• Lazy load content"]
+    Repo["📚 OKF Repository<br/>• Filesystem/Cloud<br/>• Relationships first"]
+    
+    Note2["✅ Advantage:<br/>Structure explicit<br/>self-describing"]
+    
+    App2 --> Nav
+    Nav --> Repo
+    Repo --> Note2
+    
+    style App2 fill:#e3f2fd
+    style Nav fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Repo fill:#a5d6a7,stroke:#388e3c,stroke-width:2px
+    style Note2 fill:#e8f5e9
 ```
 
 ### Semantic Navigation Pattern
