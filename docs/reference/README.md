@@ -43,6 +43,7 @@ These materials help you navigate the repository and understand the LangChain ec
 - **Production Patterns** → [Section 2: Production](../02-production-patterns/README.md)
 - **Memory & Agents** → [Section 3: Memory & State](../03-memory-state-agents/README.md)
 - **Multi-Agent Systems** → [Section 4: Multi-Agent](../04-multi-agent-architectures/README.md)
+- **RAG & Knowledge Architecture** → [Section 5: Capstone RAG](../05-capstone-rag-patterns/README.md)
 
 ### By Learning Style
 - **Visual learner**: Start with [AGENTMAP.md](./AGENTMAP.md)

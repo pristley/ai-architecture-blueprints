@@ -16,6 +16,8 @@ Welcome to the complete documentation for the AI Architecture Blueprints reposit
 | **Learn production patterns** | [Section 2: Production](./02-production-patterns/README.md) | 5 hours |
 | **Build memory-aware agents** | [Section 3: Memory & State](./03-memory-state-agents/README.md) | 4 hours |
 | **Coordinate multiple agents** | [Section 4: Multi-Agent](./04-multi-agent-architectures/README.md) | 7 hours |
+| **Build RAG systems** | [Section 5: Capstone RAG](./05-capstone-rag-patterns/README.md) | 8 hours |
+| **Choose knowledge architecture** | [WP-3.0: Knowledge Architecture](./05-capstone-rag-patterns/WP-3.0-Knowledge-Architecture-Decisions.md) | 3 hours |
 | **See the complete picture** | [AGENTMAP.md](./reference/AGENTMAP.md) | 20 min |
 | **Get ecosystem context** | [LANGCHAIN_ECOSYSTEM_MAP.md](./reference/LANGCHAIN_ECOSYSTEM_MAP.md) | 30 min |
 
@@ -74,7 +76,17 @@ Coordinate multiple agents using choreography or orchestration patterns.
 
 ---
 
-## 📍 Navigation Hubs
+### 🎓 [Section 5: Capstone — RAG & Knowledge Architecture](./05-capstone-rag-patterns/README.md)
+Deep dives into retrieval-augmented generation and knowledge representation decisions.
+
+**Contains:**
+- WP-3.0: Knowledge architecture decisions (OKF vs traditional, 40-50% cost savings)
+- WP-3.1: Naive RAG baseline (foundation for all retrieval systems)
+- WP-3.2+: Advanced retrieval, hierarchical indexing, evaluation
+
+**Outcome:** Build production RAG systems and choose the right knowledge architecture for your use case.
+
+---
 
 ### [🗺️ AGENTMAP.md](./reference/AGENTMAP.md)
 Complete visual map showing:
@@ -118,13 +130,19 @@ All four sections in order, reading deeply and running all examples.
 3. [Multi-Agent Architectures](./04-multi-agent-architectures/README.md)
 **You'll know:** How to build coordinated multi-agent systems.
 
+### Path 5: "RAG & Knowledge Systems" (11 hours)
+1. [Foundations](./01-foundations/README.md)
+2. [Production Patterns](./02-production-patterns/README.md)
+3. [Section 5: RAG & Capstone](./05-capstone-rag-patterns/README.md) - Start with WP-3.0 for architecture decisions
+**You'll know:** How to design and build production RAG systems.
+
 ---
 
 ## 📊 Repository Statistics
 
-- **4 Learning Sections** with 12+ work products
+- **5 Learning Sections** with 13+ work products
 - **9 Code Examples** with 30+ test suites (100+ tests)
-- **~15,000 lines** of documentation and code
+- **~20,000 lines** of documentation and code
 - **100% Cross-referenced** - all links verified
 - **Production-ready** - all code tested and working
 

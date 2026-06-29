@@ -22,6 +22,46 @@ After completing this section, you will:
 
 ## 📚 Work Products
 
+### **WP-3.0: Knowledge Architecture Decisions — OKF vs Traditional Methods**
+**Status:** ✅ Complete | **Time:** 3 hours | **Difficulty:** Intermediate
+
+**What You'll Learn:**
+- Traditional knowledge architectures (databases, REST APIs, multiple formats)
+- Open Knowledge Format (OKF) semantic navigation approach
+- Architectural tradeoffs: complexity vs flexibility vs performance
+- Cost analysis: 40-50% TCO reduction with OKF
+- Adapter code reduction: 75-80% less boilerplate
+- Migration strategies and lock-in risk analysis
+
+**Key Concepts:**
+- Information inversion: "fetch all then interpret" → "interpret structure then fetch"
+- Explicit relationships via `_references` metadata
+- Semantic paths for knowledge navigation
+- In-memory semantic indexing for query optimization
+
+**Delivers:**
+- 9-section comprehensive guide with 14-dimension comparison
+- 8 Mermaid diagrams for architecture visualization
+- Decision framework and quick scoring tool
+- 3-year TCO analysis with detailed cost breakdown
+- Migration playbook for 3 scenarios (greenfield, legacy DB, multi-system)
+- Python implementation examples for semantic navigator
+
+**When to Use:**
+- Designing new knowledge bases for RAG systems
+- Evaluating traditional database vs semantic approaches
+- Building multi-team knowledge platforms
+- Making foundational architecture decisions before WP-3.1
+
+**Perfect Complement to RAG:**
+This WP provides the *knowledge representation layer* that feeds into RAG retrieval. Choose your architecture (OKF or Traditional) before building the RAG pipeline in WP-3.1.
+
+**Read Next:**
+- WP-3.1: Naive RAG (once your knowledge architecture is decided)
+- WP-3.2: Advanced retrieval techniques
+
+---
+
 ### **WP-3.1: RAG Architecture — Naive Baseline**
 **Status:** ✅ Complete | **Time:** 2.5 hours | **Difficulty:** Medium
 
