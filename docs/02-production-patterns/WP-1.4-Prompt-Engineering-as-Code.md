@@ -254,6 +254,48 @@ combined = ChatPromptTemplate.from_messages([system, human])
 └────────────────────────────────────────────────────────────┘
 ```
 
+### 3.1a Prompt Pipeline Architecture (Sequence Diagram)
+
+This diagram shows the flow from raw template through versioning, injection, and composition to final LLM execution:
+
+```mermaid
+sequenceDiagram
+    actor Dev as Developer
+    participant Reg as PromptRegistry
+    participant Ver as PromptVersion
+    participant Tmpl as ChatPromptTemplate
+    participant Inject as Variable<br/>Injection
+    participant Compose as Composition
+    participant LLM as LLM
+
+    Dev->>Reg: register("customer_support",<br/>template_v1.0, metadata)
+    Reg->>Ver: Store template with metadata
+    Ver->>Tmpl: Wrap ChatPromptTemplate
+    Note over Reg: Registry now manages versions<br/>"latest" → v1.0
+
+    Dev->>Reg: get("customer_support",<br/>version="latest")
+    Reg-->>Dev: Returns PromptVersion
+
+    Dev->>Tmpl: format_messages(context_vars)
+    Tmpl->>Inject: Inject variables<br/>{role}, {language}, {input}
+    Inject-->>Tmpl: Rendered messages
+    Tmpl-->>Dev: ChatPromptValue
+
+    Dev->>Compose: compose(base_prompt +<br/>context_prompt)
+    Compose->>Reg: Fetch both versions
+    Compose->>Tmpl: Combine templates
+    Tmpl-->>Compose: New composite<br/>ChatPromptTemplate
+    Compose-->>Dev: Composed template
+
+    Dev->>LLM: Invoke chain with<br/>rendered prompt
+    LLM->>LLM: Process tokens
+    LLM-->>Dev: Structured output
+
+    Note over Dev,LLM: Pipeline complete:<br/>Template → Variables → Composition → Execution
+```
+
+**💡 KEY INSIGHT**: The PromptRegistry decouples template management from execution. Versioning, composition, and injection happen before the LLM sees anything.
+
 ### 3.2 Implementation
 
 ```python

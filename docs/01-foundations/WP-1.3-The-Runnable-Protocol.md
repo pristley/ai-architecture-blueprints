@@ -16,7 +16,7 @@ This document is organized into 12 comprehensive parts:
 | 1 | What is a Runnable? | 5 min | Beginner |
 | 2 | The Four Execution Modes | 10 min | Beginner |
 | 3 | Composition as a Graph | 10 min | Intermediate |
-| 4 | Architecture Diagrams | 5 min | All Levels |
+| 4 | Architecture Diagrams | 10 min | All Levels |
 | 5 | Implementation Deep Dive | 15 min | Advanced |
 | 6 | Execution Traces & Observability | 10 min | Intermediate |
 | 7 | Performance Characteristics | 10 min | Advanced |
@@ -524,6 +524,101 @@ English Chain  Spanish Chain  French Chain
 Note: All four modes produce the SAME RESULT,
       but with different execution characteristics
 ```
+
+### Diagram 5: Runnable Protocol Lifecycle (Interactive)
+
+```mermaid
+graph TD
+    A["Input Data"] --> B{"Execution Mode?"}
+    
+    B -->|invoke| C["Synchronous<br/>Execution"]
+    B -->|batch| D["Batch<br/>Processing"]
+    B -->|stream| E["Streaming<br/>Execution"]
+    B -->|ainvoke| F["Async<br/>Execution"]
+    
+    C --> G["Single Output"]
+    D --> H["Multiple Outputs<br/>in Parallel"]
+    E --> I["Token-by-Token<br/>Streaming"]
+    F --> J["Non-blocking<br/>Result"]
+    
+    G --> K{"Pipeline<br/>Operations?"}
+    H --> K
+    I --> K
+    J --> K
+    
+    K -->|branching| L["RunnableBranch<br/>Conditional Routing"]
+    K -->|retry| M["Retry Logic<br/>Exponential Backoff"]
+    K -->|fallback| N["Error Handling<br/>Fallback Chain"]
+    K -->|no-op| O["Direct Output"]
+    
+    L --> P["Routed to<br/>Specific Chain"]
+    M --> Q["Retried Output"]
+    N --> R["Graceful<br/>Degradation"]
+    O --> S["Final Output"]
+    
+    P --> T["Result"]
+    Q --> T
+    R --> T
+    S --> T
+    
+    style A fill:#e1f5e1
+    style T fill:#ffe1e1
+    style B fill:#e1e5ff
+    style K fill:#e1e5ff
+```
+
+**💡 KEY INSIGHT**: The Runnable protocol unifies all execution patterns. Regardless of which mode you choose, the result is the same—only the execution characteristics differ.
+
+### Diagram 6: Abstraction Hierarchy
+
+```mermaid
+graph TD
+    A["LangChain<br/>Core Abstraction"]
+    
+    A --> B["Runnable Protocol<br/>(Universal Interface)"]
+    
+    B --> C["Execution Methods"]
+    B --> D["Composition Methods"]
+    B --> E["Configuration"]
+    
+    C --> C1["invoke"]
+    C --> C2["batch"]
+    C --> C3["stream"]
+    C --> C4["ainvoke"]
+    
+    D --> D1["pipe |"]
+    D --> D2["add |"]
+    D --> D3["+"]
+    
+    E --> E1["with_config"]
+    E --> E2["bind"]
+    
+    B --> F["Concrete Implementations"]
+    
+    F --> F1["LLMs & Models"]
+    F --> F2["Prompt Templates"]
+    F --> F3["Output Parsers"]
+    F --> F4["Chains"]
+    
+    F4 --> F4a["Sequential Chain"]
+    F4 --> F4b["Branching Chain"]
+    F4 --> F4c["Parallel Chain"]
+    
+    F1 --> F1a["OpenAI"]
+    F1 --> F1b["Anthropic"]
+    F1 --> F1c["Local Models"]
+    
+    F --> F5["Retrievers"]
+    F --> F6["Tools"]
+    
+    style A fill:#fff4e1
+    style B fill:#e1f5ff
+    style F fill:#f0e1ff
+    style C fill:#ffe1f0
+    style D fill:#e1ffe1
+```
+
+**✅ BEST PRACTICE**: Understanding this hierarchy helps you recognize that LangChain's power comes from universal composition. Whether you're using a built-in chain or creating a custom Runnable, you're working with the same abstraction layer.
 
 ---
 

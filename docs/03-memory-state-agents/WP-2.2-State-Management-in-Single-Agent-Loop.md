@@ -416,6 +416,212 @@ class LoopGuard:
 
 ---
 
+## Part 6: Human-in-the-Loop (HITL) Checkpointing
+
+### The Pattern: Pause Before Critical Actions
+
+In production systems, certain state transitions are high-risk and should require human approval before proceeding:
+- Executing external tools (API calls, database writes)
+- Making financial transactions
+- Deleting or modifying user data
+- Transitioning from research to action
+
+The solution is **Human-in-the-Loop checkpointing**: pause the state machine at critical points, present the proposed action, wait for approval, then continue or rollback.
+
+### HITL Sequence Diagram
+
+This diagram shows how a research agent pauses before executing a tool:
+
+```mermaid
+sequenceDiagram
+    participant Agent as State Machine<br/>Agent
+    participant StateStore as State Store
+    participant HumanReview as Human Reviewer<br/>(Email/Dashboard)
+    participant ToolAPI as External Tool<br/>API
+    participant Monitor as Monitoring &<br/>Audit Log
+
+    rect rgb(200, 220, 255)
+        Note over Agent,Monitor: Turn 1: Automated Execution (No HITL)
+        Agent->>Agent: State: IDLE → PLANNING
+        Agent->>StateStore: Save checkpoint
+        Agent->>Monitor: Log: Planning phase started
+    end
+
+    rect rgb(255, 240, 200)
+        Note over Agent,Monitor: Turn 2: Search (Automated, Low Risk)
+        Agent->>Agent: State: PLANNING → SEARCHING
+        Agent->>ToolAPI: Execute search query
+        ToolAPI-->>Agent: Return results
+        Agent->>StateStore: Save checkpoint
+        Agent->>Monitor: Log: Search completed
+    end
+
+    rect rgb(255, 200, 200)
+        Note over Agent,Monitor: Turn 3: Action Phase (HIGH RISK - Requires HITL)
+        Agent->>Agent: Proposed state: SEARCHING → ACTION
+        Agent->>StateStore: Save state (not yet committed)
+        StateStore->>Monitor: Log: Pending approval
+        
+        Agent->>HumanReview: Send action summary:<br/>- Tool: "SendEmail"<br/>- Action: "Send results to user"<br/>- State transition: SEARCHING → ACTION
+        
+        HumanReview->>HumanReview: Human reviews action
+        alt Approved
+            HumanReview->>Agent: "✅ APPROVED"
+            Agent->>StateStore: Commit state transition
+            Agent->>ToolAPI: Execute tool
+            ToolAPI-->>Agent: Action result
+            Agent->>Monitor: Log: Action executed
+        else Rejected
+            HumanReview->>Agent: "❌ REJECTED"
+            Agent->>StateStore: Rollback to previous state
+            Agent->>Monitor: Log: Action rejected, state restored
+        else Timeout (30 min)
+            Agent->>Monitor: Log: Approval timeout
+            Agent->>StateStore: Rollback and mark as ERROR
+        end
+    end
+
+    rect rgb(200, 255, 200)
+        Note over Agent,Monitor: Turn 4: Resume or Complete
+        alt Action was approved
+            Agent->>Agent: State: ACTION → COMPLETE
+            Agent->>StateStore: Save checkpoint
+        else Action was rejected
+            Agent->>Agent: State: ERROR (waiting for retry)
+            Agent->>Monitor: Alert: Manual intervention needed
+        end
+    end
+```
+
+**Key Checkpoints:**
+- **Low-risk states** (planning, searching): Auto-execute
+- **High-risk states** (action, tool calls, writes): Pause and wait for human approval
+- **Timeout handling**: If no approval in 30 min, rollback
+- **Audit trail**: Every decision is logged
+
+### Implementation Pattern
+
+```python
+class HumanInTheLoopAgent:
+    """Agent with human approval checkpoints."""
+    
+    def __init__(self, state: ResearchState, approval_handler):
+        self.state = state
+        self.approval_handler = approval_handler  # Email, Slack, API, etc.
+        
+        # Define which states require human approval
+        self.requires_approval = {"ACTION", "WRITE", "DELETE", "EXTERNAL_API"}
+    
+    def propose_transition(self, target_state: str, action_description: str) -> bool:
+        """
+        Propose a state transition. If target state requires approval,
+        pause and wait for human decision.
+        
+        Returns: True if transition approved, False if rejected/timeout
+        """
+        
+        # Check if approval required
+        if target_state not in self.requires_approval:
+            # Low-risk: proceed automatically
+            return self.state.record_action(target_state, action_description)
+        
+        # High-risk: request human approval
+        print(f"⏸️  Requesting approval for: {action_description}")
+        
+        approval_request = {
+            "session_id": self.state.session_id,
+            "current_state": self.state.state,
+            "proposed_state": target_state,
+            "action": action_description,
+            "reasoning": f"Agent wants to transition to {target_state}",
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+        
+        # Send to human for review
+        approval = self.approval_handler.request_approval(approval_request, timeout_seconds=1800)
+        
+        if approval["status"] == "approved":
+            print(f"✅ Approved: {action_description}")
+            return self.state.record_action(target_state, action_description)
+        elif approval["status"] == "rejected":
+            print(f"❌ Rejected: {action_description}")
+            return False
+        else:  # timeout or error
+            print(f"⏰ Approval timeout/error for: {action_description}")
+            return False
+```
+
+### Approval Handler Example (Email-based)
+
+```python
+from datetime import datetime, timedelta
+import json
+
+class EmailApprovalHandler:
+    """Request human approval via email."""
+    
+    def __init__(self, mail_service, recipient_email: str):
+        self.mail = mail_service
+        self.recipient = recipient_email
+        self.pending_approvals = {}  # approval_id -> {request, timestamp}
+    
+    def request_approval(self, request: dict, timeout_seconds: int = 1800) -> dict:
+        """
+        Send email with approval link.
+        Returns approval response when human clicks link, or timeout dict.
+        """
+        
+        approval_id = str(uuid.uuid4())
+        self.pending_approvals[approval_id] = {
+            "request": request,
+            "created_at": datetime.utcnow(),
+        }
+        
+        # Generate approval links
+        approve_url = f"https://app.example.com/approve/{approval_id}?decision=yes"
+        reject_url = f"https://app.example.com/approve/{approval_id}?decision=no"
+        
+        # Send email
+        subject = f"[Agent Action] Requires Approval: {request['proposed_state']}"
+        body = f"""
+        Agent Action Requires Approval
+        
+        Current State: {request['current_state']}
+        Proposed State: {request['proposed_state']}
+        Action: {request['action']}
+        Session: {request['session_id']}
+        
+        🔗 APPROVE: {approve_url}
+        ❌ REJECT: {reject_url}
+        
+        ⏰ Decision required within 30 minutes
+        """
+        
+        self.mail.send(to=self.recipient, subject=subject, body=body)
+        
+        # Wait for response (in real system, this would be async with webhooks)
+        start = datetime.utcnow()
+        while (datetime.utcnow() - start).total_seconds() < timeout_seconds:
+            if approval_id in self.pending_approvals:
+                status = self.pending_approvals[approval_id].get("decision")
+                if status:
+                    result = {"status": status, "decision_time": datetime.utcnow().isoformat()}
+                    del self.pending_approvals[approval_id]
+                    return result
+            
+            time.sleep(10)  # Poll every 10 seconds
+        
+        # Timeout
+        return {"status": "timeout", "reason": "No approval within 30 minutes"}
+    
+    def on_approval_decision(self, approval_id: str, decision: str):
+        """Called when human makes a decision (via webhook)."""
+        if approval_id in self.pending_approvals:
+            self.pending_approvals[approval_id]["decision"] = decision
+```
+
+---
+
 ## Part 6: The Main Loop
 
 ### Loop with State Management

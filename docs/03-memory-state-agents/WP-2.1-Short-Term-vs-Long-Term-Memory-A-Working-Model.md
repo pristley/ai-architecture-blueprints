@@ -13,7 +13,7 @@
 |---------|-------|----------|-------|
 | 1 | Executive Summary | 5 min | All |
 | 2 | The Memory Problem | 10 min | All |
-| 3 | Architecture: Dual-Memory Pattern | 10 min | Intermediate |
+| 3 | Architecture: Dual-Memory Pattern | 15 min | Intermediate |
 | 4 | Short-Term Memory: ConversationBufferWindowMemory | 15 min | Intermediate |
 | 5 | Long-Term Memory: Vector Store + Summary | 15 min | Advanced |
 | 6 | Separation of Concerns | 10 min | Intermediate |
@@ -184,6 +184,73 @@ flowchart LR
     Response -->|"Store in buffer"| Buffer
     Response -->|"Analyze for<br/>new facts"| Extract
 ```
+
+### Dual-Memory Interaction Model (Complete Cycle)
+
+This diagram shows the complete memory interaction cycle during a single conversation turn:
+
+```mermaid
+graph TB
+    subgraph ShortTerm["⚡ SHORT-TERM MEMORY<br/>(Active Context)"]
+        ST1["Turn 1: User says 'I love hiking'"]
+        ST2["Turn 2: Assistant responds"]
+        ST3["Turn 3: User says 'Near Toronto'"]
+        ST4["Turn 4: Assistant responds<br/>(Most recent context)"]
+        ST1 --> ST2 --> ST3 --> ST4
+    end
+    
+    subgraph LongTerm["💾 LONG-TERM MEMORY<br/>(Extracted Facts)"]
+        LT1["User Profile:<br/>- Location: Toronto<br/>- Job: Engineer"]
+        LT2["Interests:<br/>- Hiking<br/>- Outdoor activities"]
+        LT3["Preferences:<br/>- Weekend trips<br/>- Trail difficulty: moderate"]
+        LT1 -.->|"Persist across<br/>conversations"| LT2
+        LT2 -.-> LT3
+    end
+    
+    subgraph Process["🔄 MEMORY OPERATIONS"]
+        Q["Query:<br/>Semantic search<br/>for relevant facts"]
+        U["Update:<br/>Extract new facts<br/>from latest turn"]
+        M["Merge:<br/>Combine recent +<br/>relevant context"]
+    end
+    
+    subgraph LLM["🧠 DECISION LAYER"]
+        CTX["Context Window:<br/>Recent messages +<br/>Retrieved facts"]
+        LLMCall["LLM Invocation"]
+    end
+    
+    Input["👤 New User Message"]
+    
+    Input -->|"Add to buffer"| ShortTerm
+    Input -->|"Extract entities"| Process
+    
+    ShortTerm -->|"Last N turns<br/>(immediate context)"| M
+    Process -->|"Search for<br/>similar context"| LongTerm
+    LongTerm -->|"Retrieve matching<br/>facts & preferences"| M
+    
+    M -->|"Construct<br/>enriched context"| CTX
+    CTX --> LLMCall
+    
+    LLMCall -->|"Generate response"| Response["💬 Response"]
+    
+    Response -->|"Store in buffer<br/>(sliding window)"| ShortTerm
+    Response -->|"Extract facts<br/>from assistant output"| Process
+    Process -->|"Upsert to vector DB"| LongTerm
+    
+    style ShortTerm fill:#e3f2fd
+    style LongTerm fill:#f3e5f5
+    style Process fill:#fff3e0
+    style LLM fill:#e8f5e9
+    style Input fill:#ffe0b2
+    style Response fill:#c8e6c9
+```
+
+**💡 KEY INSIGHT**: On each turn:
+1. **Short-term** buffers the recent exchange (tokens-bounded)
+2. **Long-term** retrieves facts matching the query context (semantically relevant)
+3. **Merge** combines both to create the enriched context window
+4. **Response** is analyzed to extract new facts for long-term storage
+
+This cycle keeps conversation quality high while maintaining predictable token costs.
 
 ---
 

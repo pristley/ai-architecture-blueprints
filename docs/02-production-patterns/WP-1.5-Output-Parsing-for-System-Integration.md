@@ -102,6 +102,60 @@ The important design choice is that each stage has a single job:
 3. `RetryWithErrorOutputParser` gives the model its own error context so it can correct missing or invalid fields.
 4. Human review handles the cases the model cannot fix safely.
 
+### Reliability & Recovery State Machine
+
+This state machine diagram illustrates the internal state transitions and error handling logic:
+
+```mermaid
+stateDiagram-v2
+    [*] --> RawOutput: invoke()
+    
+    RawOutput --> Validation: Output received
+    
+    Validation --> Valid: ✓ Schema OK
+    Validation --> Malformed: ✗ Syntax Error
+    Validation --> Invalid: ✗ Semantic Error
+    
+    Valid --> Success: Valid ExtractedInvoice
+    
+    Malformed --> Repair: OutputFixingParser
+    Repair --> Revalidate: Attempt repair
+    Revalidate --> Valid: ✓ Repair OK
+    Revalidate --> Invalid: ✗ Repair failed
+    
+    Invalid --> RetryState: RetryWithErrorOutputParser
+    RetryState --> RetryInvoke: Feed error feedback
+    RetryInvoke --> Revalidation: Retry output
+    Revalidation --> Valid: ✓ Retry OK
+    Revalidation --> ManualReview: ✗ Still invalid
+    
+    ManualReview --> HumanReview: Dead-letter queue
+    HumanReview --> [*]
+    
+    Success --> [*]
+    
+    note right of Valid
+        Business rules checked
+        All fields present
+        Type safety confirmed
+    end note
+    
+    note right of Repair
+        Attempt to fix:
+        - Missing quotes
+        - Trailing commas
+        - Type mismatches
+    end note
+    
+    note right of RetryState
+        Supply validation error
+        Ask model to correct
+        Bounded retry count
+    end note
+```
+
+**✅ BEST PRACTICE**: Each recovery path has an exit condition. Never retry infinitely. Escalate to human review when automated recovery exhausted.
+
 ## Why Native Structured Output Comes First
 
 Models such as GPT-4o can emit structured responses directly. When that is available, it is the most robust option because the model is constrained to the schema before the text ever reaches your application code.

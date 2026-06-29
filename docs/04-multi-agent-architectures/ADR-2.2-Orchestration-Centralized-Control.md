@@ -54,6 +54,65 @@ The Controller is the **single source of truth** for:
             └──────────────────────────────────────┘
 ```
 
+### Orchestration: Centralized Control Flow (Mermaid)
+
+This diagram shows how a central Manager agent orchestrates and delegates to Worker agents:
+
+```mermaid
+graph TB
+    subgraph Controller["🎯 MANAGER AGENT<br/>(Central Orchestrator)"]
+        C1["📋 Plan<br/>Step 1: Fetch<br/>Step 2: Analyze<br/>Step 3: Synthesize<br/>Step 4: Format"]
+        C2["💾 State<br/>current_step<br/>results[]<br/>errors[]<br/>attempt_count"]
+        C3["🧠 Logic<br/>Evaluate output<br/>Decide next action<br/>Handle errors"]
+    end
+
+    C1 --> C3
+    C2 --> C3
+
+    subgraph Workers["👷 STATELESS WORKER AGENTS"]
+        W1["Fetcher<br/>Execute search<br/>Return data"]
+        W2["Analyzer<br/>Extract facts<br/>Return analysis"]
+        W3["Synthesizer<br/>Write draft<br/>Return text"]
+        W4["Formatter<br/>Add polish<br/>Return formatted"]
+    end
+
+    C3 -->|"1️⃣ STEP 1: Fetch"| W1
+    W1 -->|"result: [data]"| C3
+    C3 -->|"✅ evaluate"| C2
+
+    C3 -->|"2️⃣ STEP 2: Analyze"| W2
+    W2 -->|"result: [facts]"| C3
+    C3 -->|"✅ evaluate"| C2
+
+    C3 -->|"3️⃣ STEP 3: Synthesize"| W3
+    W3 -->|"result: [draft]"| C3
+    C3 -->|"✅ evaluate"| C2
+
+    C3 -->|"4️⃣ STEP 4: Format"| W4
+    W4 -->|"result: [formatted]"| C3
+    C3 -->|"✅ evaluate"| C2
+
+    C3 -->|"All steps complete"| Output["✅ Final Report"]
+
+    style Controller fill:#fff3e0
+    style Workers fill:#e8f5e9
+    style C1 fill:#ffb74d
+    style C2 fill:#ffb74d
+    style C3 fill:#ffb74d
+    style W1 fill:#a5d6a7
+    style W2 fill:#a5d6a7
+    style W3 fill:#a5d6a7
+    style W4 fill:#a5d6a7
+    style Output fill:#81c784
+```
+
+**Key Characteristics:**
+- **Central Controller** – Makes all decisions about what to do next
+- **Deterministic workflow** – Same input always produces same execution path
+- **Strong coupling** – Workers depend on Controller for sequencing
+- **Full visibility** – Every step logged, every decision auditable
+- **Simple to debug** – Linear execution flow is easy to trace and understand
+
 ---
 
 ## Context: Why Orchestration?

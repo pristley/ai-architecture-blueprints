@@ -43,6 +43,64 @@ Critic subscribes, receives "report-synthesized", publishes: "review-completed"
 Drafter subscribes, receives "review-completed"
 ```
 
+### Choreography: Event-Driven Flow (Mermaid)
+
+This diagram shows how agents interact through an event bus without central coordination:
+
+```mermaid
+graph TB
+    subgraph EventBus["📡 EVENT BUS<br/>(Pub/Sub - Kafka, RabbitMQ, Redis)"]
+        E1["data-fetched"]
+        E2["report-synthesized"]
+        E3["review-completed"]
+        E4["revision-required"]
+    end
+
+    subgraph Agents["🤖 AUTONOMOUS AGENTS"]
+        A1["WebSearcher<br/>publishes: data-fetched"]
+        A2["Drafter<br/>subscribes: data-fetched<br/>publishes: report-synthesized"]
+        A3["Critic<br/>subscribes: report-synthesized<br/>publishes: review-completed"]
+    end
+
+    A1 -->|"1. fetch data"| A1
+    A1 -->|"2. publish"| E1
+
+    E1 -->|"3. subscribe"| A2
+    A2 -->|"4. draft"| A2
+    A2 -->|"5. publish"| E2
+
+    E2 -->|"6. subscribe"| A3
+    A3 -->|"7. critique"| A3
+    
+    A3 -->|"quality < threshold?"| A3
+    A3 -->|"8. YES: publish"| E4
+    A3 -->|"9. NO: publish"| E3
+
+    E4 -->|"10. subscribe"| A2
+    A2 -->|"11. revise"| A2
+    A2 -->|"12. publish"| E2
+
+    E3 -->|"Final Output"| Output["✅ Report Complete"]
+
+    style EventBus fill:#e3f2fd
+    style Agents fill:#f3e5f5
+    style A1 fill:#bbdefb
+    style A2 fill:#bbdefb
+    style A3 fill:#bbdefb
+    style E1 fill:#81c784
+    style E2 fill:#81c784
+    style E3 fill:#81c784
+    style E4 fill:#ffb74d
+    style Output fill:#c8e6c9
+```
+
+**Key Characteristics:**
+- **No central controller** – Agents decide independently what to do
+- **Loose coupling** – Agents don't know about each other, only events
+- **Self-regulating feedback loops** – Quality improves through agent interactions
+- **Emergent behavior** – System behavior emerges from local agent decisions
+- **Event durability** – Events persist in the bus for replay and auditing
+
 ---
 
 ## Why This Decision

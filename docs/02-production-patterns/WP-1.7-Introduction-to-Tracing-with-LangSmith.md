@@ -60,6 +60,54 @@ Chain Execution
    └─ Total Cost ($)
 ```
 
+### Observability Hook Map (System Architecture)
+
+This diagram shows where LangSmith integrates into a production chain and which observation points are available:
+
+```mermaid
+graph TB
+    Input["📥 Input Data<br/>(serialized)"] 
+    
+    Input -->|hook:start| Trace["🔍 LangSmith Trace<br/>Span Created"]
+    
+    Trace --> Chain["Chain Execution<br/>(Runnable Graph)"]
+    
+    Chain -->|hook:run| PromptHook["📝 Prompt Hook<br/>Template variables<br/>Rendered messages<br/>Token count"]
+    Chain -->|hook:run| LLMHook["🤖 LLM Hook<br/>API call details<br/>Provider latency<br/>Tokens in/out<br/>Cost calculation"]
+    Chain -->|hook:run| ParserHook["🔧 Parser Hook<br/>Input string<br/>Parsing latency<br/>Schema validation<br/>Error details"]
+    Chain -->|hook:run| CustomHook["⚙️ Custom Runnable Hook<br/>Execution time<br/>Custom metrics<br/>Error state"]
+    
+    PromptHook --> Execution["Chain Runtime"]
+    LLMHook --> Execution
+    ParserHook --> Execution
+    CustomHook --> Execution
+    
+    Execution -->|hook:end| Output["📤 Final Output<br/>(serialized)"]
+    
+    Output -->|hook:final| Aggregation["📊 Aggregation<br/>Total duration<br/>Total tokens<br/>Total cost<br/>Status: Success/Error"]
+    
+    Aggregation -->|transmit| LangSmith["🟢 LangSmith<br/>Cloud Platform"]
+    
+    LangSmith -->|query| UI["💻 Web UI<br/>Trace explorer<br/>Cost breakdown<br/>Performance analysis<br/>Error debugging"]
+    
+    LangSmith -->|export| Analytics["📈 Analytics<br/>Latency trends<br/>Cost tracking<br/>Error rates<br/>Model performance"]
+    
+    style Input fill:#e8f5e9
+    style Output fill:#e8f5e9
+    style Trace fill:#bbdefb
+    style PromptHook fill:#fff3e0
+    style LLMHook fill:#fff3e0
+    style ParserHook fill:#fff3e0
+    style CustomHook fill:#fff3e0
+    style Execution fill:#f3e5f5
+    style Aggregation fill:#fce4ec
+    style LangSmith fill:#c8e6c9
+    style UI fill:#a5d6a7
+    style Analytics fill:#81c784
+```
+
+**💡 KEY INSIGHT**: LangSmith hooks into every stage of execution. Your application logic doesn't change—the hooks are transparent and automatic when `LANGSMITH_TRACING=true`.
+
 ### Why Trace?
 
 | Use Case | Benefit |

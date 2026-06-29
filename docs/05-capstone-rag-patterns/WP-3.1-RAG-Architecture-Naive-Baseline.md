@@ -160,6 +160,91 @@ This work product documents the **naive baseline** as the starting point, then e
 
 ---
 
+## SECTION 2b: NAIVE VS. ADVANCED RAG FLOW
+
+### Retrieval Architecture Comparison
+
+This diagram shows the fundamental difference between naive and advanced RAG pipelines:
+
+```mermaid
+graph LR
+    subgraph Naive["🟦 NAIVE RAG PIPELINE<br/>(Simple but Limited)"]
+        N1["👤 Query<br/>User question"]
+        N2["🔍 Vector Search<br/>k=5 by similarity"]
+        N3["📋 Context Assembly<br/>Concat top-5 chunks"]
+        N4["🤖 LLM<br/>Generate answer"]
+        N1 -->|"Embed query"| N2
+        N2 -->|"Top-5 results"| N3
+        N3 -->|"Context window"| N4
+        N4 -->|"Answer"| N5["✅ Output"]
+    end
+
+    subgraph Advanced["🟩 ADVANCED RAG PIPELINE<br/>(Robust at Scale)"]
+        A1["👤 Query<br/>User question"]
+        A2["🧭 Router<br/>Classify query type"]
+        A3["🔍 Retriever 1<br/>Semantic search"]
+        A4["🔍 Retriever 2<br/>Keyword search"]
+        A5["🎯 Filter<br/>Metadata filtering"]
+        A6["📊 Reranker<br/>Cross-encoder scoring"]
+        A7["📋 Context Assembly<br/>Top reranked results"]
+        A8["🤖 LLM<br/>Generate answer"]
+        
+        A1 -->|"Analyze"| A2
+        A2 -->|"Semantic?"| A3
+        A2 -->|"Keyword?"| A4
+        A3 -->|"Top-100"| A5
+        A4 -->|"Top-100"| A5
+        A5 -->|"Filter results"| A6
+        A6 -->|"Score & rank"| A7
+        A7 -->|"Top-5 quality"| A8
+        A8 -->|"Answer"| A9["✅ Output"]
+    end
+
+    style Naive fill:#e3f2fd
+    style Advanced fill:#e8f5e9
+    style N1 fill:#bbdefb
+    style N2 fill:#64b5f6
+    style N3 fill:#42a5f5
+    style N4 fill:#2196f3
+    style A1 fill:#a5d6a7
+    style A2 fill:#81c784
+    style A3 fill:#66bb6a
+    style A4 fill:#66bb6a
+    style A5 fill:#4caf50
+    style A6 fill:#388e3c
+    style A7 fill:#2e7d32
+    style A8 fill:#1b5e20
+```
+
+**Naive RAG Characteristics:**
+- ✅ Simple: Single retrieval stage
+- ✅ Fast: Minimal latency (100-200ms)
+- ❌ Limited: No filtering or reranking
+- ❌ Brittle: Quality degrades with scale
+- ❌ Noisy: Top-k often includes irrelevant chunks
+
+**Advanced RAG Characteristics:**
+- ✅ Robust: Multi-stage filtering and reranking
+- ✅ Accurate: Cross-encoder produces better results (85%+ vs 65%)
+- ✅ Flexible: Router handles different query types
+- ❌ Complex: More infrastructure overhead
+- ❌ Slower: Additional latency (200-500ms total)
+
+### When to Use Each
+
+| Scenario | Recommendation | Reason |
+|----------|-----------------|--------|
+| **Prototyping** | Naive | Fast iteration, minimal setup |
+| **<5K documents** | Naive | Retrieval quality sufficient at small scale |
+| **5K-50K documents** | Advanced | Need filtering + reranking to maintain quality |
+| **>50K documents** | Advanced + Hierarchical | Must use multi-layer indexing |
+| **Well-curated corpus** | Naive | High-quality docs reduce noise |
+| **Noisy/heterogeneous** | Advanced | Filtering critical for relevance |
+| **Real-time requirements** | Naive | Latency-sensitive applications |
+| **Quality-focused** | Advanced | Reranking 15-20% accuracy improvement |
+
+---
+
 ## SECTION 3: THE COMPOSABLE PATTERN
 
 ### Runnable Protocol Design
@@ -929,6 +1014,136 @@ WP-3.4: Build evaluations & metrics (next)
 | **WP-3.4** | Evaluation & Metrics | Measure performance; iterate |
 | **WP-3.5** | RAG + Agents | Autonomous research, multi-step QA |
 | **WP-3.6** | Knowledge Graph RAG | Entity extraction; structured retrieval |
+
+---
+
+## SECTION 9b: HIERARCHICAL INDEXING (Teaser for WP-3.3)
+
+### The Problem: Fixed Context Windows vs Growing Document Collections
+
+As document collections scale, naive RAG hits a fundamental problem:
+
+```
+Documents: 100 → 1K → 10K → 100K
+Context Window: Fixed at 4K or 8K tokens
+
+Result: Retrieval becomes increasingly lossy
+- At 100 docs: Can retrieve 5 relevant chunks easily
+- At 10K docs: Top-5 chunks may represent <0.1% of data
+- At 100K docs: Impossible to find all relevant sections
+```
+
+**Hierarchical Indexing** solves this by creating multiple levels of abstraction:
+
+### Hierarchical Retrieval Architecture
+
+This diagram shows how documents are chunked at multiple levels and how search traverses the hierarchy:
+
+```mermaid
+graph TD
+    subgraph Input["📄 INPUT: Document Collection<br/>(100K documents, 10GB text)"]
+        Doc["Long document:<br/>20K tokens"]
+    end
+
+    subgraph Layer0["📍 LAYER 0: Document Summaries<br/>(Sparse, Context-Giving)"]
+        L0["Summary:<br/>1 per document<br/>200-300 tokens<br/>Captures key topics"]
+    end
+
+    subgraph Layer1["📍 LAYER 1: Section Summaries<br/>(Intermediate, Topic-Giving)"]
+        L1a["Section A summary<br/>300 tokens"]
+        L1b["Section B summary<br/>300 tokens"]
+        L1c["Section C summary<br/>300 tokens"]
+    end
+
+    subgraph Layer2["📍 LAYER 2: Semantic Chunks<br/>(Fine-Grained, Detail-Giving)"]
+        L2a["Chunk 2.1<br/>1K tokens"]
+        L2b["Chunk 2.2<br/>1K tokens"]
+        L2c["Chunk 2.3<br/>1K tokens"]
+        L2d["Chunk 2.4<br/>1K tokens"]
+    end
+
+    subgraph Search["🔍 RETRIEVAL PROCESS"]
+        Q["1. Query in"]
+        S1["2. Search Layer 0<br/>Find relevant documents"]
+        S2["3. Search Layer 1<br/>Find sections within<br/>relevant documents"]
+        S3["4. Search Layer 2<br/>Find detailed chunks<br/>within sections"]
+        Merge["5. Assemble context:<br/>Summary + sections +<br/>top chunks"]
+    end
+
+    Doc -->|"Extract summary"| L0
+    Doc -->|"Split by sections"| L1a
+    Doc -->|"Split by sections"| L1b
+    Doc -->|"Split by sections"| L1c
+    L1a -->|"Chunk fine-grain"| L2a
+    L1a -->|"Chunk fine-grain"| L2b
+    L1b -->|"Chunk fine-grain"| L2c
+    L1c -->|"Chunk fine-grain"| L2d
+
+    Q --> S1
+    S1 -->|"Found: Docs 5, 42, 103"| S2
+    S2 -->|"Found: Sections 5.2, 42.1, 103.4"| S3
+    S3 -->|"Found: Chunks top-3"| Merge
+
+    Merge -->|"Final context window<br/>~3K tokens:<br/>Summaries +<br/>section context +<br/>chunk details"| Output["✅ To LLM"]
+
+    style Input fill:#e3f2fd
+    style Layer0 fill:#fff3e0
+    style Layer1 fill:#ffebee
+    style Layer2 fill:#f3e5f5
+    style Search fill:#e8f5e9
+    style Output fill:#c8e6c9
+```
+
+**Key Benefits:**
+- ✅ **Hierarchical filtering:** Broad → medium → fine search
+- ✅ **Context reuse:** Summaries + details in same prompt
+- ✅ **Scale to 100K+:** Each layer reduces cardinality
+- ✅ **Graceful degradation:** Can return summaries alone if needed
+- ✅ **Better coverage:** Multiple entry points reduce miss rate
+
+**Implementation Preview:**
+```python
+# Pseudo-code: Hierarchical retrieval
+def hierarchical_retrieve(query: str, k: int = 5):
+    # Layer 0: Find relevant documents
+    doc_summaries = retriever_l0.invoke(query, k=50)
+    doc_ids = [d.metadata['doc_id'] for d in doc_summaries]
+    
+    # Layer 1: Within those docs, find sections
+    sections = retriever_l1.invoke(
+        query, 
+        filter={"doc_id": {"$in": doc_ids}},
+        k=10
+    )
+    
+    # Layer 2: Within those sections, find detailed chunks
+    chunks = retriever_l2.invoke(
+        query,
+        filter={"section_id": {"$in": [s.metadata['section_id'] for s in sections]}},
+        k=k
+    )
+    
+    # Assemble: summaries + sections + chunks
+    context = "\n".join([
+        doc.page_content for doc in doc_summaries
+    ]) + "\n" + "\n".join([
+        s.page_content for s in sections
+    ]) + "\n" + "\n".join([
+        c.page_content for c in chunks
+    ])
+    
+    return context
+```
+
+**When to use Hierarchical Indexing:**
+- ✅ Collection >50K documents
+- ✅ Need to cover broad topics + fine details
+- ✅ Context window is limiting factor
+- ✅ Multi-step reasoning needed (e.g., "Find all policies, then details on policy X")
+- ❌ Small collection (<10K docs): Overhead not justified
+- ❌ Latency critical (<100ms): Extra retrieval stages add latency
+
+**Next Steps:** See WP-3.3 for complete implementation with persistence, caching, and evaluation.
 
 ---
 

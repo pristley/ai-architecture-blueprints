@@ -147,6 +147,103 @@ Each evolution requires careful changes to state management and routing. LangGra
 - **Conditional edges** are smart routing based on evaluation logic
 - **State** is automatically managed, persisted, and passed between nodes
 
+### Agent Control Plane: State Flow Across Agents (Mermaid)
+
+This diagram shows how state is passed between multiple agents through the LangGraph control plane:
+
+```mermaid
+graph TB
+    subgraph Input["📥 INPUT"]
+        I1["Initial State<br/>query: 'Write report'<br/>attempt: 1"]
+    end
+
+    subgraph StateStore["💾 CENTRAL STATE STORE<br/>(TypedDict - Shared Control Plane)"]
+        S["State: WorkflowState<br/>- query<br/>- plan<br/>- fetched_data<br/>- analysis<br/>- draft<br/>- citations<br/>- metadata"]
+    end
+
+    subgraph Node1["🔵 NODE 1: Planner Agent"]
+        N1["Execute: Plan tool<br/>Read: state.query<br/>Modify: state.plan<br/>Publish: state update"]
+    end
+
+    subgraph Node2["🟢 NODE 2: Fetcher Agent"]
+        N2["Execute: Search tool<br/>Read: state.plan<br/>Modify: state.fetched_data<br/>Publish: state update"]
+    end
+
+    subgraph Node3["🟡 NODE 3: Analyzer Agent"]
+        N3["Execute: Analysis tool<br/>Read: state.fetched_data<br/>Modify: state.analysis<br/>Publish: state update"]
+    end
+
+    subgraph Node4["🟠 NODE 4: Synthesizer Agent"]
+        N4["Execute: Draft tool<br/>Read: state.analysis<br/>Modify: state.draft<br/>Publish: state update"]
+    end
+
+    subgraph Router["🧭 CONDITIONAL ROUTER<br/>(Evaluation Logic)"]
+        R["evaluate_output(state)<br/>Decide: Retry? Branch? Continue? End?"]
+    end
+
+    subgraph Output["📤 OUTPUT"]
+        O["Final State<br/>+ complete report"]
+    end
+
+    I1 --> S
+    S --> N1
+    
+    N1 -->|"1. Read state"| S
+    N1 -->|"2. Execute & mutate"| S
+    N1 -->|"3. Return state update"| R
+    
+    R -->|"validate_plan?"| N1
+    R -->|"plan_ok? → proceed"| S
+    
+    S --> N2
+    N2 -->|"1. Read state"| S
+    N2 -->|"2. Execute & mutate"| S
+    N2 -->|"3. Return state update"| R
+    
+    R -->|"fetch_data_ok?"| N3
+    
+    S --> N3
+    N3 -->|"1. Read state"| S
+    N3 -->|"2. Execute & mutate"| S
+    N3 -->|"3. Return state update"| R
+    
+    R -->|"analysis_ok?"| N4
+    
+    S --> N4
+    N4 -->|"1. Read state"| S
+    N4 -->|"2. Execute & mutate"| S
+    N4 -->|"3. Return state update"| R
+    
+    R -->|"synthesis_ok?"| O
+    
+    S --> O
+
+    style Input fill:#e3f2fd
+    style StateStore fill:#fff3e0
+    style Node1 fill:#bbdefb
+    style Node2 fill:#a5d6a7
+    style Node3 fill:#ffcc80
+    style Node4 fill:#ffb74d
+    style Router fill:#f8bbd0
+    style Output fill:#c8e6c9
+    style S fill:#ffe0b2
+```
+
+**Key Mechanisms:**
+
+1. **Shared State Store** – All agents read/write to the same `WorkflowState` object
+2. **State Mutations** – Each agent node updates state and returns it
+3. **Conditional Routing** – After each node, a router evaluates the state and decides the next step
+4. **Automatic Persistence** – State is checkpointed after each node (with `SqliteSaver`)
+5. **Typed State Schema** – `TypedDict` ensures all agents agree on state shape
+
+**Advantages Over Manual Approach:**
+- ✅ No manual state threading between agents
+- ✅ Automatic checkpointing and resumability
+- ✅ Graph visualization shows exact control flow
+- ✅ Conditional routing is declarative, not procedural
+- ✅ State mutations are atomic per node
+
 ### Conceptual Mapping
 
 Here's how your manual orchestrator maps 1:1 to LangGraph concepts:
