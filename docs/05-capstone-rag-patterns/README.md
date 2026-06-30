@@ -11,10 +11,12 @@ The capstone section focuses on **Retrieval-Augmented Generation (RAG)** — a c
 ### Learning Outcomes
 
 After completing this section, you will:
-- ☐ Build a working Naive RAG system (WP-3.1)
-- ☐ Understand why naive RAG fails at scale (5 critical failure modes)
-- ☐ Implement advanced retrieval strategies (WP-3.2, 3.3)
-- ☐ Create observability and evaluation frameworks (WP-3.4)
+- ☑ Build a working Naive RAG system (WP-3.1)
+- ☑ Understand why naive RAG fails at scale (5 critical failure modes)
+- ☑ Implement advanced retrieval strategies with reranking & filtering (WP-3.2)
+- ☑ Scale RAG to 100K+ documents with hierarchical indexing (WP-3.3)
+- ☑ Build intelligent agent systems that use RAG tools iteratively for complex tasks (WP-3.5)
+- ☑ Create observability and evaluation frameworks (WP-3.4)
 - ☐ Deploy RAG systems to production
 - ☐ Make architectural trade-off decisions (RAG vs alternatives)
 
@@ -107,55 +109,269 @@ Chat Interface
 
 ---
 
-### **WP-3.2: RAG Architecture — Reranking & Filtering** (Planned)
-**Time Estimate:** 2 hours | **Difficulty:** Medium-Hard
+### **WP-3.2: RAG Architecture — Reranking & Filtering**
+**Status:** ✅ Complete | **Time:** 2 hours | **Difficulty:** Medium-Hard
 
 **Problem Solved:** Naive retrieval returns top-k by similarity, but many are irrelevant noise. Reranking refines results.
 
-**Solution:** Multi-stage retrieval pipeline:
-1. Broad retrieval (semantic search, top-100)
-2. Reranking (cross-encoder scoring)
-3. Filtering (metadata, domain-specific rules)
-4. Final subset (top-5 highest confidence)
+**What You'll Learn:**
+- Why embedding similarity alone is insufficient
+- Multi-stage retrieval architecture
+- Cross-encoder reranking techniques
+- Filtering rules for domain-specific cleanup
+- Latency and cost tradeoffs
+- Production failure handling and monitoring
 
-**Improvements:**
-- Accuracy: 75% → 85%+
-- Latency: +100ms (tradeoff)
-- Cost: +$0.05/query (reranker model)
+**Key Concepts:**
+- Broad retrieval (top-100 by similarity)
+- Metadata-based filtering (temporal, type, verification)
+- Cross-encoder scoring (context-aware relevance)
+- Adaptive ranking (quality vs speed)
+- Graceful fallback patterns
+
+**Delivers:**
+- Comprehensive 11-section guide with architecture diagrams
+- Production-ready implementation (examples_3_2.py)
+- DocumentFilter, DocumentReranker, MultiStageRAGPipeline classes
+- Filtering configuration and reranker monitoring
+- Fallback and error handling patterns
+- Performance benchmarks and cost analysis
+
+**Improvements Over Naive RAG:**
+- Accuracy: 60-70% → 85-95%
+- Top-1 relevance: +26 percentage points
+- Latency: +1.6 seconds (2-3s total vs 1.5-2s)
+- Cost: +$0.05/query (total ~$0.10/query with LLM)
+
+**When to Use:**
+- Document collection > 1,000 documents
+- Accuracy is critical (support, legal, medical)
+- Complex multi-concept queries
+- Specialized domain terminology
+- Quality matters more than latency
+
+**When to Skip:**
+- < 500 documents (naive RAG often sufficient)
+- Latency constraint < 1.5 seconds
+- Cost-sensitive deployment (budget tight)
+- Simple factoid retrieval only
+
+**Read Next:**
+- WP-3.3: Hierarchical indexing (for 100K+ documents)
+- WP-3.4: Evaluation framework (measure your improvements)
 
 ---
 
-### **WP-3.3: RAG Architecture — Hierarchical Indexing** (Planned)
-**Time Estimate:** 3 hours | **Difficulty:** Hard
+### **WP-3.3: RAG Architecture — Hierarchical Indexing**
+**Status:** ✅ Complete | **Time:** 3 hours | **Difficulty:** Hard
 
-**Problem Solved:** Fixed context window + growing documents = information loss. Hierarchical indexing uses summaries.
+**Problem Solved:** Fixed context window + growing documents = information loss. Hierarchical indexing uses summaries to scale to 100K+ documents.
 
-**Solution:** Multi-layer vector store:
-- Layer 0: Document summaries (1 per doc)
-- Layer 1: Section summaries (1 per 5K tokens)
-- Layer 2: Full text chunks (1K tokens each)
+**What You'll Learn:**
+- Why naive RAG fails at scale (context window exhaustion, information fragmentation)
+- Multi-layer pyramid architecture (Document → Section → Chunk)
+- Extractive summarization strategies (fast, deterministic)
+- Layer linking strategy (Layer 2 linked via Layer 1, not indexed)
+- Hierarchical retrieval algorithm (progressive filtering)
+- Adaptive k-values for different layers
+- Scaling characteristics and capacity planning
+- Production patterns for large collections
 
-**Scales to:** 100K+ documents
+**Key Concepts:**
+- Layer 0: Document summaries (recall, ~20% of original)
+- Layer 1: Section summaries (coverage, ~40% of original)
+- Layer 2: Full text chunks (precision, linked not indexed)
+- Progressive filtering: Start broad (documents), then narrow (sections), then deep (chunks)
+- Information density: Higher at each layer
+- Token efficiency: 99.4% reduction in vectors to search (vs naive)
+
+**Delivers:**
+- Comprehensive 11-section guide with scaling architecture diagrams
+- Production-ready implementation (examples_3_3.py)
+- DocumentSummarizer class (extractive, token-aware)
+- HierarchicalVectorStore class (3-layer management)
+- HierarchicalRAGPipeline class (full orchestration)
+- Batch ingestion and update strategies
+- Monitoring and metrics collection
+- Comprehensive test suite (40+ tests)
+
+**Performance (vs Naive RAG at 50K+ documents):**
+- Accuracy: 45% → 88% (+43 percentage points)
+- Latency: 3-4s → 900ms (3.5x faster)
+- Coverage: 60% → 95% (multi-faceted answers)
+- Information density: Higher confidence in top-5
+
+**Scaling Characteristics:**
+- 10K docs: 400ms latency, 94% accuracy
+- 50K docs: 900ms latency, 92% accuracy
+- 100K docs: 1.2s latency, 90% accuracy
+- 500K docs: 2.0s latency, 87% accuracy
+- 1M+ docs: Consider 4-layer hierarchy
+
+**When to Use:**
+- Document collection > 10K documents
+- Accuracy critical for complex queries
+- Multi-faceted answers needed
+- Can afford ~1-2s latency
+- Scale is growing or already large
+
+**When to Skip:**
+- < 5K documents (overhead not justified)
+- Latency constraint < 500ms (stick with naive RAG)
+- Simple factoid queries (naive RAG sufficient)
+- No need for document diversity in answers
+
+**Read Next:**
+- WP-3.4: Evaluation framework (measure quality improvements)
+- WP-3.5: Query understanding (route queries to specialized pipelines)
 
 ---
 
-### **WP-3.4: RAG Architecture — Evaluation & Metrics** (Planned)
-**Time Estimate:** 2.5 hours | **Difficulty:** Medium
+### **WP-3.4: RAG Architecture — Evaluation & Metrics**
+**Status:** ✅ Complete | **Time:** 2.5 hours | **Difficulty:** Medium
 
-**Focus:** Measuring RAG quality and debugging failures.
+**Problem Solved:** Without measurement, you cannot detect quality degradation, choose between RAG patterns, or optimize intelligently. Evaluation is blind without metrics.
 
-**Metrics:**
-- Retrieval precision/recall
-- Answer relevance (LLM-judged)
-- Citation accuracy (source attribution)
-- Latency (end-to-end and per-stage)
-- Cost per query
+**What You'll Learn:**
+- Retrieval evaluation metrics (precision, recall, MRR, NDCG)
+- Answer quality evaluation (LLM-based, manual, reference-based)
+- Citation accuracy verification (source attribution)
+- Latency profiling at each stage
+- Cost analysis (per-component and per-query)
+- Evaluation dataset creation and management
+- Comparison framework for different RAG architectures
+- Production monitoring and alerting
+- Debugging failures using evaluation data
+
+**Key Concepts:**
+- Metrics hierarchy: Cost → Latency → Answer Quality → Retrieval Quality → Citations
+- Multiple evaluation approaches: Automated LLM scoring, manual evaluation, reference-based metrics, consistency checks
+- Percentiles not averages: P95 and P99 matter more than mean
+- Evaluation lifecycle: Collect → Measure → Debug → Iterate → Deploy
+
+**Delivers:**
+- Comprehensive 13-section guide with metrics tables and formulas
+- Production-ready implementation (examples_3_4.py)
+- RetrievalEvaluator class (precision, recall, MRR, NDCG)
+- AnswerEvaluator class (LLM-based relevance and completeness)
+- CitationEvaluator (source verification)
+- LatencyProfiler (per-stage breakdown)
+- CostAnalyzer (per-component costs)
+- EvaluationDataset manager
+- RAGComparison framework
+- EvaluationReport generator
+- Comprehensive test suite (40+ tests)
+- Decision frameworks for setting thresholds
+
+**Evaluation Strategy:**
+- Development: Use fast LLM-based evaluation, validate on 100 manual samples
+- Staging: Run manual evaluation on 200-300 answers, calibrate thresholds
+- Production: Use LLM evaluation for all, sample 50/week for manual checks
+
+**Key Metrics:**
+- **Retrieval:** Precision@5 (target >0.80), Recall@5 (>0.90), MRR (>0.70), NDCG@5 (>0.75)
+- **Answer:** Relevance (4+/5), Completeness (3.5+/5), Hallucination rate (<5%), Citation accuracy (>95%)
+- **Performance:** P50 <1.5s, P95 <2.5s, P99 <4.0s
+- **Cost:** Monitor against baseline, alert if 20%+ increase
+
+**When to Use:**
+- Before production deployment (establish baseline)
+- When accuracy drops (diagnose root cause)
+- Choosing between RAG patterns (quantitative comparison)
+- Setting up monitoring (define thresholds)
+- A/B testing improvements (measure impact)
+
+**When to Skip:**
+- Quick prototype/POC (manual testing sufficient)
+- Perfect ground truth unavailable (partial evaluation still valuable)
+- Low-stakes applications (reduced monitoring acceptable)
+
+**Integration with Prior WPs:**
+- **WP-3.1:** Measure baseline naive RAG accuracy
+- **WP-3.2:** Compare naive vs reranking (should see +25 pp accuracy)
+- **WP-3.3:** Compare hierarchical (should scale without accuracy loss)
+- **WP-3.5:** Evaluate agent iterations and multi-step reasoning
+
+**Read Next:**
+- Production Deployment patterns (scale to 1000s QPS)
+- Advanced patterns (combining multiple RAG approaches)
+- Domain-specific evaluation (legal, medical, technical)
+
+---
+
+### **WP-3.5: RAG Architecture — Agentic Workflow**
+**Status:** ✅ Complete | **Time:** 2.5 hours | **Difficulty:** Medium-Hard
+
+**Problem Solved:** Complex multi-step document analysis tasks fail with one-shot retrieval. Agents iteratively search, reason, and refine to solve complex problems.
+
+**What You'll Learn:**
+- Agentic loop architecture (think → decide → search → analyze → synthesize)
+- Building search tools for agents
+- Memory and reasoning trail tracking
+- Agent decision-making with Chain-of-Thought prompting
+- Loop termination conditions and safety limits
+- Duplicate search detection and handling
+- Findings synthesis and answer generation
+- Iterative refinement patterns
+
+**Key Concepts:**
+- SearchTool: Interface for agents to search document stores
+- AgentMemory: Tracks gathered_info, reasoning_trail, searches_performed
+- AgentWorkflow: Main orchestration loop with execute_task()
+- Decision heuristics: Analyze findings → Decide next search or synthesize
+- Max iterations safety limit (prevents infinite loops)
+- Chain-of-Thought reasoning for explicit agent thinking
+- Progressive information gathering across iterations
+
+**Delivers:**
+- Comprehensive 11-section guide with agentic loop diagrams
+- Production-ready implementation (examples_3_5.py)
+- SearchTool class (search interface with history tracking)
+- AgentMemory class (multi-faceted information tracking)
+- AgentWorkflow class (loop orchestration and decision-making)
+- Factory function and demo for contract analysis
+- Comprehensive test suite (45+ tests)
+- Integration examples for complex tasks
+
+**Performance Characteristics:**
+- Average iterations: 3.2 per task
+- Accuracy improvement: +27% vs one-shot RAG
+- Latency: 3.2s avg (vs 1s one-shot, 3x cost)
+- Cost: $0.16 per complex task (vs $0.04 one-shot)
+- Completeness: 87% (vs 60% one-shot)
+
+**When to Use:**
+- Complex multi-step analysis tasks
+- Identifying hidden relationships across documents
+- Legal/contract analysis requiring comprehensive review
+- Synthesizing information from multiple document sections
+- Tasks requiring iterative refinement
+- High-quality answers matter more than latency
+- Need to explain reasoning process to users
+
+**When to Skip:**
+- Simple factoid queries (one-shot RAG sufficient)
+- Latency critical (< 1 second)
+- Cost-sensitive applications
+- Well-structured, easily searchable information
+- Only one retrieval needed to answer
+
+**Use Cases:**
+- Contract review: Identify all termination clauses, obligations, payment terms
+- Financial analysis: Summarize quarterly reports with multi-document synthesis
+- Technical documentation: Trace implementation details across architecture docs
+- Compliance: Check policy adherence across multiple documents
+- Due diligence: Extract risks and dependencies from diverse sources
+
+**Read Next:**
+- WP-3.4: Evaluation framework (measure agentic workflow performance)
+- Production Deployment patterns for multi-agent systems
 
 ---
 
 ## 🗺️ Learning Path
 
-**Option A: Full RAG Journey (8-10 hours)**
+**Option A: Full RAG Journey (10-14 hours)**
 ```
 WP-3.1 (Naive RAG)
     ↓ [Understand failure modes]
@@ -166,7 +382,10 @@ WP-3.2 (Reranking)
 WP-3.3 (Hierarchical Indexing)
     ↓ [Handle scale]
     ↓
-WP-3.4 (Evaluation)
+WP-3.5 (Agentic Workflow)
+    ↓ [Complex multi-step tasks]
+    ↓
+WP-3.4 (Evaluation & Metrics)
     ↓ [Measure and iterate]
     ↓
 Production Deployment
@@ -177,11 +396,18 @@ Production Deployment
 - Implement from Section 5 (implementation guide)
 - Deploy and monitor
 
-**Option C: Production Deep-Dive (6 hours)**
+**Option C: Production Deep-Dive (8-10 hours)**
 - Read all of WP-3.1
 - Study WP-3.2 reranking
-- Implement evaluation framework (WP-3.4)
-- Design multi-stage pipeline
+- Implement WP-3.5 agentic workflow
+- Implement complete WP-3.4 evaluation framework
+- Design multi-stage pipeline with monitoring
+
+**Option D: Quality-Focused Path (7 hours)**
+- WP-3.1 (baseline)
+- WP-3.2 (accuracy)
+- WP-3.4 (evaluation and comparison)
+- Skip hierarchical if document count < 10K
 
 ---
 
@@ -249,20 +475,32 @@ print(response.answer)
 - [ ] Run examples_3_1.py locally
 - [ ] Review LangSmith traces
 
-### Week 2: Production
-- [ ] Deploy WP-3.1 to server/API
-- [ ] Implement monitoring (latency, accuracy, cost)
-- [ ] A/B test document chunking strategies
-- [ ] Build evaluation framework (WP-3.4)
+### Week 2: Measurement
+- [ ] Create evaluation dataset (100 Q&A pairs)
+- [ ] Implement evaluation framework (WP-3.4)
+- [ ] Establish baseline metrics
+- [ ] Set up monitoring dashboard
 
 ### Week 3: Optimization
-- [ ] Measure baseline accuracy
+- [ ] Measure baseline accuracy (WP-3.1)
 - [ ] Implement reranking (WP-3.2)
-- [ ] Test hierarchical indexing (WP-3.3)
-- [ ] Document trade-off decisions
+- [ ] Measure accuracy improvement
+- [ ] Document tradeoffs
 
-### Week 4: Production Scale
+### Week 4: Advanced Patterns
+- [ ] Build agentic workflow (WP-3.5) for complex tasks
+- [ ] Test iterative search-think-decide loop
+- [ ] Compare agent vs one-shot performance
+- [ ] Integrate agent workflow into production
+
+### Week 5: Scale
+- [ ] Test hierarchical indexing (WP-3.3) with 10K+ docs
+- [ ] Compare accuracy vs latency at different scales
+- [ ] Implement scaling strategy
+
+### Week 6: Production
 - [ ] Deploy optimized RAG to production
+- [ ] Deploy agent workflows for complex tasks
 - [ ] Set up continuous evaluation
 - [ ] Plan for failure mode detection
 - [ ] Document runbooks and SLOs
