@@ -1,5 +1,92 @@
 # Changelog
 
+## [1.2.2] - 2026-07-01
+
+### Added
+- **Legal Contract Agent - Project Organization & Navigation**
+  - Created `legal-contract-agent/INDEX.md` (500+ lines): Comprehensive project navigation hub
+    * Quick navigation to all 6 sections (architecture, code, safety, evaluation, implementation, data)
+    * Architecture overview with 7-task pipeline diagram
+    * 10 guardrails summary table with safety specifications
+    * 6 success metrics definition (Recall, Precision, F1, Hallucination, Latency, Cost)
+    * 4-phase development roadmap with timelines
+    * Core data models: ContractAnalysisResult, GroundTruthAnnotation, etc.
+    * 100+ cross-references linking design docs to code modules
+    * Project statistics: 7 tasks, 10 guardrails, 6 metrics, 45-contract dataset
+  
+  - Created `legal-contract-agent/QUICKSTART.md` (400 lines): 5-minute rapid onboarding
+    * 7-step installation process (clone, venv, install, docker, config, verify, try)
+    * Prerequisites for each OS (Tesseract OCR, Python 3.11+, Docker)
+    * Virtual environment and dependency setup
+    * Docker Compose configuration (Qdrant vector store, PostgreSQL audit log)
+    * OpenAI API key configuration (.env setup)
+    * 3 ways to try the system (CLI, pytest, Streamlit UI)
+    * Common tasks and troubleshooting section
+    * Next steps for deeper learning
+
+- **Portfolio Navigation & Discoverability**
+  - Updated `README.md` (main): Added Section 6 subsection
+    * "🏛️ Section 6: Capstone — End-to-End Agentic System (2-3 weeks)"
+    * Description of 7-task pipeline, 10 guardrails, 45-contract dataset
+    * Links to legal-contract-agent/, QUICKSTART.md, INDEX.md, and design docs
+  
+  - Updated `docs/README.md`: Added legal-contract-agent as 6th learning path
+    * Quick-start table row: "See a production AI system | Section 6: Legal Contract Agent | 2-3 weeks"
+    * Full section describing pipeline, HITL approval workflow, guardrails, evaluation
+    * Links to 06-capstone-legal-contract-analysis/ README
+  
+  - Updated `docs/06-capstone-legal-contract-analysis/README.md`: Added quick links table
+    * 4-row navigation table (Implementation Code, Quick Start, Project Index, Main README)
+    * Prominent links at top before existing content
+    * Facilitates seamless navigation from design docs to implementation
+
+- **AGENTMAP Knowledge Graph Expansion (800+ lines)**
+  - Extended Core Documents table: Added 18 new rows
+    * WP-3.0-3.7 (RAG patterns: naive baseline, reranking, hierarchical indexing, evaluation, agentic, query routing)
+    * WP-4.1-4.9 (Capstone design: domain selection, pipeline, threat model, guardrails, HITL, notifications, evaluation, dataset, tool selection)
+    * WP-5.1-5.2 (Implementation: PDF ingestion, clause extraction)
+    * legal-contract-agent INDEX.md and QUICKSTART.md
+  
+  - Extended Code Examples & Test Examples tables: Added 8 new rows
+    * RAG pattern examples (test_wp_3_*.py files)
+    * Capstone implementation examples (test_wp_4_*.py, test_adr_1_2.py, test_naive_rag.py)
+  
+  - Updated Mermaid graph: Added 6 new nodes with 5 new relationships
+    * WP30 (Knowledge Architecture)
+    * ADR003 (Agentic vs Naive)
+    * WP41 (Capstone)
+    * LEGALINDEX (Project navigation)
+    * Updated style definitions with color coding
+  
+  - Added 5 comprehensive relationship sections (800+ lines total):
+    1. WP-3.0: Knowledge Architecture Decisions (OKF vs traditional, cost analysis, foundations for WP-3.1+)
+    2. WP-3.1 & RAG Patterns (Progressive enhancement: naive → reranking → hierarchical → agentic)
+    3. ADR-003: Agentic RAG vs Naive (Decision matrix, when each approach appropriate)
+    4. WP-4: Capstone Legal Contract Analysis (Integrates all portfolio concepts, 7-task pipeline, 4 phases, metrics)
+    5. legal-contract-agent: Implementation & Navigation (INDEX.md, QUICKSTART.md, src structure, data, tests, usage guide)
+
+### Changed
+- Version: 1.2.1 → 1.2.2
+- Portfolio scope: Now includes complete capstone system implementation with navigation
+- Documentation hub: Extended AGENTMAP.md with RAG patterns and capstone references
+- Learning paths: Now 6 sections with 2-3 week capstone project at the end
+- Project visibility: legal-contract-agent now discoverable from main README and docs hub
+
+### Key Metrics
+- Architectural Decision Records: 6 (ADR-1.2, ADR-2.1, ADR-2.2, ADR-003, ADR-3.9, plus references)
+- Work Products: 30+ (WP-1.3 through WP-5.2 including RAG patterns and capstone)
+- Navigation Guides: 2 new (INDEX.md 500+ lines, QUICKSTART.md 400 lines)
+- Documentation Updated: 5 files (README.md, docs/README.md, docs/06-capstone-legal-contract-analysis/README.md, AGENTMAP.md, legal-contract-agent/README.md)
+- Learning Paths: 6 complete paths (foundations → production → memory/state → multi-agent → RAG → capstone)
+- Portfolio Integration: 100+ cross-references between design docs and implementation code
+
+### Impact
+- **Discoverability**: legal-contract-agent now featured prominently in main README and docs navigation
+- **Onboarding**: Users can go from discovery to running code in 5 minutes via QUICKSTART.md
+- **Architecture Understanding**: INDEX.md provides complete mapping of design → implementation → testing
+- **Knowledge Graph**: AGENTMAP now shows how all 30+ work products interconnect
+- **Learning Flow**: Complete progression from foundations through end-to-end production capstone system
+
 ## [1.2.1] - 2026-06-28
 
 ### Changed
