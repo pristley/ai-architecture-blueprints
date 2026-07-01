@@ -6,6 +6,17 @@
 
 ---
 
+## 🔗 Quick Links
+
+| Resource | Purpose |
+|----------|---------|
+| **[Implementation Code](../../legal-contract-agent/)** | Full Python codebase, tests, and Streamlit UI |
+| **[Quick Start Guide](../../legal-contract-agent/QUICKSTART.md)** | 5-minute setup (Python 3.10+, Docker optional) |
+| **[Project Index](../../legal-contract-agent/INDEX.md)** | Complete navigation guide to all code and docs |
+| **[Main README](../../README.md)** | Back to main portfolio |
+
+---
+
 ## Overview
 
 This capstone brings together all prior portfolio concepts to build an **end-to-end agentic AI system** for analyzing legal contracts:

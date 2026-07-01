@@ -132,6 +132,25 @@ Transform theoretical knowledge into production RAG systems with deep comparativ
 - ADR-003: Agentic RAG Decision Record (when to use vs one-shot)
 - WP-3.7: Query Router — Adaptive strategy selection (-36% latency, -28% cost)
 
+### 🏛️ Section 6: Capstone — End-to-End Agentic System (2-3 weeks)
+**[Legal Contract Analysis Agent](./legal-contract-agent/)** — Production agentic system for automated legal contract analysis with human-in-the-loop review.
+
+**Key Features**:
+- 🏗️ **7-Task Pipeline**: Ingestion → Classification → Clause Extraction → Anomaly Detection → Summarization → Triage → Human Review
+- ⚡ **10× Speedup**: Parallel task execution (75s → 15s)
+- 🛡️ **10 Guardrails**: Input validation, PII redaction, confidence calibration, rate limiting
+- 👤 **Human-in-Loop**: Streamlit UI for legal review with feedback capture
+- 📊 **6 Success Metrics**: Recall, precision, F1, hallucination rate, latency, cost
+- 🗂️ **45-Contract Ground Truth**: Annotated dataset with 13 detected anomalies
+
+**Architecture**:
+- **Orchestration**: LangGraph with checkpointing
+- **Tools**: Docling (PDF parsing), Qdrant (vector search), OpenAI GPT-4, Tavily (legal search)
+- **UI**: Streamlit multi-page dashboard
+- **Notifications**: Slack + Email
+
+**Documentation**: [Capstone Design Docs](./docs/06-capstone-legal-contract-analysis/) | **Code**: [legal-contract-agent](./legal-contract-agent/) | **Guide**: [Implementation Guide](./legal-contract-agent/INDEX.md)
+
 ---
 
 ## ⚡ Quick Install & Run

@@ -17,6 +17,7 @@ Welcome to the complete documentation for the AI Architecture Blueprints reposit
 | **Build memory-aware agents** | [Section 3: Memory & State](./03-memory-state-agents/README.md) | 4 hours |
 | **Coordinate multiple agents** | [Section 4: Multi-Agent](./04-multi-agent-architectures/README.md) | 7 hours |
 | **Build RAG systems** | [Section 5: Capstone RAG](./05-capstone-rag-patterns/README.md) | 8 hours |
+| **See a production AI system** | [Section 6: Legal Contract Agent](./06-capstone-legal-contract-analysis/README.md) | 2-3 weeks |
 | **Choose knowledge architecture** | [WP-3.0: Knowledge Architecture](./05-capstone-rag-patterns/WP-3.0-Knowledge-Architecture-Decisions.md) | 3 hours |
 | **See the complete picture** | [AGENTMAP.md](./reference/AGENTMAP.md) | 20 min |
 | **Get ecosystem context** | [LANGCHAIN_ECOSYSTEM_MAP.md](./reference/LANGCHAIN_ECOSYSTEM_MAP.md) | 30 min |
@@ -85,6 +86,25 @@ Deep dives into retrieval-augmented generation and knowledge representation deci
 - WP-3.2+: Advanced retrieval, hierarchical indexing, evaluation
 
 **Outcome:** Build production RAG systems and choose the right knowledge architecture for your use case.
+
+---
+
+### 🏛️ [Section 6: Capstone — End-to-End Agentic System](./06-capstone-legal-contract-analysis/README.md)
+Production implementation of a legal contract analysis agent using all portfolio patterns.
+
+**Contains:**
+- **10 Design Documents** (ADRs, threat models, guardrails)
+- **45-Contract Ground Truth Dataset** (annotated with anomalies)
+- **Full Python Implementation** (LangGraph, Qdrant, OpenAI)
+- **Streamlit UI** (human review dashboard)
+- **6 Success Metrics** (evaluation methodology)
+
+**Quick Links:**
+- 🔗 **[Implementation Code](../legal-contract-agent/)** — Full source code
+- ⏱️ **[Quick Start](../legal-contract-agent/QUICKSTART.md)** — 5-minute setup
+- 🗺️ **[Project Index](../legal-contract-agent/INDEX.md)** — Navigation guide
+
+**Outcome:** See a complete end-to-end agentic system in production, integrating RAG, orchestration, memory, multi-agent patterns, human-in-the-loop checkpoints, and guardrails.
 
 ---
 

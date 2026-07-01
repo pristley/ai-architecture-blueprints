@@ -106,6 +106,10 @@ graph TB
     AGENTMAP -->|Shows relationships| WP24
     AGENTMAP -->|Shows relationships| WP26
     AGENTMAP -->|Shows relationships| WP27
+    AGENTMAP -->|Shows relationships| WP30
+    AGENTMAP -->|Shows relationships| ADR003
+    AGENTMAP -->|Shows relationships| WP41
+    AGENTMAP -->|Shows relationships| LEGALINDEX
     
     style START fill:#4CAF50,stroke:#2E7D32,color:#fff
     style ECOSYSTEM fill:#2196F3,stroke:#1565C0,color:#fff
@@ -138,6 +142,12 @@ graph TB
     style WP27 fill:#FF9800,stroke:#E65100,color:#fff
     style EX27 fill:#9C27B0,stroke:#6A1B9A,color:#fff
     style TEST27 fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style WP30 fill:#FF9800,stroke:#E65100,color:#fff
+    style ADR003 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP31 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP41 fill:#FF9800,stroke:#E65100,color:#fff
+    style WP51 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style LEGALINDEX fill:#2196F3,stroke:#1565C0,color:#fff
     style AGENTMAP fill:#F44336,stroke:#C62828,color:#fff
 ```
 
@@ -164,6 +174,27 @@ graph TB
 | [WP-2.4-Choreography-Pattern.md](../04-multi-agent-architectures/WP-2.4-Choreography-Pattern.md) | 🐝 Design Pattern | Practical choreography implementation with event-driven Hive Mind | ~1000 | ✅ |
 | [WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md](../04-multi-agent-architectures/WP-2.6-Introduction-to-LangGraph-for-Stateful-Graphs.md) | 🔗 Framework Guide | Reimplementation of orchestrator using LangGraph StateGraph for production workflows | ~2000 | ✅ |
 | [WP-2.7-Checkpointing-and-Human-in-the-Loop.md](../04-multi-agent-architectures/WP-2.7-Checkpointing-and-Human-in-the-Loop.md) | 🔐 Framework Guide | LangGraph checkpointing for human approval gates and state resumption | ~2500 | ✅ |
+| [WP-3.0-Knowledge-Architecture-Decisions.md](../05-capstone-rag-patterns/WP-3.0-Knowledge-Architecture-Decisions.md) | 🏗️ Architecture Decision | OKF vs traditional databases: 40-50% cost savings analysis | ~1500 | ✅ |
+| [WP-3.1-RAG-Architecture-Naive-Baseline.md](../05-capstone-rag-patterns/WP-3.1-RAG-Architecture-Naive-Baseline.md) | 📊 Design Pattern | Foundation RAG: vector stores, semantic search, 5 failure modes | ~1200 | ✅ |
+| [WP-3.2-Advanced-Retrieval-Reranking-Filtering.md](../05-capstone-rag-patterns/WP-3.2-Advanced-Retrieval-Reranking-Filtering.md) | 📈 Design Pattern | Reranking & filtering for accuracy improvement | ~800 | ✅ |
+| [WP-3.3-Hierarchical-Indexing-Scale.md](../05-capstone-rag-patterns/WP-3.3-Hierarchical-Indexing-Scale.md) | 🔗 Design Pattern | Scale to 100K+ documents with hierarchical indexing | ~900 | ✅ |
+| [WP-3.4-Evaluation-Metrics.md](../05-capstone-rag-patterns/WP-3.4-Evaluation-Metrics.md) | 📏 Evaluation Guide | Measure and debug RAG performance (recall, precision, F1) | ~600 | ✅ |
+| [WP-3.5-Agentic-Workflow.md](../05-capstone-rag-patterns/WP-3.5-Agentic-Workflow.md) | 🤖 Design Pattern | Iterative multi-step search and synthesis with refinement | ~1100 | ✅ |
+| [ADR-003-Agentic-RAG-over-Naive-RAG.md](../05-capstone-rag-patterns/ADR-003-Agentic-RAG-over-Naive-RAG.md) | 🏗️ Architecture Decision | When to use agentic RAG vs one-shot retrieval (decision matrix) | ~1000 | ✅ |
+| [WP-3.7-Query-Router.md](../05-capstone-rag-patterns/WP-3.7-Query-Router.md) | 🛣️ Design Pattern | Adaptive strategy selection (-36% latency, -28% cost) | ~1000 | ✅ |
+| [WP-4.1-Domain-Selection-ADR.md](../06-capstone-legal-contract-analysis/WP-4.1-Domain-Selection-ADR.md) | 🏛️ Architecture Decision | Why legal contracts: measurable, high-impact, requires judgment | ~800 | ✅ |
+| [WP-4.2-Task-Decomposition.md](../06-capstone-legal-contract-analysis/WP-4.2-Task-Decomposition.md) | 📋 Design Spec | 7-task pipeline: ingestion, classification, extraction, anomaly, summary, triage, review | ~1200 | ✅ |
+| [WP-4.3-Threat-Model-Failure-Analysis.md](../06-capstone-legal-contract-analysis/WP-4.3-Threat-Model-Failure-Analysis.md) | 🛡️ Risk Analysis | Failure modes, attack vectors, mitigation strategies | ~900 | ✅ |
+| [WP-4.4-Guardrail-Specification.md](../06-capstone-legal-contract-analysis/WP-4.4-Guardrail-Specification.md) | 🔒 Safety Guide | 10 concrete guardrails: validation, PII, confidence, rate limiting | ~1000 | ✅ |
+| [WP-4.5-HITL-Checkpoint-Architecture.md](../06-capstone-legal-contract-analysis/WP-4.5-HITL-Checkpoint-Architecture.md) | 🔐 Design Spec | Human-in-the-loop checkpoint architecture with approval gates | ~900 | ✅ |
+| [WP-4.6-HITL-Queue-Notification-Design.md](../06-capstone-legal-contract-analysis/WP-4.6-HITL-Queue-Notification-Design.md) | 📢 Design Spec | Notification queue design (Slack + Email) for human review | ~700 | ✅ |
+| [WP-4.7-Evaluation-Criteria-Definition.md](../06-capstone-legal-contract-analysis/WP-4.7-Evaluation-Criteria-Definition.md) | 📊 Evaluation Guide | 6 success metrics: recall, precision, F1, hallucination, latency, cost | ~800 | ✅ |
+| [WP-4.8-Ground-Truth-Dataset-Creation.md](../06-capstone-legal-contract-analysis/WP-4.8-Ground-Truth-Dataset-Creation.md) | 📋 Dataset | 45-contract annotated dataset with 13 detected anomalies | ~1100 | ✅ |
+| [WP-4.9-Tool-Selection-ADR.md](../06-capstone-legal-contract-analysis/WP-4.9-Tool-Selection-ADR.md) | 🏗️ Architecture Decision | Tool selection: Docling, Qdrant, GPT-4, Tavily, Streamlit | ~600 | ✅ |
+| [WP-5.1-PDF-Ingestion-Preprocessing-Tool.md](../06-capstone-legal-contract-analysis/WP-5.1-PDF-Ingestion-Preprocessing-Tool.md) | 💻 Implementation | Task 1: PDF parsing, text extraction, OCR validation | ~600 | ✅ |
+| [WP-5.2-Clause-Extraction-Agent-First-Pass.md](../06-capstone-legal-contract-analysis/WP-5.2-Clause-Extraction-Agent-First-Pass.md) | 💻 Implementation | Task 3: Clause extraction with parallel execution | ~700 | ✅ |
+| [legal-contract-agent/INDEX.md](../../legal-contract-agent/INDEX.md) | 🗺️ Navigation | Complete project index: 500+ lines with full structure | ~500 | ✅ |
+| [legal-contract-agent/QUICKSTART.md](../../legal-contract-agent/QUICKSTART.md) | 🚀 Setup Guide | 5-minute quickstart: venv, dependencies, config, run examples | ~400 | ✅ |
 
 ### Code Examples
 
@@ -190,6 +221,10 @@ graph TB
 | [tests/test_controller_orchestration.py](../../tests/test_controller_orchestration.py) | 🧪 Tests | 41 tests for orchestration: step execution, workflows, audit trails | ~600 | ✅ |
 | [tests/test_langgraph_orchestration.py](../../tests/test_langgraph_orchestration.py) | 🧪 Tests | Comprehensive LangGraph tests: state, nodes, edges, evaluation, end-to-end | ~500 | ✅ |
 | [tests/test_langgraph_checkpointing.py](../../tests/test_langgraph_checkpointing.py) | 🧪 Tests | Comprehensive checkpointing tests: validation, nodes, routing, workflows, persistence | ~700 | ✅ |
+| [tests/test_wp_3_*.py](../../tests/) | 🧪 Tests | RAG pattern tests: naive baseline, reranking, hierarchical, agentic, evaluation | ~2000 | ✅ |
+| [tests/test_wp_4_*.py](../../tests/) | 🧪 Tests | Capstone design tests: threat model, guardrails, HITL, evaluation | ~1500 | ✅ |
+| [tests/test_adr_1_2.py](../../tests/test_adr_1_2.py) | 🧪 Tests | ADR-1.2 validation tests | ~300 | ✅ |
+| [tests/test_naive_rag.py](../../tests/test_naive_rag.py) | 🧪 Tests | Naive RAG baseline tests | ~600 | ✅ |
 
 ### Meta Documents
 
@@ -1240,6 +1275,281 @@ tests/test_langgraph_orchestration.py: Comprehensive LangGraph StateGraph Tests
     ├─ State deltas simplify state management
     ├─ Graph compilation is reliable
     └─ Production readiness (async support, tracing, extensibility)
+```
+
+### WP-3.0: Knowledge Architecture Decisions
+
+```
+WP-3.0: Knowledge Architecture - OKF vs Traditional Databases
+│
+├─→ Depends on
+│   ├─ WP-2.1 (vector databases for semantic search in long-term memory)
+│   ├─ WP-1.7 (observability for cost and latency tracking)
+│   └─ Production patterns (reliability, cost considerations)
+│
+├─→ Teaches decision-making for
+│   ├─ Knowledge organization frameworks (OKF) vs traditional databases
+│   ├─ Cost analysis (40-50% savings potential)
+│   ├─ Scalability trade-offs
+│   ├─ Maintenance complexity
+│   └─ Production deployment considerations
+│
+├─→ References
+│   ├─ WP-3.1 (naive RAG baseline implementation)
+│   ├─ WP-3.2+ (advanced RAG patterns)
+│   └─ ADR-003 (agentic vs one-shot decision)
+│
+├─→ Learning outcomes
+│   ├─ Understand OKF architecture benefits and tradeoffs
+│   ├─ Make informed decisions about knowledge organization
+│   ├─ Analyze costs for different approaches
+│   ├─ Design scalable knowledge systems
+│   └─ Choose between architectural approaches
+│
+└─→ Foundation for
+    ├─ WP-3.1 (naive baseline uses chosen architecture)
+    ├─ WP-3.2+ (advanced patterns build on this foundation)
+    └─ WP-4+ (capstone uses selected knowledge architecture)
+```
+
+### WP-3.1 & Capstone RAG Patterns
+
+```
+WP-3.1: RAG Architecture - Naive Baseline
+│
+├─→ Depends on
+│   ├─ WP-2.1 (semantic search and vector stores)
+│   ├─ WP-3.0 (knowledge architecture decisions)
+│   └─ WP-1.7 (observability for RAG debugging)
+│
+├─→ Teaches implementation of
+│   ├─ Vector store integration
+│   ├─ Semantic search patterns
+│   ├─ 5 failure modes in naive RAG
+│   ├─ Evaluation methodology
+│   └─ Baseline metrics
+│
+├─→ References
+│   ├─ WP-3.2 (reranking addresses failure modes)
+│   ├─ WP-3.3 (hierarchical indexing for scale)
+│   ├─ WP-3.4 (evaluation metrics)
+│   └─ WP-3.5 (agentic workflow builds on baseline)
+│
+├─→ Progressive Enhancement Path
+│   ├─ WP-3.1: Naive baseline (establish baseline metrics)
+│   ├─ WP-3.2: Add reranking (+15% accuracy)
+│   ├─ WP-3.3: Add hierarchical indexing (100x scale)
+│   ├─ WP-3.4: Comprehensive evaluation
+│   ├─ WP-3.5: Agentic workflow (+25% quality)
+│   ├─ ADR-003: Decision when to use agentic
+│   └─ WP-3.7: Query routing (-36% latency, -28% cost)
+│
+└─→ Foundation for
+    ├─ WP-3.2 (improve accuracy on baseline)
+    ├─ WP-3.5 (agentic pattern builds on retrieval)
+    └─ WP-4.2+ (capstone legal RAG uses these patterns)
+```
+
+### ADR-003: Agentic RAG vs Naive
+
+```
+ADR-003: Agentic RAG over Naive RAG
+│
+├─→ Depends on
+│   ├─ WP-3.1 (naive baseline - comparison point)
+│   ├─ WP-3.5 (agentic workflow implementation)
+│   └─ WP-2.2 (state management in agentic systems)
+│
+├─→ Teaches decision-making for
+│   ├─ When naive RAG is sufficient
+│   ├─ When agentic patterns add value
+│   ├─ Cost/benefit analysis of agentic complexity
+│   ├─ Hybrid approaches
+│   └─ Deployment considerations
+│
+├─→ Comparison Matrix
+│   ├─ Naive: fast, simple, predictable, limited
+│   ├─ Agentic: slower, complex, adaptive, powerful
+│   └─ Decision criteria on 6 axes
+│
+├─→ References
+│   ├─ WP-3.1 (naive implementation details)
+│   ├─ WP-3.5 (agentic implementation details)
+│   ├─ WP-3.7 (query router for hybrid approach)
+│   └─ WP-4.2+ (capstone uses agentic patterns)
+│
+└─→ Learning outcomes
+    ├─ Understand when each approach is appropriate
+    ├─ Evaluate tradeoffs quantitatively
+    ├─ Design hybrid systems
+    └─ Make ADR decisions for your domain
+```
+
+### WP-4: Capstone - Legal Contract Analysis Domain
+
+```
+WP-4.1-4.9: Complete Capstone Design (End-to-End Agentic System)
+│
+├─→ Brings together ALL portfolio concepts
+│   ├─ Foundations (ADR-1.2, WP-1.3-1.7): chain abstractions, observability
+│   ├─ Production Patterns: output parsing, LLM selection, tracing
+│   ├─ Memory & State (WP-2.1-2.2): state management, loop prevention
+│   ├─ Multi-Agent (ADR-2.2, WP-2.3, WP-2.6-2.7): LangGraph orchestration
+│   ├─ RAG Patterns (WP-3.0-3.5, ADR-003): agentic retrieval, evaluation
+│   └─ Domain: Legal contracts (high impact, measurable, requires judgment)
+│
+├─→ 9 Design Documents
+│   ├─ WP-4.1: Domain selection and justification
+│   ├─ WP-4.2: 7-task pipeline decomposition
+│   ├─ WP-4.3: Threat model and failure analysis
+│   ├─ WP-4.4: 10 concrete guardrails specification
+│   ├─ WP-4.5: Human-in-the-loop checkpoint architecture
+│   ├─ WP-4.6: Notification queue design (Slack + Email)
+│   ├─ WP-4.7: 6 success metrics and evaluation
+│   ├─ WP-4.8: 45-contract ground truth dataset
+│   ├─ WP-4.9: Tool selection ADR (Docling, Qdrant, GPT-4, etc)
+│   └─ WP-5.1-5.2: Implementation guides (PDF ingestion, clause extraction)
+│
+├─→ 7-Task Pipeline
+│   ├─ Task 1: Document Ingestion (Docling) - 1 sec
+│   ├─ Task 2: Contract Classification - 3 sec
+│   ├─ Task 3: Clause Extraction (parallel) - 5 sec
+│   ├─ Task 4: Anomaly Detection (parallel) - 4 sec
+│   ├─ Task 5: Summarization - 2 sec
+│   ├─ Task 6: Risk Triage - 0.5 sec
+│   ├─ Task 7: Human Review (Streamlit UI) - 5-30 min
+│   └─ Orchestration: LangGraph StateGraph with checkpointing
+│
+├─→ Architecture Decisions
+│   ├─ 🏛️ Legal contracts as domain (WP-4.1)
+│   ├─ ⚙️ LangGraph orchestration (WP-2.6 foundation)
+│   ├─ 🛡️ 10 guardrails + HITL (WP-4.4-4.6)
+│   ├─ 📊 6 success metrics + evaluation (WP-4.7)
+│   ├─ 🗂️ 45-contract ground truth (WP-4.8)
+│   └─ 🔧 Tool stack (WP-4.9)
+│
+├─→ Key Metrics
+│   ├─ Clause Extraction Recall: ≥80%
+│   ├─ Classification Precision: ≥85%
+│   ├─ Risk Flag F1 Score: ≥80%
+│   ├─ Hallucination Rate: ≤5%
+│   ├─ Latency: ≤30 sec per contract
+│   └─ Cost: ≤$0.10 per contract
+│
+├─→ Implementation Status
+│   ├─ ✅ Phase 1: Design & Dataset (Weeks 1-2)
+│   ├─ 🔄 Phase 2: Core Implementation (Weeks 3-5)
+│   ├─ ⏳ Phase 3: Evaluation & Tuning (Weeks 6-7)
+│   └─ ⏳ Phase 4: Production Deployment (Week 8+)
+│
+├─→ Code Navigation
+│   ├─ 📂 [legal-contract-agent/](../../legal-contract-agent/) - Full source
+│   ├─ 📖 [INDEX.md](../../legal-contract-agent/INDEX.md) - Project navigation
+│   ├─ ⏱️ [QUICKSTART.md](../../legal-contract-agent/QUICKSTART.md) - 5-min setup
+│   ├─ 💻 `src/agent/` - LangGraph orchestration
+│   ├─ 🔧 `src/tools/` - PDF, extraction, anomaly detection
+│   ├─ 🛡️ `src/guardrails/` - Safety implementations
+│   ├─ 📊 `src/evaluation/` - Metrics computation
+│   ├─ 🎨 `src/ui/` - Streamlit dashboard
+│   └─ 🧪 `tests/` - Comprehensive test suite
+│
+├─→ Design-to-Code Traceability
+│   ├─ Docs (WP-4.1-4.9) define what to build
+│   ├─ Code (legal-contract-agent/) implements it
+│   ├─ Tests (test_wp_4_*.py) validate design
+│   ├─ INDEX.md links design docs to code modules
+│   ├─ QUICKSTART.md enables rapid onboarding
+│   └─ Complete bidirectional references
+│
+└─→ Complements
+    ├─ All portfolio concepts (1.0-3.7)
+    ├─ LangGraph (orchestration framework)
+    ├─ LangSmith (observability)
+    ├─ Production deployment guides
+    └─ Full end-to-end capstone system
+```
+
+### legal-contract-agent: Implementation & Navigation
+
+```
+legal-contract-agent: Complete Agentic System Implementation
+│
+├─→ Project Index & Quick Start
+│   ├─ [INDEX.md](../../legal-contract-agent/INDEX.md) - 500+ lines
+│   │   ├─ 📍 Quick navigation to all sections
+│   │   ├─ 🏗️ Architecture & design links
+│   │   ├─ 💻 Code module descriptions
+│   │   ├─ 🚀 Development roadmap (4 phases)
+│   │   └─ 📊 Project statistics
+│   ├─ [QUICKSTART.md](../../legal-contract-agent/QUICKSTART.md) - 400 lines
+│   │   ├─ ⏱️ 5-10 minute setup guide
+│   │   ├─ 7-step installation process
+│   │   ├─ API key configuration
+│   │   ├─ Docker service setup
+│   │   ├─ 3 ways to try it out
+│   │   └─ Troubleshooting section
+│   └─ [README.md](../../legal-contract-agent/README.md)
+│       ├─ Project mission and metrics
+│       ├─ 7-task pipeline overview
+│       ├─ Tech stack description
+│       ├─ Quick start instructions
+│       └─ Links to INDEX and QUICKSTART
+│
+├─→ Design Documentation (docs/06-capstone-legal-contract-analysis/)
+│   ├─ WP-4.1: Domain selection rationale
+│   ├─ WP-4.2: Task decomposition and pipeline
+│   ├─ WP-4.3: Threat model and failure modes
+│   ├─ WP-4.4: Guardrail specifications
+│   ├─ WP-4.5: HITL checkpoint design
+│   ├─ WP-4.6: Notification queue design
+│   ├─ WP-4.7: Evaluation criteria and metrics
+│   ├─ WP-4.8: Ground truth dataset creation
+│   ├─ WP-4.9: Tool selection ADR
+│   ├─ WP-5.1: PDF ingestion implementation
+│   └─ WP-5.2: Clause extraction implementation
+│
+├─→ Source Code (src/)
+│   ├─ agent/ - LangGraph orchestration
+│   │   ├─ state.py - Agent state schema
+│   │   ├─ graph.py - StateGraph definition
+│   │   └─ main.py - Entry point
+│   ├─ tools/ - Task implementations
+│   │   ├─ pdf_ingestion.py - Task 1
+│   │   ├─ clause_extractor.py - Task 3
+│   │   └─ ...
+│   ├─ guardrails/ - Safety checks
+│   ├─ evaluation/ - Metrics computation
+│   └─ ui/ - Streamlit dashboard
+│
+├─→ Data (data/)
+│   ├─ contracts/ - Input contracts
+│   └─ ground_truth/ - Annotated dataset (45 contracts)
+│
+├─→ Tests (tests/)
+│   ├─ test_wp_4_*.py - Design validation
+│   ├─ test_full_pipeline.py - End-to-end tests
+│   └─ test_*.py - Component tests
+│
+├─→ Setup & Config
+│   ├─ requirements.txt - Dependencies
+│   ├─ setup.py - Package config
+│   ├─ docker-compose.yml - Services (Qdrant, PostgreSQL)
+│   └─ .env.example - Configuration template
+│
+├─→ How to Use This Project
+│   ├─ 🚀 First time? → QUICKSTART.md (5 min)
+│   ├─ 🗺️ Explore structure? → INDEX.md (complete guide)
+│   ├─ 📚 Learn architecture? → docs/06-capstone-legal-contract-analysis/
+│   ├─ 💻 Understand code? → src/ with INDEX.md mapping
+│   ├─ 🧪 Run tests? → pytest tests/ (validates design)
+│   └─ 🚀 Deploy? → See Phase 4 in INDEX.md
+│
+└─→ Complements
+    ├─ All portfolio work products (WP-1.0-3.7)
+    ├─ All ADRs (ADR-1.2, ADR-2.1-2.2, ADR-003)
+    ├─ LangGraph framework (WP-2.6 concepts)
+    ├─ LangSmith observability (WP-1.7 concepts)
+    └─ Production AI systems best practices
 ```
 
 ---
