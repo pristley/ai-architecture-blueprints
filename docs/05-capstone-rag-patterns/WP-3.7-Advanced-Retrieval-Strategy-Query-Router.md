@@ -795,7 +795,7 @@ def get_optimal_strategy(self, query_type: QueryType) -> RetrievalStrategy:
 
 ### Cost Analysis
 
-**Pricing (November 2024):**
+**Pricing (April 2026):**
 - Keyword search: ~$0.001/query (no LLM)
 - Vector search: $0.015/query (embedding API)
 - Hybrid: $0.012/query (both, split execution)

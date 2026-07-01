@@ -1,7 +1,7 @@
 # ADR-1.2: Chain Types - When to Use Direct LLM, SimpleSequentialChain, or RunnableSequence/LCEL
 
 **Status**: Accepted  
-**Date**: 2024  
+**Date**: 2026  
 **Implements**: Work Product 1.2 - "Hello World" Three Ways  
 
 ## Context

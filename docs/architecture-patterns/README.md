@@ -65,6 +65,6 @@ The following files remain in this directory for reference but are **not maintai
 
 ---
 
-**Last Maintained**: 2024  
+**Last Maintained**: 2026  
 **Deprecated**: 2024-06-29  
 **Migration Path**: [WP-3.0](../05-capstone-rag-patterns/WP-3.0-Knowledge-Architecture-Decisions.md)

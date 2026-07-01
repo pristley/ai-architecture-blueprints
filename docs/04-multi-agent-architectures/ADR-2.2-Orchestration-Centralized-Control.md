@@ -1,6 +1,6 @@
 # ADR-2.2: Orchestration - Centralized Control for Deterministic Workflows
 
-**Status**: Active | **Version**: 1.0 | **Date**: 2024
+**Status**: Active | **Version**: 1.0 | **Date**: 2026
 
 ---
 

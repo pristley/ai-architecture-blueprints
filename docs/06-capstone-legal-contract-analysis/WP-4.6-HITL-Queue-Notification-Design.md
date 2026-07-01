@@ -2,7 +2,7 @@
 
 **Work Product Type**: Enterprise System Architecture  
 **Phase**: 4 — Capstone: End-to-End Agentic System  
-**Date**: 2024-01-21  
+**Date**: 2026-04-02  
 **Status**: ✅ Accepted  
 
 ---
@@ -45,7 +45,7 @@ This document specifies the **review queue system** that manages contracts requi
 │  └─────────────────────────────────────────────────────┘   │
 │            ↓                                                │
 │  Outputs:                                                   │
-│  ├─ "Your turn to review: contract_2024_001"             │
+│  ├─ "Your turn to review: contract_2026_001"             │
 │  ├─ "Alert: Contract overdue for review (SLA breach)"    │
 │  ├─ "Action: Escalate to legal team"                     │
 │  └─ Workload metrics for managers                         │
@@ -129,7 +129,7 @@ class QueueItem:
 ```json
 {
   "queue_state": {
-    "timestamp": "2024-01-21T14:30:00Z",
+    "timestamp": "2026-04-02T14:30:00Z",
     "total_items": 47,
     "breakdown": {
       "pending": 12,
@@ -141,9 +141,9 @@ class QueueItem:
   },
   "critical_priority": [
     {
-      "queue_id": "q_2024_0001",
-      "contract_id": "contract_2024_001",
-      "filename": "NDA_AcmeCorp_2024-01-20.pdf",
+      "queue_id": "q_2026_0001",
+      "contract_id": "contract_2026_001",
+      "filename": "NDA_AcmeCorp_2026-04-02.pdf",
       "contract_type": "NDA",
       "priority": "critical",
       "priority_score": 95,
@@ -151,15 +151,15 @@ class QueueItem:
         "critical_anomaly_detected",
         "evidence_validation_failed"
       ],
-      "created_at": "2024-01-21T14:15:00Z",
-      "sla_target_time": "2024-01-21T14:20:00Z",
+      "created_at": "2026-04-02T14:15:00Z",
+      "sla_target_time": "2026-04-02T14:20:00Z",
       "status": "pending",
       "time_in_queue_seconds": 900
     },
     {
-      "queue_id": "q_2024_0002",
-      "contract_id": "contract_2024_002",
-      "filename": "ServiceAgreement_2024-01-21.pdf",
+      "queue_id": "q_2026_0002",
+      "contract_id": "contract_2026_002",
+      "filename": "ServiceAgreement_2026-04-02.pdf",
       "contract_type": "SaaS",
       "priority": "critical",
       "priority_score": 88,
@@ -666,7 +666,7 @@ class Notification:
     read_at: datetime = None
     
     # Action (if user needs to click something)
-    action_url: str = None  # e.g., "/review/contract_2024_001"
+    action_url: str = None  # e.g., "/review/contract_2026_001"
     
     # Retry logic
     retry_count: int = 0
@@ -765,17 +765,17 @@ class NotificationManager:
 From: HITL Queue System
 To: sarah.chen@company.com
 
-Subject: URGENT: New Contract for Review — NDA_AcmeCorp_2024-01-20.pdf
+Subject: URGENT: New Contract for Review — NDA_AcmeCorp_2026-04-02.pdf
 
 Body:
 You have a critical contract to review:
-  - File: NDA_AcmeCorp_2024-01-20.pdf
+  - File: NDA_AcmeCorp_2026-04-02.pdf
   - Type: NDA
   - Risk: Unlimited Liability clause detected (HIGH)
   - Agent Confidence: 88%
   - SLA: Review within 5 minutes
 
-[REVIEW NOW] button → /review/contract_2024_001
+[REVIEW NOW] button → /review/contract_2026_001
 
 ---
 
@@ -786,10 +786,10 @@ To: john.smith@company.com
 Subject: ⏰ Contract Overdue for Review (4 min remaining)
 
 Body:
-Contract ServiceAgreement_2024-01-21.pdf is due for review in 4 minutes.
+Contract ServiceAgreement_2026-04-02.pdf is due for review in 4 minutes.
 Please complete your feedback to meet the SLA.
 
-[REVIEW NOW] button → /review/contract_2024_002
+[REVIEW NOW] button → /review/contract_2026_002
 ```
 
 ---
@@ -803,7 +803,7 @@ Please complete your feedback to meet the SLA.
 ║ QUEUE MANAGER DASHBOARD                                                   ║
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║                                                                            ║
-║ QUEUE STATUS (as of 2024-01-21 14:30:00 UTC)                             ║
+║ QUEUE STATUS (as of 2026-04-02 14:30:00 UTC)                             ║
 │                                                                            ║
 │ ┌─ PENDING (12)     ┌─ IN REVIEW (8)    ┌─ ESCALATED (2)                ║
 │ │  🔴 CRITICAL (4)  │  Sarah Chen (2)   │  NDA_AcmeCorp   04:15 PM      ║
@@ -1045,6 +1045,6 @@ notifications:
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: 2024-01-21  
+**Last Updated**: 2026-04-02  
 **Author**: Architecture Portfolio  
 **Status**: ✅ Approved for Implementation

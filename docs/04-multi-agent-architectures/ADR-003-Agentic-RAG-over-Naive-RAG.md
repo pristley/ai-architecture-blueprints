@@ -151,7 +151,7 @@ Agentic RAG:
 
 #### Cost Analysis
 
-**Per-query costs (using OpenAI pricing, Nov 2024):**
+**Per-query costs (using OpenAI pricing, April 2026):**
 
 | Component | Unit Cost | Naive RAG | Agentic RAG | Delta |
 |-----------|-----------|-----------|------------|-------|
@@ -618,7 +618,7 @@ else:
 - Gold standard (human): 100% recall
 - Gap closed: 41% (54% → 76%)
 
-**Cost Analysis (based on Nov 2024 pricing):**
+**Cost Analysis (based on April 2026 pricing):**
 - Naive RAG alone: $0.016/query
 - Naive RAG + human review: $5.02/query
 - Agentic RAG + spot-check: $0.54/query

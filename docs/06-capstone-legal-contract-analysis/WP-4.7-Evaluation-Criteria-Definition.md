@@ -2,7 +2,7 @@
 
 **Work Product Type**: Measurement Framework & Quality Standards  
 **Phase**: 4 — Capstone: End-to-End Agentic System  
-**Date**: 2024-01-21  
+**Date**: 2026-04-02  
 **Status**: ✅ Accepted  
 
 ---
@@ -376,7 +376,7 @@ def compute_latency(
 
 **Example**:
 ```
-Contract: NDA_Acme_2024.pdf (3 pages)
+Contract: NDA_Acme_2026.pdf (3 pages)
 
 Task 1 (Ingestion): 1.2 sec
 Task 2 (Classification): 3.5 sec
@@ -418,7 +418,7 @@ def compute_cost_per_contract(
     Compute cost from token usage.
     """
     
-    # Token costs (per OpenAI pricing as of Jan 2024)
+    # Token costs (per OpenAI pricing as of April 2026)
     COST_INPUT_TOKEN = 0.03 / 1_000_000    # $0.03 per 1M tokens
     COST_OUTPUT_TOKEN = 0.06 / 1_000_000   # $0.06 per 1M tokens
     
@@ -767,7 +767,7 @@ Strategy 3 (Expensive, High Quality):
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
 ║ EVALUATION REPORT: Legal Contract Analysis System                       ║
-║ Test Date: 2024-01-21 | Test Set: 45 contracts | Ground Truth: Manual  ║
+║ Test Date: 2026-04-02 | Test Set: 45 contracts | Ground Truth: Manual  ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
 ║ OVERALL PERFORMANCE                                                      ║
@@ -853,6 +853,6 @@ Strategy 3 (Expensive, High Quality):
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: 2024-01-21  
+**Last Updated**: 2026-04-02  
 **Author**: Architecture Portfolio  
 **Status**: ✅ Approved for Implementation

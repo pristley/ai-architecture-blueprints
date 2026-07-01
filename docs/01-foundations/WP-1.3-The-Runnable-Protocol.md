@@ -2,7 +2,7 @@
 
 **Work Product**: 1.3 - Deep Dive: Understanding the Foundation  
 **Status**: Complete  
-**Date**: 2024  
+**Date**: 2026  
 **Audience**: Engineers who want to understand LangChain's architecture, not just use LCEL  
 
 ---

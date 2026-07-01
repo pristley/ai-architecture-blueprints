@@ -2,7 +2,7 @@
 
 **Work Product Type**: Safety & Security Architecture  
 **Phase**: 4 — Capstone: End-to-End Agentic System  
-**Date**: 2024-01-21  
+**Date**: 2026-04-02  
 **Status**: ✅ Accepted  
 
 ---
@@ -539,6 +539,6 @@ Each failure mode above maps to one or more **guardrails** (WP-4.4):
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: 2024-01-21  
+**Last Updated**: 2026-04-02  
 **Author**: Architecture Portfolio  
 **Status**: ✅ Approved for Implementation

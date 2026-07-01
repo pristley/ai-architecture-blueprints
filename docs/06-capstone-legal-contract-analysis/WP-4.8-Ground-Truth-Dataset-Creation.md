@@ -2,7 +2,7 @@
 
 **Work Product Type**: Data Curation & Quality Assurance  
 **Phase**: 4 — Capstone: End-to-End Agentic System  
-**Date**: 2024-01-21  
+**Date**: 2026-04-02  
 **Status**: ✅ Accepted  
 
 ---
@@ -163,7 +163,7 @@ Confidence: 3 (unclear what "unauthorized" means in this context)
 {
   "metadata": {
     "contract_id": "gt_001",
-    "filename": "NDA_Example_2024.pdf",
+    "filename": "NDA_Example_2026.pdf",
     "source": "Public template (Legal.com)",
     "contract_type": "NDA",
     "num_pages": 3,
@@ -287,7 +287,7 @@ When an anomaly is present:
 ```
 MUTUAL NON-DISCLOSURE AGREEMENT
 
-This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of January 1, 2024, 
+This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of April 1, 2026, 
 between Alice Corp ("Disclosing Party") and Bob Inc ("Receiving Party").
 
 WHEREAS, the parties desire to discuss certain business opportunities and wish to protect 
@@ -738,7 +738,7 @@ This contract contributes to overall metrics in WP-4.7
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: 2024-01-21  
+**Last Updated**: 2026-04-02  
 **Author**: Architecture Portfolio  
 **Status**: ✅ Approved for Implementation
 
