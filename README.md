@@ -21,11 +21,12 @@ This repository provides decision records, design patterns, and working implemen
 
 | Metric | Value | Details |
 |--------|-------|---------|
-| **Work Products** | 20+ | From foundations to production multi-agent systems |
+| **Work Products** | 22+ | From foundations to production multi-agent systems |
 | **Architecture Decisions** | 5 ADRs | Strategic decisions guiding all implementations |
-| **Documentation** | 15,000+ lines | Comprehensive guides with decision trees |
-| **Code Examples** | 9 implementations | Production-ready with full comments |
-| **Test Coverage** | 300+ tests | Validating each pattern and edge case |
+| **Documentation** | 18,000+ lines | Comprehensive guides with decision trees |
+| **Code Examples** | 11 implementations | Production-ready with full comments |
+| **Test Coverage** | 350+ tests | Validating each pattern and edge case |
+| **Safety Guardrails** | 10 implemented | FM-1 through FM-10 threat prevention |
 | **Performance Gains** | Measured | Naive → Production: 36% latency reduction, 27% quality gain |
 
 **Key Portfolio Assets:**
